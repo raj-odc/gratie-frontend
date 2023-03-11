@@ -917,5 +917,8 @@
       "name": "UserAlreadyClaimedToHisOwnWallet",
       "msg": "User has already been claimed to his own wallet"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "AEf99S19YTaox9E8aX3ugpGJtHTHjaQtSY2ixtLysFGr"
+  }
 }

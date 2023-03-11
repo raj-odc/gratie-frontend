@@ -3,6 +3,16 @@ export type GratieSolana = {
   "name": "gratie_solana",
   "instructions": [
     {
+      "name": "isAdmin",
+      "accounts": [],
+      "args": [
+        {
+          "name": "adminPubkey",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
       "name": "withdrawFromGratieWallet",
       "accounts": [
         {
@@ -914,6 +924,16 @@ export const IDL: GratieSolana = {
   "version": "0.1.0",
   "name": "gratie_solana",
   "instructions": [
+    {
+      "name": "isAdmin",
+      "accounts": [],
+      "args": [
+        {
+          "name": "adminPubkey",
+          "type": "publicKey"
+        }
+      ]
+    },
     {
       "name": "withdrawFromGratieWallet",
       "accounts": [
