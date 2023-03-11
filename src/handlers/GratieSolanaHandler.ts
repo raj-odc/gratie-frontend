@@ -1,3 +1,39 @@
+/*
+  Handler for all communications to the contract
+  use the connect function first and pass the program to the other functions
+
+  you can find all the functions in the gratie-solana repository in tests/
+  you might have to adjust them a bit to work in the browser
+  but the general idea is the same
+
+  to list all accounts of a specific type you can
+  
+  const accounts = await program.account.<name>.all();
+
+  const companyLicenses = await program.account.companyLicense.all();
+
+
+  const solanaPubkey = solana.publicKey;
+  
+  companyLicenses.filter(p => p.publicKey == solanaPublicky);
+
+  //filter companyLicense and find the one with the license you want
+
+  const companyLicensePubkey = companyLicenses[0].publicKey;
+
+  try {
+    // will fail when none exist
+  const companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePubkey);
+  } catch (e) {
+  }
+
+
+
+
+*/
+
+
+
 import * as anchor from "@project-serum/anchor";
 import { AnchorProvider, Program } from "@project-serum/anchor";
 import { Connection, PublicKey } from "@solana/web3.js";
@@ -121,6 +157,10 @@ const getCompanyLicensePDA = (program: Program<GratieSolana>, company_name: stri
 export const getGratieWalletPDA = (program: Program<GratieSolana>) => {
   return getPDA(program, 'gratie_wallet', []);
 };
+
+export const getCompanyRewardsBucketPDA = (program: Program<GratieSolana>, companyLicensePDA: anchor.web3.PublicKey) => {
+  return getPDA(program, 'company_rewards_bucket', [companyLicensePDA]);
+}
 
 const getPDA = (program: Program<GratieSolana>, id: string, keys: (anchor.web3.PublicKey | string | number)[]) => {
   const [pda, _] = anchor.web3.PublicKey.findProgramAddressSync(

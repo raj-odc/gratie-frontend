@@ -71,7 +71,7 @@ export default function CompanyForm() {
     const data = new FormData(event.currentTarget);
     console.log(data);
     const formVal = {
-      name: 'test_555',
+      name: 'test_5555',
       email: 'test@tes.com',
       logoUri: 'test.png',
       evaluation: 1000,
@@ -80,6 +80,7 @@ export default function CompanyForm() {
 
     const program = await GratieSolanaHandler.connect();
 
+    // this gets all the licenses
     const licenses = await program.account.companyLicense.all();
     console.log(licenses);
 
