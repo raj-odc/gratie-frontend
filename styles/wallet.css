@@ -1,0 +1,22 @@
+.wallet-button{
+    border: 2px solid black !important;
+    color: white !important;
+ }
+  
+ .wallet-button:hover {
+   border: 2px solid grey !important;
+   color: white !important;
+ }
+
+ /* .wallet-adapter-dropdown-list-active {
+    z-index: 1000;
+   color: red !important;
+   position: relative;
+  } */
+
+ /* .wallet-adapter-button {
+  position: absolute !important;
+ } */
+ /* .wallet-adapter-dropdown-list {
+   position: relative !important;
+ } */
