@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 // import "./App.css";
-import idl from '../lib/gratie_solana.json' //copy from target folder inside idl.json
+import idl from '../gratie_solana_contract/idl/gratie_solana.json' //copy from target folder inside idl.json
 import * as anchor from "@project-serum/anchor";
 import { Program, Wallet, AnchorProvider, SystemProgram } from "@project-serum/anchor";
 import { GratieSolana } from "../gratie_solana_contract/types/gratie_solana";
@@ -70,7 +70,7 @@ const App = () => {
     try {
       setLoading(true)
       if (solana) {
-        const response = await solana.connect(); //to disconnect use "solana.disconnect()"
+        const response = await (solana as any).connect(); //to disconnect use "solana.disconnect()"
         setWalletAdresss(response.publicKey.toString());
       } else {
         alert("Please Install Solana's Phantom Wallet");

@@ -3,7 +3,8 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-function file2Buffer(file: any) {
+
+export function file2Buffer(file: any) {
   return new Promise(function (resolve, reject) {
     const reader = new FileReader()
     const readFile = function (event: any) {
@@ -70,6 +71,10 @@ const testPage = () => {
     const company = await uploadCompanyLicense(companyLicenseForm, imageUrl);
     console.log(company);
   };
+
+  useEffect(() => {
+    console.log(process.env.RPC_URL);
+  });
 
   return (
     <div>

@@ -127,20 +127,20 @@ export default function Admin() {
   const getAllCompanies = async () => {
     const program = await connectToGratieSolanaContract();
     const allLicenses = await listCompanyLicenses(program);
-    console.log("allLicenses:",allLicenses);
+    console.log("allLicenses:", allLicenses);
   }
 
   const getAllPendingCompanies = async () => {
     const program = await connectToGratieSolanaContract();
     const pendingLicenses = await getAllPendingLicenses(program)
-    console.log("pendingLicenses:",pendingLicenses);
+    console.log("pendingLicenses:", pendingLicenses);
 
   }
 
   const approveCompanyLicense = async () => {
     const program = await connectToGratieSolanaContract();
     const verifiedLicenses = await getAllVerifiedLicenses(program)
-    console.log("verifiedLicenses:",verifiedLicenses);
+    console.log("verifiedLicenses:", verifiedLicenses);
   }
 
   const createTier = async () => {
