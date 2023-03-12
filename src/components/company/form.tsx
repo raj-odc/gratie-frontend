@@ -11,8 +11,9 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Akord } from '@akord/akord-js'
 import { useState } from 'react'
-
-import { GratieSolanaHandler } from '@/src/handlers/GratieSolanaHandler';
+import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
+import { createCompanyLicense, CreateCompanyLicenseForm } from '@/src/gratie_solana_contract/gratie_solana_company';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 
 
@@ -30,6 +31,8 @@ declare const window: Window &
 
 export default function CompanyForm() {
 
+  const wallet = useWallet();
+
   const [open, setOpen] = React.useState(false);
 
   const [validCompany, setValidCompany] = React.useState(undefined);
@@ -39,7 +42,7 @@ export default function CompanyForm() {
     email: "",
     evaluation: "",
     tierID: "",
-    logoUri: '',
+    jsonMetadataUrl: '',
   });
   const handleClose = () => {
     setOpen(false);
@@ -70,7 +73,7 @@ export default function CompanyForm() {
     const { stackId } = await akord.stack.create(vault.id, file, file.name)
     console.log("stackId", stackId);
 
-    const value = (res:any) => ({
+    const value = (res: any) => ({
       ...res,
       ['logoUri']: stackId,
     });
@@ -86,8 +89,8 @@ export default function CompanyForm() {
     handleClose()
   }
 
-  const onValChange = (event:any) => {
-    const value = (res:any) => ({
+  const onValChange = (event: any) => {
+    const value = (res: any) => ({
       ...res,
       [event.target.id]: event.target.value,
     });
@@ -96,7 +99,7 @@ export default function CompanyForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (formObject.logoUri===''){
+    if (formObject.jsonMetadataUrl === '') {
       console.log("Please upload the logo before proceed");
       return false;
     }
@@ -105,20 +108,20 @@ export default function CompanyForm() {
     console.log("event.currentTarget", event.currentTarget);
     const data = new FormData(event.currentTarget);
     console.log(formObject);
-    const formVal:any = new Object(formObject);
+    const formVal: any = new Object(formObject);
     formVal['tierID'] = parseInt(formVal.tierID)
     formVal['evaluation'] = parseInt(formVal.evaluation)
 
     console.log(formVal);
 
-    const program = await GratieSolanaHandler.connect();
+    const program = await connectToGratieSolanaContract();
 
     // this gets all the licenses
     const licenses = await program.account.companyLicense.all();
     console.log(licenses);
 
 
-    const company = await GratieSolanaHandler.createCompanyLicense(program, window.solana, formVal);
+    const company = await createCompanyLicense(program, wallet.publicKey!, formVal);
     console.log(company)
 
     handleClose()

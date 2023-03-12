@@ -1,0 +1,15 @@
+import * as anchor from "@project-serum/anchor";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { GratieSolana } from "./types/gratie_solana";
+import idl from "./idl/gratie_solana.json";
+
+const NETWORK = "http://localhost:8899";
+
+export const connectToGratieSolanaContract = async (): Promise<anchor.Program<GratieSolana>> => {
+  const connection = new Connection(NETWORK, "processed");
+  const provider = new anchor.AnchorProvider(connection, (window as any).solana, { preflightCommitment: 'processed' });
+  const programID = new PublicKey(idl.metadata.address);
+  const program: anchor.Program<GratieSolana> | any = new anchor.Program(idl as any, programID, provider);
+
+  return program;
+}

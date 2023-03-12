@@ -4,12 +4,15 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 import { SolanaLogo } from "./../../components"
+
+import GratieSolanaTest from "../../gratie_solana_contract/gratieSolanaContractTest";
+
 import styles from "./index.module.css";
 
-export const HomeView: FC = ({}) => {
+export const HomeView: FC = ({ }) => {
   const { publicKey } = useWallet();
 
-  const onClick = () => {};
+  const onClick = () => { };
 
   return (
     <div className="container mx-auto max-w-6xl p-8 2xl:px-0">
@@ -27,6 +30,7 @@ export const HomeView: FC = ({}) => {
             <WalletMultiButton className="btn btn-ghost" />
           </div>
         </div>
+
 
         <div className="text-center pt-2">
           <div className="hero min-h-16 py-4">

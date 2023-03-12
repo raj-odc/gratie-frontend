@@ -1,17 +1,17 @@
 // app/src/App.js
 
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 // import "./App.css";
 import idl from '../lib/gratie_solana.json' //copy from target folder inside idl.json
 import * as anchor from "@project-serum/anchor";
 import { Program, Wallet, AnchorProvider, SystemProgram } from "@project-serum/anchor";
-import { GratieSolana } from "./../lib/types/gratie_solana";
+import { GratieSolana } from "../gratie_solana_contract/types/gratie_solana";
 
 
 declare const window: Window &
-   typeof globalThis & {
-     solana: any
-   }
+  typeof globalThis & {
+    solana: any
+  }
 
 const App = () => {
   const [walletAddress, setWalletAdresss] = useState("");
@@ -24,16 +24,16 @@ const App = () => {
     checkIfWalletConnected();
     const onLoad = () => {
 
-        console.log("sdadsadasdsadsa");
+      console.log("sdadsadasdsadsa");
       const provider = anchor.AnchorProvider.env();
       console.log("provider", provider);
       anchor.setProvider(provider);
-    
+
       const program = anchor.workspace.GratieSolana as Program<GratieSolana> | any
-      console.log("program",program);
+      console.log("program", program);
 
       const wallet = anchor.AnchorProvider.env().wallet as Wallet;
-      console.log("wallet",wallet);
+      console.log("wallet", wallet);
       checkIfWalletConnected();
 
     };
@@ -46,7 +46,7 @@ const App = () => {
     const { solana } = window.solana;
     console.log("solana", solana)
     try {
-		setLoading(true)
+      setLoading(true)
       if (solana) {
         if (solana.isPhantom) {
           console.log("phatom is connected");
@@ -59,27 +59,27 @@ const App = () => {
       }
     } catch (err) {
       console.log(err);
-    }finally{
-		setLoading(false)
-	}
+    } finally {
+      setLoading(false)
+    }
   };
 
   const connectWallet = async () => {
     // const { solana } = window.solana;
     console.log("solana---", solana);
-	try{
-		setLoading(true)
-		if (solana) {
-			const response = await solana.connect(); //to disconnect use "solana.disconnect()"
-			setWalletAdresss(response.publicKey.toString());
-		  } else {
-			alert("Please Install Solana's Phantom Wallet");
-		  }
-	}catch(err){
-		console.log(err)
-	}finally{
-		setLoading(false)
-	}
+    try {
+      setLoading(true)
+      if (solana) {
+        const response = await solana.connect(); //to disconnect use "solana.disconnect()"
+        setWalletAdresss(response.publicKey.toString());
+      } else {
+        alert("Please Install Solana's Phantom Wallet");
+      }
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
   };
 
   return (

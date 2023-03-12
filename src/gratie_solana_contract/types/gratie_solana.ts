@@ -3,6 +3,37 @@ export type GratieSolana = {
   "name": "gratie_solana",
   "instructions": [
     {
+      "name": "deleteCompanyLicense",
+      "accounts": [
+        {
+          "name": "companyLicenseOwner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "companyLicense",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "companyLicenseTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "addCompanyLicenseToMetaplex",
       "accounts": [
         {
@@ -993,6 +1024,37 @@ export const IDL: GratieSolana = {
   "version": "0.1.0",
   "name": "gratie_solana",
   "instructions": [
+    {
+      "name": "deleteCompanyLicense",
+      "accounts": [
+        {
+          "name": "companyLicenseOwner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "companyLicense",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "companyLicenseTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
     {
       "name": "addCompanyLicenseToMetaplex",
       "accounts": [

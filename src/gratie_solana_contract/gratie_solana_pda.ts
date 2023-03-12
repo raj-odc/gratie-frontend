@@ -1,9 +1,9 @@
 import * as anchor from "@project-serum/anchor";
 import { Program, Wallet } from "@project-serum/anchor";
-import { GratieSolana } from "../lib/types/gratie_solana";
+import { GratieSolana } from "./types/gratie_solana";
 
 
-const getPDA = (program: Program<GratieSolana> | any, id: string, keys: (anchor.web3.PublicKey | string | number)[]) => {
+const getPDA = (program: Program<GratieSolana>, id: string, keys: (anchor.web3.PublicKey | string | number)[]) => {
   const [pda, _] = anchor.web3.PublicKey.findProgramAddressSync(
     [
       anchor.utils.bytes.utf8.encode(id),
@@ -31,41 +31,41 @@ const getPDA = (program: Program<GratieSolana> | any, id: string, keys: (anchor.
   return pda;
 }
 
-export const getGratieWalletPDA = (program: Program<GratieSolana> | any) => {
+export const getGratieWalletPDA = (program: Program<GratieSolana>) => {
   return getPDA(program, 'gratie_wallet', []);
 };
 
-export const getUserRewardsBucketTokenAccountPDA = (program: Program<GratieSolana> | any, userRewardsBucketPDA: anchor.web3.PublicKey) => {
+export const getUserRewardsBucketTokenAccountPDA = (program: Program<GratieSolana>, userRewardsBucketPDA: anchor.web3.PublicKey) => {
   // user_rewards_bucket_token_account
   return getPDA(program, 'urb_ta', [userRewardsBucketPDA]);
 };
 
-export const getTierPDA = (program: Program<GratieSolana> | any, tierID: number) => {
+export const getTierPDA = (program: Program<GratieSolana>, tierID: number) => {
   return getPDA(program, 'tier', [tierID]);
 }
 
-export const getUserPDA = (program: Program<GratieSolana> | any, companyLicensePublicKey: anchor.web3.PublicKey, user_id: string) => {
+export const getUserPDA = (program: Program<GratieSolana>, companyLicensePublicKey: anchor.web3.PublicKey, user_id: string) => {
   return getPDA(program, 'user', [companyLicensePublicKey, user_id]);
 }
 
-export const getCompanyLicensePDA = (program: Program<GratieSolana> | any, company_name: string) => {
+export const getCompanyLicensePDA = (program: Program<GratieSolana>, company_name: string) => {
   return getPDA(program, 'company_license', [company_name]);
 }
 
-export const getCompanyRewardsBucketPDA = (program: Program<GratieSolana> | any, companyLicensePDA: anchor.web3.PublicKey) => {
+export const getCompanyRewardsBucketPDA = (program: Program<GratieSolana>, companyLicensePDA: anchor.web3.PublicKey) => {
   return getPDA(program, 'company_rewards_bucket', [companyLicensePDA]);
 }
 
-export const getUserRewardsBucketPDA = (program: Program<GratieSolana> | any, user: anchor.web3.PublicKey) => {
+export const getUserRewardsBucketPDA = (program: Program<GratieSolana>, user: anchor.web3.PublicKey) => {
   return getPDA(program, 'user_rewards_bucket', [user]);
 }
 
-export const getCompanyRewardsBucket = async (program: Program<GratieSolana> | any, companyLicensePDA: anchor.web3.PublicKey) => {
+export const getCompanyRewardsBucket = async (program: Program<GratieSolana>, companyLicensePDA: anchor.web3.PublicKey) => {
   const companyRewardsBucketPDA = getCompanyRewardsBucketPDA(program, companyLicensePDA);
   return await program.account.companyRewardsBucket.fetch(companyRewardsBucketPDA);
 }
 
-export const getCompanyLicense = async (program: Program<GratieSolana> | any, company_name: string) => {
+export const getCompanyLicense = async (program: Program<GratieSolana>, company_name: string) => {
   const companyLicensePDA = getCompanyLicensePDA(program, company_name);
   return await program.account.companyLicense.fetch(companyLicensePDA);
 }

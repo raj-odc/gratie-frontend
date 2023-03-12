@@ -12,7 +12,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Akord } from '@akord/akord-js'
 import { useState } from 'react'
 
-import { GratieSolanaHandler } from '@/src/handlers/GratieSolanaHandler';
 
 
 
@@ -73,13 +72,13 @@ export default function List() {
     //     }
 
     //     console.log("companyRewardsBucket", companyRewardsBucket);
-    
+
     // }
   });
 
 
-  const onValChange = (event:any) => {
-    const value = (res:any) => ({
+  const onValChange = (event: any) => {
+    const value = (res: any) => ({
       ...res,
       [event.target.id]: event.target.value,
     });
@@ -148,7 +147,7 @@ export default function List() {
             </Grid>
 
             <Button
-             onClick={createCompanyUser}
+              onClick={createCompanyUser}
               type="submit"
               fullWidth
               variant="contained"

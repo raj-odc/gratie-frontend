@@ -15,11 +15,12 @@ import { useState } from 'react'
 import * as anchor from "@project-serum/anchor";
 
 import { Program, Wallet } from "@project-serum/anchor";
-import { GratieSolanaHandler, getCompanyRewardsBucket, getCompanyLicensePDA } from '@/src/handlers/GratieSolanaHandler';
 
 import RegForm from '@/src/components/company/form';
 
 import CompanyList from '@/src/components/company/list';
+import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
+import { getCompanyLicensePDA, getCompanyRewardsBucket } from '@/src/gratie_solana_contract/gratie_solana_pda';
 
 
 
@@ -62,54 +63,55 @@ export default function Admin() {
   // Filter with non verified companies
   // Verify company
   // Add tier button
- 
-  
 
-//   React.useEffect(() => {
-//     // handleToggle();
-//   })
+
+
+  //   React.useEffect(() => {
+  //     // handleToggle();
+  //   })
 
   const initWallet = async () => {
     handleToggle();
     const solanaPubKey = localStorage.getItem('solanaPubKey')
 
-    const program = await GratieSolanaHandler.connect();
+
+    const program = await connectToGratieSolanaContract();
 
     // this gets all the licenses
     const allLicenses = await program.account.companyLicense.all();
     console.log(allLicenses);
-    const userLicenses:any = allLicenses.filter(p => p.account.owner.toString() == solanaPubKey);
+    const userLicenses: any = allLicenses.filter((p: any) => p.account.owner.toString() == solanaPubKey);
     console.log("userLicenses", userLicenses.length);
     setValidCompany(userLicenses.length <= 0)
 
     if (userLicenses) {
-        const companyLicensePDA = await getCompanyLicensePDA(program, userLicenses[0].account.name);
+      const companyLicensePDA = getCompanyLicensePDA(program, userLicenses[0].account.name);
 
-        let companyRewardsBucket;
-        try {
-            companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
-        }
-        catch {
-            console.log("Company rewards not yet created")
-            setIsCompanyUser(false)
-        }
-        if (!companyRewardsBucket) {
-            // const provider = anchor.AnchorProvider.env();
-            // anchor.setProvider(provider);
-            // const wallet = anchor.AnchorProvider.env().wallet as Wallet;
+      let companyRewardsBucket;
+      try {
+        companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
+      }
+      catch {
+        console.log("Company rewards not yet created")
+        setIsCompanyUser(false)
+      }
+      if (!companyRewardsBucket) {
+        // const provider = anchor.AnchorProvider.env();
+        // anchor.setProvider(provider);
+        // const wallet = anchor.AnchorProvider.env().wallet as Wallet;
 
-            // await createUserRewardsBucket(program, wallet);
-            // console.log("companyRewardsBucket", companyRewardsBucket)
-        }
+        // await createUserRewardsBucket(program, wallet);
+        // console.log("companyRewardsBucket", companyRewardsBucket)
+      }
 
-        console.log("companyRewardsBucket", companyRewardsBucket);
-    
+      console.log("companyRewardsBucket", companyRewardsBucket);
+
     }
-    
- 
+
+
     handleClose();
   }
-  
+
   const getAllCompanies = async () => {
     console.log("getAllCompanies", getAllCompanies)
   }
@@ -125,7 +127,7 @@ export default function Admin() {
   const createTier = async () => {
     console.log("createTier", createTier)
   }
-  
+
   return (
     <div className=''>
 
@@ -135,56 +137,56 @@ export default function Admin() {
           <Typography component="h1" variant="h5">
             Registration
           </Typography>
-            <Button
-             onClick={initWallet}
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 6, mb: 4 }}
-            >
-              Connect With Wallet
-            </Button>
+          <Button
+            onClick={initWallet}
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 6, mb: 4 }}
+          >
+            Connect With Wallet
+          </Button>
         </Container>
-        {validCompany && validCompany==true ? <RegForm/> : validCompany==false ? <CompanyList/> : "test"}
-        
+        {validCompany && validCompany == true ? <RegForm /> : validCompany == false ? <CompanyList /> : "test"}
+
         <Button
-             onClick={getAllCompanies}
-              type="button"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 6, mb: 4 }}
-            >
-              List all companies
-            </Button>
-            <Button
-             onClick={getAllPendingCompanies}
-              type="button"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 6, mb: 4 }}
-            >
-              Pending Approval
-            </Button>
+          onClick={getAllCompanies}
+          type="button"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 6, mb: 4 }}
+        >
+          List all companies
+        </Button>
+        <Button
+          onClick={getAllPendingCompanies}
+          type="button"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 6, mb: 4 }}
+        >
+          Pending Approval
+        </Button>
 
-            <Button
-             onClick={approveCompanyLicense}
-              type="button"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 6, mb: 4 }}
-            >
-              Approve Company
-            </Button>
+        <Button
+          onClick={approveCompanyLicense}
+          type="button"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 6, mb: 4 }}
+        >
+          Approve Company
+        </Button>
 
-            <Button
-             onClick={createTier}
-              type="button"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 6, mb: 4 }}
-            >
-              Create Tier
-            </Button>
+        <Button
+          onClick={createTier}
+          type="button"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 6, mb: 4 }}
+        >
+          Create Tier
+        </Button>
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={open}
