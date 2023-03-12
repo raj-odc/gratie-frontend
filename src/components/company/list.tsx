@@ -17,6 +17,7 @@ import { sha256 } from "@project-serum/anchor/dist/cjs/utils";
 import { createUser } from '@/src/gratie_solana_contract/gratie_solana_user';
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { faker } from '@faker-js/faker';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 
 
@@ -92,19 +93,21 @@ export default function List() {
     setFormObject(value);
   };
 
+  const { wallet } = useWallet();
+
   const createCompanyUser = async () => {
     if (wallet) {
-        const userEmail = faker.internet.email();
-        const program = await connectToGratieSolanaContract();
-        const allLicenses = await program.account.companyLicense.all();
-        const companyName = allLicenses[0].account.name
-        const user = await createUser(program, wallet.adapter.publicKey, companyName, {
-            userId: sha256.hash(userEmail).substring(0, 16),
-            encryptedPassword: faker.internet.password(),
-            encryptedPasswordAlgorithm: 0,
-            encryptedPasswordSalt: faker.internet.password(),
-        });
-        console.log("createCompanyUser", user)
+      const userEmail = faker.internet.email();
+      const program = await connectToGratieSolanaContract();
+      const allLicenses = await program.account.companyLicense.all();
+      const companyName = allLicenses[0].account.name
+      const user = await createUser(program, wallet.adapter.publicKey!, companyName, {
+        userId: sha256.hash(userEmail).substring(0, 16),
+        encryptedPassword: faker.internet.password(),
+        encryptedPasswordAlgorithm: 0,
+        encryptedPasswordSalt: faker.internet.password(),
+      });
+      console.log("createCompanyUser", user)
     }
   }
 

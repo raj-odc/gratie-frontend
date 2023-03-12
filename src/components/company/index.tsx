@@ -137,8 +137,8 @@ export default function CompanyForm() {
       const program = await connectToGratieSolanaContract();
       const allLicenses = await program.account.companyLicense.all();
       const companyName = allLicenses[0].account.name
-      const rewards:any = getCompanyRewardsBucketForCompany(program, companyName)
-      if (rewards){
+      const rewards: any = getCompanyRewardsBucketForCompany(program, companyName)
+      if (rewards) {
         confirm("already rewards present for the company");
         return;
       }
@@ -157,9 +157,9 @@ export default function CompanyForm() {
 
   const getAllUser = async () => {
     let users;
-    if(wallet) {
-        const program = await connectToGratieSolanaContract();
-        users = await getCompanyUser(program, wallet?.adapter.publicKey);
+    if (wallet) {
+      const program = await connectToGratieSolanaContract();
+      users = await getCompanyUser(program, wallet?.adapter.publicKey!);
     }
     console.log("getAllUser", users)
   }

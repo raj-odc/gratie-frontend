@@ -53,9 +53,9 @@ export const getUser = (program: anchor.Program<GratieSolana>, companyName: stri
   return program.account.user.fetch(userPDA);
 };
 
-export const getCompanyUser = async(program: anchor.Program<GratieSolana>, walletPubKey: anchor.web3.PublicKey) => {
+export const getCompanyUser = async (program: anchor.Program<GratieSolana>, walletPubKey: anchor.web3.PublicKey) => {
   const users = await program.account.user.all()
-  const usersList: any = users.filter(user => user.account.company.toString() == walletPubKey);
+  const usersList: any = users.filter(user => user.account.company == walletPubKey);
   return usersList;
 }
 
