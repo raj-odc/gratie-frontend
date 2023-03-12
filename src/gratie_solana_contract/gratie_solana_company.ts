@@ -46,6 +46,18 @@ export const listCompanyLicenses = async (program: anchor.Program<GratieSolana>)
   return companyLicenses;
 };
 
+export const getAllVerifiedLicenses = async (program: anchor.Program<GratieSolana>) => {
+  const companyLicenses = await program.account.companyLicense.all();
+  const verifiedCompanyLicenses = companyLicenses.filter(license => license.account.verified == true);
+  return verifiedCompanyLicenses;
+};
+
+export const getAllPendingLicenses = async (program: anchor.Program<GratieSolana>) => {
+  const companyLicenses = await program.account.companyLicense.all();
+  const pendingCompanyLicenses = companyLicenses.filter(license => license.account.verified == false);
+  return pendingCompanyLicenses;
+};
+
 export const verifyCompanyLicense = async (program: anchor.Program<GratieSolana>, walletPubKey: anchor.web3.PublicKey, companyName: string) => {
   const companyLicense = getCompanyLicensePDA(program, companyName);
   await program.methods.verifyCompanyLicense().accounts({ admin: walletPubKey, companyLicense: companyLicense }).rpc();

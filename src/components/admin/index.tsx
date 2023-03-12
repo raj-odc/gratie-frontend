@@ -22,6 +22,7 @@ import CompanyList from '@/src/components/company/list';
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { getCompanyLicensePDA, getCompanyRewardsBucket } from '@/src/gratie_solana_contract/gratie_solana_pda';
 
+import { listCompanyLicenses, verifyCompanyLicense, getAllVerifiedLicenses, getAllPendingLicenses } from "@/src/gratie_solana_contract/gratie_solana_company";
 
 
 // import '@/styles/form.css';
@@ -56,7 +57,6 @@ export default function Admin() {
     setOpen(!open);
   };
 
-  handleToggle();
 
   // todo:
   // List of all companies from the list
@@ -113,15 +113,22 @@ export default function Admin() {
   }
 
   const getAllCompanies = async () => {
-    console.log("getAllCompanies", getAllCompanies)
+    const program = await connectToGratieSolanaContract();
+    const allLicenses = await listCompanyLicenses(program);
+    console.log("allLicenses:",allLicenses);
   }
 
   const getAllPendingCompanies = async () => {
-    console.log("getAllPendingCompanies", getAllPendingCompanies)
+    const program = await connectToGratieSolanaContract();
+    const pendingLicenses = await getAllPendingLicenses(program)
+    console.log("pendingLicenses:",pendingLicenses);
+
   }
 
   const approveCompanyLicense = async () => {
-    console.log("approveCompanyLicense", approveCompanyLicense)
+    const program = await connectToGratieSolanaContract();
+    const verifiedLicenses = await getAllVerifiedLicenses(program)
+    console.log("verifiedLicenses:",verifiedLicenses);
   }
 
   const createTier = async () => {

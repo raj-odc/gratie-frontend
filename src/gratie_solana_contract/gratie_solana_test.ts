@@ -3,7 +3,7 @@ import * as anchor from "@project-serum/anchor";
 import { sha256 } from "@project-serum/anchor/dist/cjs/utils";
 import { createCompanyLicense, createCompanyRewardsBucket, listCompanyLicenses, verifyCompanyLicense } from "./gratie_solana_company";
 import { checkAdmin } from "./gratie_solana_contract";
-import { createUser, createUserRewardsBucket } from "./gratie_solana_user";
+import { createUser, createUserRewardsBucket, getCompanyUser } from "./gratie_solana_user";
 import { GratieSolana } from "./types/gratie_solana";
 
 // Here all functions are tested on the browser frontend
@@ -71,5 +71,9 @@ export const testAllGratieSolanaFunctions = async (program: anchor.Program<Grati
   const userRewardBucket = await createUserRewardsBucket(program, walletPubKey, companyName, userId);
 
   console.log(userRewardBucket);
+
+  const usersList = await getCompanyUser(program, walletPubKey);
+  console.log("usersList for this company", usersList);
+
 
 }
