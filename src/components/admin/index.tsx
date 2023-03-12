@@ -23,6 +23,11 @@ import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/grat
 import { getCompanyLicensePDA, getCompanyRewardsBucket } from '@/src/gratie_solana_contract/gratie_solana_pda';
 
 import { listCompanyLicenses, verifyCompanyLicense, getAllVerifiedLicenses, getAllPendingLicenses } from "@/src/gratie_solana_contract/gratie_solana_company";
+import { Tab, Tabs } from '@mui/material';
+
+
+import List from './list'
+
 
 
 // import '@/styles/form.css';
@@ -49,6 +54,13 @@ export default function Admin() {
   const [walletAddress, setWalletAdresss] = useState("");
   const [Loding, setLoading] = useState(false)
   const [solana, setSolana] = useState({})
+
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const handleTabChange = (event:any, newTabIndex:number) => {
+    console.log("newTabIndex", newTabIndex)
+    setTabIndex(newTabIndex);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -137,70 +149,10 @@ export default function Admin() {
 
   return (
     <div className=''>
-
       <React.Fragment>
-        <Container className='form-outer' component="main" maxWidth="md">
-
-          <Typography component="h1" variant="h5">
-            Registration
-          </Typography>
-          <Button
-            onClick={initWallet}
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 6, mb: 4 }}
-          >
-            Connect With Wallet
-          </Button>
+        <Container className='' component="main" maxWidth="md">
+           <List/>
         </Container>
-        {validCompany && validCompany == true ? <RegForm /> : validCompany == false ? <CompanyList /> : "test"}
-
-        <Button
-          onClick={getAllCompanies}
-          type="button"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 6, mb: 4 }}
-        >
-          List all companies
-        </Button>
-        <Button
-          onClick={getAllPendingCompanies}
-          type="button"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 6, mb: 4 }}
-        >
-          Pending Approval
-        </Button>
-
-        <Button
-          onClick={approveCompanyLicense}
-          type="button"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 6, mb: 4 }}
-        >
-          Approve Company
-        </Button>
-
-        <Button
-          onClick={createTier}
-          type="button"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 6, mb: 4 }}
-        >
-          Create Tier
-        </Button>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
-          onClick={handleClose}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
       </React.Fragment>
 
 

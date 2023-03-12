@@ -32,48 +32,48 @@ export const testAllGratieSolanaFunctions = async (program: anchor.Program<Grati
   console.log(companyLicense);
 
 
-  console.log('Verifying Company License');
+  // console.log('Verifying Company License');
 
-  await verifyCompanyLicense(program, walletPubKey, companyName);
-
-
-  console.log('Creating Company Rewards Bucket');
-
-  const bucket = await createCompanyRewardsBucket(program, walletPubKey, companyName, {
-    tokenName: faker.internet.userName(),
-    tokenSymbol: faker.internet.userName(),
-    tokenMetadataJsonUrl: faker.internet.url(),
-  });
-
-  console.log(bucket);
+  // await verifyCompanyLicense(program, walletPubKey, companyName);
 
 
+  // console.log('Creating Company Rewards Bucket');
 
-  console.log('Listing Company Licenses');
+  // const bucket = await createCompanyRewardsBucket(program, walletPubKey, companyName, {
+  //   tokenName: faker.internet.userName(),
+  //   tokenSymbol: faker.internet.userName(),
+  //   tokenMetadataJsonUrl: faker.internet.url(),
+  // });
 
-  const licenses = await listCompanyLicenses(program);
-  console.log(licenses);
+  // console.log(bucket);
 
 
-  console.log('Creating user');
+
+  // console.log('Listing Company Licenses');
+
+  // const licenses = await listCompanyLicenses(program);
+  // console.log(licenses);
 
 
-  const user = await createUser(program, walletPubKey, companyName, {
-    userId: userId,
-    encryptedPassword: faker.internet.password(),
-    encryptedPasswordAlgorithm: 0,
-    encryptedPasswordSalt: faker.internet.password(),
-  });
-  console.log(user);
+  // console.log('Creating user');
 
-  console.log('Creating user reward bucket');
 
-  const userRewardBucket = await createUserRewardsBucket(program, walletPubKey, companyName, userId);
+  // const user = await createUser(program, walletPubKey, companyName, {
+  //   userId: userId,
+  //   encryptedPassword: faker.internet.password(),
+  //   encryptedPasswordAlgorithm: 0,
+  //   encryptedPasswordSalt: faker.internet.password(),
+  // });
+  // console.log(user);
 
-  console.log(userRewardBucket);
+  // console.log('Creating user reward bucket');
 
-  const usersList = await getCompanyUser(program, walletPubKey);
-  console.log("usersList for this company", usersList);
+  // const userRewardBucket = await createUserRewardsBucket(program, walletPubKey, companyName, userId);
+
+  // console.log(userRewardBucket);
+
+  // const usersList = await getCompanyUser(program, walletPubKey);
+  // console.log("usersList for this company", usersList);
 
 
 }

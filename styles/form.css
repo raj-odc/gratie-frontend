@@ -3,3 +3,27 @@
     color: #000;
     margin-top: 110px;
 }
+
+.admin-list {
+    margin-top: 110px; 
+}
+
+.non-selected-tab {
+    width: 265px;
+    height: 108px;
+
+    background: #050A04;
+    box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25);
+    border-radius: 35px;
+    color: #fff;
+}
+
+.selected-tab {
+    width: 265px;
+    height: 108px;
+
+    background: #045703;
+    box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25);
+    border-radius: 35px;
+    color: #fff !important;
+}
