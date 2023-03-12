@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gratie-frontend
+  namespace: gratie
+spec:
+  rules:
+    - host: "gratie.xyz"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gratie-frontend
+                port:
+                  number: 80
