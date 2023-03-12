@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import NavBar from './navBar'
 
-import AdminForm from '@/src/components/admin/index';
+import AdminView from '@/src/components/admin/index';
 
 import SolanaTest from '@/src/components/solana-test';
 import Head from 'next/head';
@@ -24,7 +24,7 @@ export default function Admin() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBarWallet/>
-      <AdminForm/>
+      <AdminView/>
     </>
   );
 }

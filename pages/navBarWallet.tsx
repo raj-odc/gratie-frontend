@@ -23,8 +23,7 @@ const Home: NextPage = () => {
             <AppBar position="fixed">
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                      <img className='logo' alt='logo' src='/images/Favicon.png' />
-    -                 <img className='logo-text' alt='logo' src='/images/Logo.png' />
+                       <img className='logo-image' alt='logo' src='/images/Logo.png' />
                     </Typography>
                     {publicKey ? (
                         <div className='top-wallet-section'>
