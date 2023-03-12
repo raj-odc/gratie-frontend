@@ -27,7 +27,8 @@ import { ReactNode, useCallback, useMemo } from 'react';
 
 const CLUSTER = WalletAdapterNetwork.Devnet;
 const CONNECTION_CONFIG: ConnectionConfig = { commitment: 'processed' };
-const ENDPOINT = /*#__PURE__*/ clusterApiUrl(CLUSTER);
+// const ENDPOINT = /*#__PURE__*/ clusterApiUrl(CLUSTER);
+const ENDPOINT = 'http://localhost:8899';
 
 // const theme = /*#__PURE__*/ createTheme();
 

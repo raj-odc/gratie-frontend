@@ -6,15 +6,17 @@ import { getCompanyLicense, getCompanyLicensePDA, getCompanyRewardsBucketPDA, ge
 import { createMintKeyAndTokenAccount } from "./util";
 
 
-export const createCompanyRewardsBucket = async (program: anchor.Program<GratieSolana> | any, wallet: anchor.Wallet, company_name:string) => {
+export const createCompanyRewardsBucket = async (program: anchor.Program<GratieSolana> | any, publicKey: anchor.web3.PublicKey, company_name:string) => {
   const companyLicensePDA = getCompanyLicensePDA(program, company_name);
   const companyRewardsBucketPDA = getCompanyRewardsBucketPDA(program, companyLicensePDA);
 
-  const { mintKey, tokenAccount } = await createMintKeyAndTokenAccount(program, wallet.publicKey);
+  console.log("wallet.publicKey, createCompanyRewardsBucket", publicKey);
 
+  const { mintKey, tokenAccount } = await createMintKeyAndTokenAccount(program, publicKey);
 
+  console.log("publicKey", publicKey);
   await program.methods.createCompanyRewardsBucket(company_name).accounts({
-    mintAuthority: wallet.publicKey,
+    mintAuthority: publicKey,
     companyLicense: companyLicensePDA,
     companyRewardsBucket: companyRewardsBucketPDA,
     mint: mintKey.publicKey,

@@ -86,6 +86,10 @@ export default function List() {
     setFormObject(value);
   };
 
+  const createCompanyUser = async () => {
+    console.log("createCompanyUser", createCompanyUser)
+  }
+
   return (
     <div className=''>
 
@@ -142,13 +146,15 @@ export default function List() {
                 />
               </Grid>
             </Grid>
+
             <Button
+             onClick={createCompanyUser}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 6, mb: 4 }}
             >
-              Register Here
+              Create the Company user
             </Button>
           </Box>
         </Container>

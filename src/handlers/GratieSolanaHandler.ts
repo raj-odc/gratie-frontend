@@ -41,6 +41,9 @@ import { GratieSolana } from "../lib/types/gratie_solana";
 import idl from "../lib/idl/gratie_solana.json";
 import { BN } from "bn.js";
 import { createAssociatedTokenAccountInstruction, createInitializeMintInstruction, getAssociatedTokenAddress, MINT_SIZE, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletAdapter } from "@solana/wallet-adapter-base";
+
 
 interface CreateCompanyLicenseForm {
   name: string;
@@ -51,20 +54,26 @@ interface CreateCompanyLicenseForm {
 }
 
 export class GratieSolanaHandler {
-  public static async connect(): Promise<anchor.Program<GratieSolana> | any> {
+  public static async connect(wallet:any): Promise<anchor.Program<GratieSolana> | any> {
+    let publicKey;
+    const { solana } = window as any;
+
     // change this to devnet later when we use devnet
     const network = 'http://localhost:8899';
 
     // do some checks here if the wallet exists
-    const { solana } = window as any;
-    const response = await solana.connect();
-    // once the user has connected for the first time you can use below
-    //const response = await solana.connect({ onlyIfTrusted: true });
-console.log("response", response);
-    console.log("solana wallat", response.wallat);
-    console.log("Connected with public key: ", response.publicKey.toString());
+    if (!wallet) {
+        const response = await solana.connect();
+        wallet = response.wallat;
+        publicKey = response.publicKey.toString();
+    }
+    else {
+      publicKey = wallet.adapter.publicKey.toString();
+    }
+    
+    console.log("Connected with public key: ", publicKey);
 
-    localStorage.setItem('solanaPubKey', response.publicKey.toString());
+    localStorage.setItem('solanaPubKey', publicKey);
     const connection = new Connection(network, "processed");
     const provider = new AnchorProvider(connection, solana, { preflightCommitment: 'processed' });
     const programID = new PublicKey(idl.metadata.address);
@@ -72,7 +81,6 @@ console.log("response", response);
 
     return program;
   }
-
 
   // solana is window.solana
   public static async createCompanyLicense(program: Program<GratieSolana> | any, solana: any, form: CreateCompanyLicenseForm) {

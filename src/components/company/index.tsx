@@ -23,6 +23,8 @@ import RegForm from '@/src/components/company/form';
 
 import CompanyList from '@/src/components/company/list';
 import { createUserRewardsBucket } from '@/src/handlers/user';
+import { createCompanyLicense } from '@/src/tests/company';
+import { createCompanyRewardsBucket } from '@/src/handlers/company';
 
 
 
@@ -70,7 +72,7 @@ export default function CompanyForm() {
     console.log("user--", connection);
     const solanaPubKey = localStorage.getItem('solanaPubKey')
 
-    const program = await GratieSolanaHandler.connect();
+    const program = await GratieSolanaHandler.connect(wallet);
 
     console.log("program", program);
     setIsWalletConnected(true)
@@ -96,11 +98,11 @@ export default function CompanyForm() {
             // const provider = anchor.AnchorProvider.env();
             // anchor.setProvider(provider);
             // const wallet = anchor.AnchorProvider.env().wallet as Wallet;
-            console.log('program',program);
-            console.log(program.wallat)
-            console.log("solana", window.solana.wallet);
+            // console.log('program',program);
+            console.log(wallet)
+            // console.log("solana", window.solana.wallet);
 
-            await createUserRewardsBucket(program, program.wallat, 'test');
+            await createCompanyRewardsBucket(program, wallet, 'test');
             console.log("companyRewardsBucket", companyRewardsBucket)
         // }
 
@@ -118,6 +120,40 @@ export default function CompanyForm() {
   const handleToggle = () => {
     setOpen(!open);
   };
+
+
+
+  const createRewardToken = async () => {
+    console.log("wallet", wallet)
+   
+    
+    if (wallet) {
+        const program = await GratieSolanaHandler.connect(wallet);
+        const allLicenses = await program.account.companyLicense.all();
+    console.log(allLicenses);
+        console.log("connection", program)
+        console.log("wallet", wallet)
+        const companyRewards = await createCompanyRewardsBucket(program, (wallet as any).adapter.publicKey, 'test comopany1');
+        console.log("companyRewards", companyRewards);
+    }
+    else {
+        confirm("First connect to the wallet");
+    }
+     // const provider = anchor.AnchorProvider.env();
+            // anchor.setProvider(provider);
+            // const wallet = anchor.AnchorProvider.env().wallet as Wallet;
+            // console.log('program',program);
+            console.log(wallet)
+            // console.log("solana", window.solana.wallet);
+
+            
+            // console.log("companyRewardsBucket", companyRewardsBucket)
+    // console.log("createRewardToken", createRewardToken)
+  }
+
+  const getAllUser = async () => {
+    console.log("getAllUser", getAllUser)
+  }
   
   return (
     <div className=''>
@@ -140,6 +176,26 @@ export default function CompanyForm() {
         </Container>
         : validCompany ? <CompanyList/> : <RegForm/>
         }
+
+            <Button
+             onClick={createRewardToken}
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 6, mb: 4 }}
+            >
+              Create the Company Reward Token
+            </Button>
+
+            <Button
+              onClick={getAllUser}
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 6, mb: 4 }}
+            >
+              List the User
+            </Button>
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={open}

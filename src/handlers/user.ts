@@ -128,7 +128,9 @@ const getAllUserRewardsBuckets = async (program: Program<GratieSolana> | any) =>
 
 
 export const createUserRewardsBucket = async (program: Program<GratieSolana> | any, wallet: Wallet, company_name:string) => {
+  console.log("program", program);
   const companyLicensePDA = getCompanyLicensePDA(program, company_name);
+  
   const companyRewardsBucketPDA = getCompanyRewardsBucketPDA(program, companyLicensePDA);
   const companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
   const userPDA = getUserPDA(program, companyLicensePDA, USER_ID);

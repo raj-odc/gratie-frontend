@@ -110,7 +110,21 @@ export default function Admin() {
     handleClose();
   }
   
+  const getAllCompanies = async () => {
+    console.log("getAllCompanies", getAllCompanies)
+  }
 
+  const getAllPendingCompanies = async () => {
+    console.log("getAllPendingCompanies", getAllPendingCompanies)
+  }
+
+  const approveCompanyLicense = async () => {
+    console.log("approveCompanyLicense", approveCompanyLicense)
+  }
+
+  const createTier = async () => {
+    console.log("createTier", createTier)
+  }
   
   return (
     <div className=''>
@@ -132,6 +146,45 @@ export default function Admin() {
             </Button>
         </Container>
         {validCompany && validCompany==true ? <RegForm/> : validCompany==false ? <CompanyList/> : "test"}
+        
+        <Button
+             onClick={getAllCompanies}
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 6, mb: 4 }}
+            >
+              List all companies
+            </Button>
+            <Button
+             onClick={getAllPendingCompanies}
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 6, mb: 4 }}
+            >
+              Pending Approval
+            </Button>
+
+            <Button
+             onClick={approveCompanyLicense}
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 6, mb: 4 }}
+            >
+              Approve Company
+            </Button>
+
+            <Button
+             onClick={createTier}
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 6, mb: 4 }}
+            >
+              Create Tier
+            </Button>
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={open}
