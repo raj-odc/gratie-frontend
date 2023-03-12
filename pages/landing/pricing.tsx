@@ -8,15 +8,7 @@ export default function Pricing(){
             <Typography
         variant="h4"
         noWrap
-        sx={{
-          fontSize:'60px',
-          flexGrow: 1,
-          fontFamily: 'Book antique',
-          color: '#ffff',
-          textAlign:"justify",
-          mb:6,
-          mt:18
-        }}
+        
       >Pricing</Typography>
         <Grid container spacing={1} sx={{margin:'auto'}}>
             <Grid item xs={12} md={3}>

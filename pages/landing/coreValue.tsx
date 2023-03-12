@@ -50,10 +50,10 @@ export default function CoreValue(){
               Click on issue rewards , give required inputs ( company valuation, net revenue of last quarter, % of distribution, no of users )
               </ListItem>
               <ListItem>
-              Based on your inputs your own enterprise's cryptocurrency is issued and supplied to the circulation , click on submit button and complete the transaction in blockchain.
+              Based on your inputs your own enterprise&apos;s cryptocurrency is issued and supplied to the circulation , click on submit button and complete the transaction in blockchain.
               </ListItem>
               <ListItem>
-              A magic link for minting user NFT's is created , share it to the necessary and they can claim the rewards within our dashboard itself.
+              A magic link for minting user NFT&apos;s is created , share it to the necessary and they can claim the rewards within our dashboard itself.
               </ListItem>
               <ListItem>
               Enjoy hassle free maintenance of your ecosystem

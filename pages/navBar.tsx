@@ -16,6 +16,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import ToggleButtonNotEmpty from './toggleMenu';
 
 import ConnectWallet from "../src/views/WalletView/connectWallet";
+import Image from 'next/image';
 
 const pages = ['Use Case', 'Pricing', 'Community'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -50,8 +51,7 @@ function ResponsiveAppBar() {
           <Toolbar disableGutters>
             <Box sx={{ display:'flex' ,margin:'auto', mt:2 }}>
               <Box  sx={{ display:'flex', margin:'auto', pr:3}}>
-              <img width={70} height={70} style={{marginTop:'10px', marginRight:'-10px'}} alt='logo' src='/images/Favicon.png' />
-              <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                <Image width={105} height={95} src='/images/Logo.png' alt={''}></Image>
               </Box>
               <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                 <IconButton
