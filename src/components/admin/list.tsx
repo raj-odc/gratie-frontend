@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
-import { listCompanyLicenses, verifyCompanyLicense, getAllVerifiedLicenses, getAllPendingLicenses } from "@/src/gratie_solana_contract/gratie_solana_company";
+import { getAllVerifiedLicenses, getAllPendingLicenses } from "@/src/gratie_solana_contract/gratie_solana_company";
 import { useEffect } from 'react';
 import ListUserTable from './table';
 
@@ -55,23 +55,25 @@ export default function BasicTabs() {
   };
 
   const getAllPendingCompanies = async () => {
-    console.log("sdfsfsd--------")
     const program = await connectToGratieSolanaContract();
-    const pendingLics = await getAllPendingLicenses(program);
+    const pendingLics:any = await getAllPendingLicenses(program);
     setPendingLicenses(pendingLics);
+    await approveCompanyLicense();
     return pendingLics;
   }
 
   const approveCompanyLicense = async () => {
     const program = await connectToGratieSolanaContract();
-    const verifiedLics = await getAllVerifiedLicenses(program);
+    const verifiedLics:any = await getAllVerifiedLicenses(program);
     setApprovedLicenses(verifiedLics);
-    console.log("verifiedLics", verifiedLics)
     return verifiedLics;
   }
+  
+//   const createTier = async () => {
+//     console.log("createTier", createTier)
+//   }
 
   useEffect(() => {
-    approveCompanyLicense();
     getAllPendingCompanies();
   }, []);
 
@@ -93,7 +95,6 @@ export default function BasicTabs() {
             {
              approvedLicenses && <ListUserTable data={approvedLicenses} />
            }
-            Item Two
         </TabPanel>
         </Box>
     </Container>

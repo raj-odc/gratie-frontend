@@ -15,9 +15,8 @@ export default function ListUserTable(props:any) {
 
     const handleVerify = async(companyName:string) => {
         const program = await connectToGratieSolanaContract();
-        const walletPubKey:any = wallet.publicKey?.toString()
+        const walletPubKey:any = wallet.publicKey;
         const isAdmin = await checkAdmin(program, walletPubKey);
-        console.log('isadmin:', isAdmin);
         if(!isAdmin){
             confirm("You can't do Verify until you are admin");
             return;
@@ -38,7 +37,7 @@ export default function ListUserTable(props:any) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.data.map((row) => (
+          {props.data.map((row:any) => (
             <TableRow
               key={row.account.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
