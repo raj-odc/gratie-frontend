@@ -4,7 +4,7 @@ import { GratieSolana } from "../target/types/gratie_solana";
 import { TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress, createInitializeMintInstruction, MINT_SIZE } from '@solana/spl-token'
 
 // Note: this works on devnet but not on localnet
-const testMintCompanyLicenseMetaplex = async (program: Program<GratieSolana>, wallet: Wallet) => {
+const testMintCompanyLicenseMetaplex = async (program: Program<GratieSolana> | any, wallet: Wallet) => {
   const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
     "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
   );

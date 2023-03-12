@@ -18,7 +18,7 @@ import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 // this way the user can just come to gratie and login and will be instantly identified
 // and can use his private key
 
-export const createUser = async (program: Program<GratieSolana>, wallet: Wallet) => {
+export const createUser = async (program: Program<GratieSolana> | any, wallet: Wallet) => {
 
   const user = anchor.web3.Keypair.generate();
 
@@ -70,7 +70,7 @@ export const encryptUserPassword = async (userPasswordPlaintext: string, salt: s
 };
 
 // the user needs to have the encrypted user password to decrypt the private key
-export const userGetPrivateKey = async (program: Program<GratieSolana>, userPasswordPlaintext: string) => {
+export const userGetPrivateKey = async (program: Program<GratieSolana> | any, userPasswordPlaintext: string) => {
   const companyLicensePDA = getCompanyLicensePDA(program, COMPANY_NAME);
 
   const email_sha = sha256.hash(USER_EMAIL);
@@ -106,12 +106,12 @@ export const userGetPrivateKey = async (program: Program<GratieSolana>, userPass
 
 };
 
-const getAllUserRewardsBuckets = async (program: Program<GratieSolana>) => {
+const getAllUserRewardsBuckets = async (program: Program<GratieSolana> | any) => {
   return await program.account.userRewardsBucket.all();
 }
 
 
-export const createUserRewardsBucket = async (program: Program<GratieSolana>, wallet: Wallet) => {
+export const createUserRewardsBucket = async (program: Program<GratieSolana> | any, wallet: Wallet) => {
   const companyLicensePDA = getCompanyLicensePDA(program, COMPANY_NAME);
   const companyRewardsBucketPDA = getCompanyRewardsBucketPDA(program, companyLicensePDA);
   const companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
@@ -138,7 +138,7 @@ export const createUserRewardsBucket = async (program: Program<GratieSolana>, wa
 
 
 // claims the user to a new private key that is generated here
-export const claimUser = async (program: Program<GratieSolana>, userPassword: string) => {
+export const claimUser = async (program: Program<GratieSolana> | any, userPassword: string) => {
   const newUserKeypair = anchor.web3.Keypair.generate();
 
   const companyLicensePDA = getCompanyLicensePDA(program, COMPANY_NAME);
@@ -186,7 +186,7 @@ export const claimUser = async (program: Program<GratieSolana>, userPassword: st
 
 };
 
-export const claimUserToHisOwnWallet = async (program: Program<GratieSolana>, newUserPubKey: anchor.web3.PublicKey, userPassword: string) => {
+export const claimUserToHisOwnWallet = async (program: Program<GratieSolana> | any, newUserPubKey: anchor.web3.PublicKey, userPassword: string) => {
 
   const companyLicensePDA = getCompanyLicensePDA(program, COMPANY_NAME);
   const companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);

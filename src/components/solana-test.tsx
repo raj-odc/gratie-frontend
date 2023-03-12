@@ -29,7 +29,7 @@ const App = () => {
       console.log("provider", provider);
       anchor.setProvider(provider);
     
-      const program = anchor.workspace.GratieSolana as Program<GratieSolana>
+      const program = anchor.workspace.GratieSolana as Program<GratieSolana> | any
       console.log("program",program);
 
       const wallet = anchor.AnchorProvider.env().wallet as Wallet;

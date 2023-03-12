@@ -4,7 +4,7 @@ import { GratieSolana } from "../lib/types/gratie_solana";
 import { TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress, createInitializeMintInstruction, MINT_SIZE, getOrCreateAssociatedTokenAccount, getAccount } from '@solana/spl-token'
 
 
-export const companyCreateInitialTokenAccountForUser = async (program: Program<GratieSolana>, wallet: anchor.web3.PublicKey, mintKey: anchor.web3.PublicKey, user: anchor.web3.PublicKey) => {
+export const companyCreateInitialTokenAccountForUser = async (program: Program<GratieSolana> | any, wallet: anchor.web3.PublicKey, mintKey: anchor.web3.PublicKey, user: anchor.web3.PublicKey) => {
   const tokenAccount = await getAssociatedTokenAddress(
     mintKey,
     user
@@ -26,7 +26,7 @@ export const companyCreateInitialTokenAccountForUser = async (program: Program<G
 
 };
 
-export const userCreateTokenAccount = async (program: Program<GratieSolana>, oldUserWallet: anchor.web3.Keypair, mintKey: anchor.web3.PublicKey, newUserPubKey: anchor.web3.PublicKey) => {
+export const userCreateTokenAccount = async (program: Program<GratieSolana> | any, oldUserWallet: anchor.web3.Keypair, mintKey: anchor.web3.PublicKey, newUserPubKey: anchor.web3.PublicKey) => {
   const tokenAccount = await getAssociatedTokenAddress(
     mintKey,
     newUserPubKey,
@@ -49,7 +49,7 @@ export const userCreateTokenAccount = async (program: Program<GratieSolana>, old
 };
 
 
-export const createMintKeyAndTokenAccount = async (program: Program<GratieSolana>, walletPublicKey: anchor.web3.PublicKey) => {
+export const createMintKeyAndTokenAccount = async (program: Program<GratieSolana> | any, walletPublicKey: anchor.web3.PublicKey) => {
   const mintKey: anchor.web3.Keypair = anchor.web3.Keypair.generate();
 
   const tokenAccount = await getAssociatedTokenAddress(

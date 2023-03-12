@@ -6,7 +6,7 @@ import { COMPANY_NAME, USER_ID } from "./gratie-solana";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 
-export const transferTokensToUser = async (program: anchor.Program<GratieSolana>, wallet: anchor.Wallet, amount: anchor.BN) => {
+export const transferTokensToUser = async (program: anchor.Program<GratieSolana> | any, wallet: anchor.Wallet, amount: anchor.BN) => {
   const companyLicensePDA = getCompanyLicensePDA(program, COMPANY_NAME);
   const companyRewardsBucketPDA = getCompanyRewardsBucketPDA(program, companyLicensePDA);
   const companyRewardsBucket = await program.account.companyRewardsBucket.fetch(companyRewardsBucketPDA);

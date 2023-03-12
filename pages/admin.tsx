@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import NavBar from './navBar'
 
-import RegForm from '@/src/components/registration/form';
+import RegForm from '@/src/components/company/form';
 
 import SolanaTest from '@/src/components/solana-test';
 

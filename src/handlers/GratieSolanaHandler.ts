@@ -51,7 +51,7 @@ interface CreateCompanyLicenseForm {
 }
 
 export class GratieSolanaHandler {
-  public static async connect(): Promise<anchor.Program<GratieSolana>> {
+  public static async connect(): Promise<anchor.Program<GratieSolana> | any> {
     // change this to devnet later when we use devnet
     const network = 'http://localhost:8899';
 
@@ -60,20 +60,22 @@ export class GratieSolanaHandler {
     const response = await solana.connect();
     // once the user has connected for the first time you can use below
     //const response = await solana.connect({ onlyIfTrusted: true });
-
+console.log("response", response);
+    console.log("solana wallat", response.wallat);
     console.log("Connected with public key: ", response.publicKey.toString());
 
+    localStorage.setItem('solanaPubKey', response.publicKey.toString());
     const connection = new Connection(network, "processed");
     const provider = new AnchorProvider(connection, solana, { preflightCommitment: 'processed' });
     const programID = new PublicKey(idl.metadata.address);
-    const program: anchor.Program<GratieSolana> = new anchor.Program(idl as any, programID, provider);
+    const program: anchor.Program<GratieSolana> | any = new anchor.Program(idl as any, programID, provider);
 
     return program;
   }
 
 
   // solana is window.solana
-  public static async createCompanyLicense(program: Program<GratieSolana>, solana: any, form: CreateCompanyLicenseForm) {
+  public static async createCompanyLicense(program: Program<GratieSolana> | any, solana: any, form: CreateCompanyLicenseForm) {
     const companyLicensePDA = getCompanyLicensePDA(program, form.name);
 
     const { mintKey, tokenAccount } = await createMintKeyAndTokenAccount(program, solana.publicKey);
@@ -97,7 +99,7 @@ export class GratieSolanaHandler {
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-export const createMintKeyAndTokenAccount = async (program: Program<GratieSolana>, walletPublicKey: anchor.web3.PublicKey) => {
+export const createMintKeyAndTokenAccount = async (program: Program<GratieSolana> | any, walletPublicKey: anchor.web3.PublicKey) => {
   const mintKey: anchor.web3.Keypair = anchor.web3.Keypair.generate();
 
   const tokenAccount = await getAssociatedTokenAddress(
@@ -141,28 +143,33 @@ export const createMintKeyAndTokenAccount = async (program: Program<GratieSolana
 
 // PDA helper functions you can get them from test/pda in gratie-solana
 
-export const getCompanyLicense = async (program: Program<GratieSolana>, company_name: string) => {
+export const getCompanyLicense = async (program: Program<GratieSolana> | any, company_name: string) => {
   const companyLicensePDA = getCompanyLicensePDA(program, company_name);
   return await program.account.companyLicense.fetch(companyLicensePDA);
 }
 
-export const getTierPDA = (program: Program<GratieSolana>, tierID: number) => {
+export const getTierPDA = (program: Program<GratieSolana> | any, tierID: number) => {
   return getPDA(program, 'tier', [tierID]);
 }
 
-const getCompanyLicensePDA = (program: Program<GratieSolana>, company_name: string) => {
+export const getCompanyLicensePDA = (program: Program<GratieSolana> | any, company_name: string) => {
   return getPDA(program, 'company_license', [company_name]);
 }
 
-export const getGratieWalletPDA = (program: Program<GratieSolana>) => {
+export const getGratieWalletPDA = (program: Program<GratieSolana> | any) => {
   return getPDA(program, 'gratie_wallet', []);
 };
 
-export const getCompanyRewardsBucketPDA = (program: Program<GratieSolana>, companyLicensePDA: anchor.web3.PublicKey) => {
+export const getCompanyRewardsBucketPDA = (program: Program<GratieSolana> | any, companyLicensePDA: anchor.web3.PublicKey) => {
   return getPDA(program, 'company_rewards_bucket', [companyLicensePDA]);
 }
 
-const getPDA = (program: Program<GratieSolana>, id: string, keys: (anchor.web3.PublicKey | string | number)[]) => {
+export const getCompanyRewardsBucket = async (program: Program<GratieSolana> | any, companyLicensePDA: anchor.web3.PublicKey) => {
+  const companyRewardsBucketPDA = getCompanyRewardsBucketPDA(program, companyLicensePDA);
+  return await program.account.companyRewardsBucket.fetch(companyRewardsBucketPDA);
+}
+
+const getPDA = (program: Program<GratieSolana> | any, id: string, keys: (anchor.web3.PublicKey | string | number)[]) => {
   const [pda, _] = anchor.web3.PublicKey.findProgramAddressSync(
     [
       anchor.utils.bytes.utf8.encode(id),

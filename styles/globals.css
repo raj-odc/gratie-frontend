@@ -303,3 +303,24 @@ a {
   width: 98px;
   height: 33px;
 }
+
+.top-wallet-section {
+  display: flex;
+}
+.top-wallet-section button {
+  margin-left: 10px !important;
+  color: white !important;
+  background: radial-gradient(122.09% 122.09% at 50% 50%, rgba(0, 255, 1, 0) 0%, #00FF01 100%) !important;
+  border-radius: 100px !important;
+  border-color: #00FF01 !important;
+}
+
+.top-wallet-section button:hover {
+  border-color: #FFF !important;
+}
+
+.top-wallet-section div {
+  color: #000;
+  font-size: 20px;
+  background-color: #00FF01;
+}

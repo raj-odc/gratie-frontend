@@ -3,6 +3,118 @@
   "name": "gratie_solana",
   "instructions": [
     {
+      "name": "addCompanyLicenseToMetaplex",
+      "accounts": [
+        {
+          "name": "companyLicenseOwner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "companyLicense",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "masterEdition",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "addCompanyRewardTokensToMetaplex",
+      "accounts": [
+        {
+          "name": "companyLicenseOwner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "companyRewardsBucket",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "companyLicense",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "isAdmin",
       "accounts": [],
       "args": [
@@ -113,7 +225,7 @@
           "type": "string"
         },
         {
-          "name": "logoUri",
+          "name": "tokenMetadataJsonUrl",
           "type": "string"
         },
         {
@@ -218,6 +330,18 @@
       "args": [
         {
           "name": "companyName",
+          "type": "string"
+        },
+        {
+          "name": "tokenName",
+          "type": "string"
+        },
+        {
+          "name": "tokenSymbol",
+          "type": "string"
+        },
+        {
+          "name": "tokenMetadataJsonUri",
           "type": "string"
         }
       ]
@@ -462,75 +586,6 @@
       "args": []
     },
     {
-      "name": "mintCompanyLicenseMetaplex",
-      "accounts": [
-        {
-          "name": "mintAuthority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "metadata",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "masterEdition",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "creatorKey",
-          "type": "publicKey"
-        },
-        {
-          "name": "uri",
-          "type": "string"
-        },
-        {
-          "name": "title",
-          "type": "string"
-        }
-      ]
-    },
-    {
       "name": "createTier",
       "accounts": [
         {
@@ -600,10 +655,6 @@
             "type": "string"
           },
           {
-            "name": "logoUri",
-            "type": "string"
-          },
-          {
             "name": "evaluation",
             "type": "u64"
           },
@@ -613,9 +664,15 @@
           },
           {
             "name": "tokenAccount",
-            "type": {
-              "option": "publicKey"
-            }
+            "type": "publicKey"
+          },
+          {
+            "name": "tokenMetadataJsonUri",
+            "type": "string"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
           },
           {
             "name": "userCount",
@@ -652,6 +709,18 @@
           {
             "name": "tokenMintKey",
             "type": "publicKey"
+          },
+          {
+            "name": "tokenSymbol",
+            "type": "string"
+          },
+          {
+            "name": "tokenName",
+            "type": "string"
+          },
+          {
+            "name": "tokenMetadataJsonUri",
+            "type": "string"
           },
           {
             "name": "userRewardsBucketCount",
@@ -919,6 +988,6 @@
     }
   ],
   "metadata": {
-    "address": "AEf99S19YTaox9E8aX3ugpGJtHTHjaQtSY2ixtLysFGr"
+    "address": "876aszEfTpFmid7jbhoZuTZW3wKewB6YXCkVnAxwcsEY"
   }
 }

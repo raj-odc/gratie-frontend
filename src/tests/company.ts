@@ -7,7 +7,7 @@ import { getCompanyLicense, getCompanyLicensePDA, getCompanyRewardsBucketPDA, ge
 import { createMintKeyAndTokenAccount } from "./util";
 
 
-export const createCompanyRewardsBucket = async (program: anchor.Program<GratieSolana>, wallet: anchor.Wallet) => {
+export const createCompanyRewardsBucket = async (program: anchor.Program<GratieSolana> | any, wallet: anchor.Wallet) => {
   const companyLicensePDA = getCompanyLicensePDA(program, COMPANY_NAME);
   const companyRewardsBucketPDA = getCompanyRewardsBucketPDA(program, companyLicensePDA);
 
@@ -26,7 +26,7 @@ export const createCompanyRewardsBucket = async (program: anchor.Program<GratieS
 }
 
 
-export const verifyCompanyLicense = async (program: anchor.Program<GratieSolana>, wallet: anchor.Wallet) => {
+export const verifyCompanyLicense = async (program: anchor.Program<GratieSolana> | any, wallet: anchor.Wallet) => {
   const companyLicense = getCompanyLicensePDA(program, COMPANY_NAME);
   await program.methods.verifyCompanyLicense().accounts({ admin: wallet.publicKey, companyLicense: companyLicense }).rpc();
 
@@ -35,7 +35,7 @@ export const verifyCompanyLicense = async (program: anchor.Program<GratieSolana>
   expect(updatedLicense.verified).to.equal(true);
 }
 
-export const createCompanyLicense = async (program: anchor.Program<GratieSolana>, wallet: anchor.Wallet) => {
+export const createCompanyLicense = async (program: anchor.Program<GratieSolana> | any, wallet: anchor.Wallet) => {
   const companyLicensePDA = getCompanyLicensePDA(program, COMPANY_NAME);
 
   const testEmail = "mail@mucks.dev";

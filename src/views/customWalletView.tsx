@@ -14,7 +14,7 @@ const CustomWalletView = () => {
                   onClick={connect}
                   sx={{ my: 2, color: 'white', display: 'block', paddingX:2, fontSize:'20px' }}
                 >
-                 Connect Wallet
+                 Connect Wallet1111111111111111111111
                 </Button>
     );
 };

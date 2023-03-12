@@ -34,7 +34,7 @@ describe("gratie-solana", () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-  const program = anchor.workspace.GratieSolana as Program<GratieSolana>
+  const program = anchor.workspace.GratieSolana as Program<GratieSolana> | any
   const wallet = anchor.AnchorProvider.env().wallet as Wallet;
 
   it("create-gratie-wallet", async () => {
