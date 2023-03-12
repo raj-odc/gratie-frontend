@@ -29,13 +29,17 @@ pnpm dev
 ```mermaid
 sequenceDiagram
   participant Admin
+  participant Wallet
   participant Company
   participant User
+  Admin-->>Wallet: Connect to the wallet
   Admin-->>Company: Approve the company
   Admin-->>Company: Add the new tier
+  Company-->>Wallet: Connect to the wallet
   Company-->>Company: Register their company valuation
   Company-->>Company:Create the reward bucket
   Company-->>Company: Add the company User
+  User-->>Wallet: Connect to the wallet
   User-->>User: mint rewards
 
   Note right of User: happens automatically <br/> on first login
