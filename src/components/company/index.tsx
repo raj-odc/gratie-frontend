@@ -54,6 +54,15 @@ export default function CompanyForm() {
   const [Loding, setLoading] = useState(false)
   const [solana, setSolana] = useState({})
 
+
+  // todo:
+  // Check for wallet present, else wallet connect
+  // Get all license, -> if this user has already company license 
+  //  -> Check for the reward token if its present then promt to list  else create reard token
+  //  -> Else -> Add company screen ()
+  // Pass the list of licenses to list component ,also show add user
+
+
   const initWallet = async () => {
     handleToggle();
 

@@ -48,6 +48,23 @@ export default function Admin() {
   const [Loding, setLoading] = useState(false)
   const [solana, setSolana] = useState({})
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
+
+  handleToggle();
+
+  // todo:
+  // List of all companies from the list
+  // Filter with non verified companies
+  // Verify company
+  // Add tier button
+ 
+  
+
 //   React.useEffect(() => {
 //     // handleToggle();
 //   })
@@ -93,12 +110,7 @@ export default function Admin() {
     handleClose();
   }
   
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleToggle = () => {
-    setOpen(!open);
-  };
+
   
   return (
     <div className=''>
