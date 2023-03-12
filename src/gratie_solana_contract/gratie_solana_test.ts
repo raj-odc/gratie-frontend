@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import * as anchor from "@project-serum/anchor";
 import { sha256 } from "@project-serum/anchor/dist/cjs/utils";
 import { createCompanyLicense, createCompanyRewardsBucket, listCompanyLicenses, verifyCompanyLicense } from "./gratie_solana_company";
+import { checkAdmin } from "./gratie_solana_contract";
 import { createUser, createUserRewardsBucket } from "./gratie_solana_user";
 import { GratieSolana } from "./types/gratie_solana";
 
@@ -12,6 +13,10 @@ export const testAllGratieSolanaFunctions = async (program: anchor.Program<Grati
   const userEmail = faker.internet.email();
   const userId = sha256.hash(userEmail).substring(0, 16);
 
+  console.log('is admin?');
+
+  const isAdmin = await checkAdmin(program, walletPubKey);
+  console.log('isadmin:', isAdmin);
 
 
   console.log('Creating Company License');

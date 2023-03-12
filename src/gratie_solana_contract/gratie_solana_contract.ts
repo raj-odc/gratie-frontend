@@ -13,3 +13,13 @@ export const connectToGratieSolanaContract = async (): Promise<anchor.Program<Gr
 
   return program;
 }
+
+export const checkAdmin = async (program: anchor.Program<GratieSolana>, admin: anchor.web3.PublicKey): Promise<boolean> => {
+  try {
+    await program.methods.isAdmin(admin).rpc();
+    return true;
+  } catch (e) {
+    return false;
+
+  }
+}
