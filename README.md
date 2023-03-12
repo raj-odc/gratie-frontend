@@ -33,10 +33,10 @@ sequenceDiagram
   participant User
   Admin-->>Company: Approve the company
   Admin-->>Company: Add the new tier
-  Company-->>Register their company valuation
-  Company-->>Create the reward bucket
-  Company-->>Add the company User
-  User-->> mint rewards
+  Company-->>Company: Register their company valuation
+  Company-->>Company:Create the reward bucket
+  Company-->>Company: Add the company User
+  User-->>User: mint rewards
 
   Note right of User: happens automatically <br/> on first login
   User-->>Contract: claim encrypted keypair and ATA
