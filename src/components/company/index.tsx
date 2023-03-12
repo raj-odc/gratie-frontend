@@ -23,9 +23,12 @@ import RegForm from '@/src/components/company/form';
 import CompanyList from '@/src/components/company/list';
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { getCompanyLicensePDA, getCompanyRewardsBucket } from '@/src/gratie_solana_contract/gratie_solana_pda';
-import { createCompanyRewardsBucket, CreateCompanyRewardsBucketForm } from '@/src/gratie_solana_contract/gratie_solana_company';
+import { createCompanyRewardsBucket, CreateCompanyRewardsBucketForm, getCompanyRewardsBucketForCompany } from '@/src/gratie_solana_contract/gratie_solana_company';
+import { getCompanyUser } from '@/src/gratie_solana_contract/gratie_solana_user';
+
 
 import GratieSolanaTest from "../../gratie_solana_contract/gratieSolanaContractTest";
+import { faker } from '@faker-js/faker';
 
 // import '@/styles/form.css';
 
@@ -130,43 +133,35 @@ export default function CompanyForm() {
 
 
   const createRewardToken = async () => {
-    console.log("wallet", wallet)
-
-
     if (wallet) {
       const program = await connectToGratieSolanaContract();
       const allLicenses = await program.account.companyLicense.all();
-      console.log(allLicenses);
-      console.log("connection", program)
-      console.log("wallet", wallet)
-
+      const companyName = allLicenses[0].account.name
+      const rewards:any = getCompanyRewardsBucketForCompany(program, companyName)
+      if (rewards){
+        confirm("already rewards present for the company");
+        return;
+      }
       const companyRewardsBucketForm: CreateCompanyRewardsBucketForm = {
-        tokenName: 'test',
-        tokenSymbol: 'test',
-        tokenMetadataJsonUrl: 'https://test.com/testconfig.json',
-
+        tokenName: faker.internet.userName(),
+        tokenSymbol: faker.internet.userName(),
+        tokenMetadataJsonUrl: faker.internet.url(),
       };
-
-      const companyRewards = await createCompanyRewardsBucket(program, (wallet as any).adapter.publicKey, 'test comopany1', companyRewardsBucketForm);
-      console.log("companyRewards", companyRewards);
+      const companyRewards = await createCompanyRewardsBucket(program, (wallet as any).adapter.publicKey, companyName, companyRewardsBucketForm);
+      console.log("companyRewards created", companyRewards);
     }
     else {
       confirm("First connect to the wallet");
     }
-    // const provider = anchor.AnchorProvider.env();
-    // anchor.setProvider(provider);
-    // const wallet = anchor.AnchorProvider.env().wallet as Wallet;
-    // console.log('program',program);
-    console.log(wallet)
-    // console.log("solana", window.solana.wallet);
-
-
-    // console.log("companyRewardsBucket", companyRewardsBucket)
-    // console.log("createRewardToken", createRewardToken)
   }
 
   const getAllUser = async () => {
-    console.log("getAllUser", getAllUser)
+    let users;
+    if(wallet) {
+        const program = await connectToGratieSolanaContract();
+        users = await getCompanyUser(program, wallet?.adapter.publicKey);
+    }
+    console.log("getAllUser", users)
   }
 
   return (

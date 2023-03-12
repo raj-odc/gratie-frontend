@@ -11,6 +11,13 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Akord } from '@akord/akord-js'
 import { useState } from 'react'
+import { sha256 } from "@project-serum/anchor/dist/cjs/utils";
+
+
+import { createUser } from '@/src/gratie_solana_contract/gratie_solana_user';
+import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
+import { faker } from '@faker-js/faker';
+
 
 
 
@@ -86,7 +93,19 @@ export default function List() {
   };
 
   const createCompanyUser = async () => {
-    console.log("createCompanyUser", createCompanyUser)
+    if (wallet) {
+        const userEmail = faker.internet.email();
+        const program = await connectToGratieSolanaContract();
+        const allLicenses = await program.account.companyLicense.all();
+        const companyName = allLicenses[0].account.name
+        const user = await createUser(program, wallet.adapter.publicKey, companyName, {
+            userId: sha256.hash(userEmail).substring(0, 16),
+            encryptedPassword: faker.internet.password(),
+            encryptedPasswordAlgorithm: 0,
+            encryptedPasswordSalt: faker.internet.password(),
+        });
+        console.log("createCompanyUser", user)
+    }
   }
 
   return (
