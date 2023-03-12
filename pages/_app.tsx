@@ -28,50 +28,50 @@ import { ReactNode, useCallback, useMemo } from 'react';
 const CLUSTER = WalletAdapterNetwork.Devnet;
 const CONNECTION_CONFIG: ConnectionConfig = { commitment: 'processed' };
 // const ENDPOINT = /*#__PURE__*/ clusterApiUrl(CLUSTER);
-const ENDPOINT = 'http://localhost:8899';
+const ENDPOINT = process.env.NODE_ENV === 'development' ? 'http://localhost:8899' : 'https://api.devnet.solana.com';
 
 // const theme = /*#__PURE__*/ createTheme();
 
 function App({ children }: { children: ReactNode }) {
-    const { enqueueSnackbar } = useSnackbar();
-    const handleWalletError = useCallback(
-        (e: WalletError) => {
-            enqueueSnackbar(`${e.name}: ${e.message}`, { variant: 'error' });
-        },
-        [enqueueSnackbar],
-    );
-    const adapters = useMemo(
-        () =>
-            typeof window === 'undefined'
-                ? [] // No wallet adapters when server-side rendering.
-                : [
-                      /**
-                       * Note that you don't have to include the SolanaMobileWalletAdapter here;
-                       * It will be added automatically when this app is running in a compatible mobile context.
-                       */
-                  ],
-        [],
-    );
-    return (
-      <main className={myFont.className}>
-        <ThemeProvider theme={theme}>
-          <ConnectionProvider config={CONNECTION_CONFIG} endpoint={ENDPOINT}>
-                <WalletProvider autoConnect={true} onError={handleWalletError} wallets={adapters}>
-                    <WalletModalProvider>{children}</WalletModalProvider>
-                </WalletProvider>
-            </ConnectionProvider>
-        </ThemeProvider>
-      </main>)
+  const { enqueueSnackbar } = useSnackbar();
+  const handleWalletError = useCallback(
+    (e: WalletError) => {
+      enqueueSnackbar(`${e.name}: ${e.message}`, { variant: 'error' });
+    },
+    [enqueueSnackbar],
+  );
+  const adapters = useMemo(
+    () =>
+      typeof window === 'undefined'
+        ? [] // No wallet adapters when server-side rendering.
+        : [
+          /**
+           * Note that you don't have to include the SolanaMobileWalletAdapter here;
+           * It will be added automatically when this app is running in a compatible mobile context.
+           */
+        ],
+    [],
+  );
+  return (
+    <main className={myFont.className}>
+      <ThemeProvider theme={theme}>
+        <ConnectionProvider config={CONNECTION_CONFIG} endpoint={ENDPOINT}>
+          <WalletProvider autoConnect={true} onError={handleWalletError} wallets={adapters}>
+            <WalletModalProvider>{children}</WalletModalProvider>
+          </WalletProvider>
+        </ConnectionProvider>
+      </ThemeProvider>
+    </main>)
 }
 
 function ExampleMobileDApp({ Component, pageProps }: AppProps) {
-    return (
-        <SnackbarProvider autoHideDuration={10000}>
-            <App>
-                <Component {...pageProps} />
-            </App>
-        </SnackbarProvider>
-    );
+  return (
+    <SnackbarProvider autoHideDuration={10000}>
+      <App>
+        <Component {...pageProps} />
+      </App>
+    </SnackbarProvider>
+  );
 }
 
 export default ExampleMobileDApp;

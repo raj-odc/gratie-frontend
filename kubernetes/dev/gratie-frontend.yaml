@@ -1,22 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gratie-frontend
+  name: gratie-frontend-dev
   namespace: gratie
   labels:
-    app: gratie-frontend
+    app: gratie-frontend-dev
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: gratie-frontend
+      app: gratie-frontend-dev
   template:
     metadata:
       labels:
-        app: gratie-frontend
+        app: gratie-frontend-dev
     spec:
       containers:
-        - name: gratie-frontend
+        - name: gratie-frontend-dev
+          image: ghcr.io/raj-odc/gratie-frontend:dev
+          imagePullPolicy: Always
           env:
             - name: B2_ACCESS_KEY_ID
               valueFrom:
@@ -28,6 +30,5 @@ spec:
                 secretKeyRef:
                   name: gratie-secret
                   key: B2_SECRET_KEY
-          image: ghcr.io/raj-odc/gratie-frontend:main
           ports:
             - containerPort: 3000
