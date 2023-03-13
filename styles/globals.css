@@ -72,221 +72,31 @@ h1 {
   color: #fff;
   opacity: 100%;
 }
-
 h2 {
   font-size: 50px;
   color: #fff;
   opacity: 80%;
 }
-
 h5 {
   font-size: 38px;
   color: #00FF01;
   opacity: 100%;
 }
-
 h6 {
   font-size: 30px;
   color: #FFF;
   opacity: 100%;
 }
-
 a {
   color: inherit;
   text-decoration: none;
 }
 
-.core-values {
-  /* font-family: 'Book antique'; */
-  /* font-weight: 400; */
-}
-
-.head-text {
-  font-size: 50px;
-  font-weight: 400;
-  line-height: 1.34;
-}
-
-.sub-text  {
-  font-size: 38px;
-  font-weight: 400;
-  line-height: 1;
-  text-align: center;
-}
-
-
-.test {
-  font-size: 30px;
-  line-height: 1;
-  text-align: center;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
-
-.toggle-box{
-  margin-bottom: 2px;
-  margin-top: 10px;
-  font-size: 32px;
-  color: #fff;
-}
-.toggle-item{
-  margin-bottom: 5px;
-  padding: 20px 50px
-}
-.toggle-item:hover{
-  color:#00FF01
-}
-.image{
-  position: relative;
-  left: -100%;
-  animation: slideRight 1s forwards;
-}
-@keyframes slideRight {
-  to {
-    left: 0;
-  }
-}
-.button-arrow{
-  background-color: transparent;
-  border-radius: 20px;
-  border: 2px solid #fff;
-  font-size: large;
-  font-weight: 400;
-}
-.button-arrow:hover{
-  border-color: #00FF01;
-  background-color: #cfcece;
-  color: #000;
-  font-weight: 600;
-  width:165px
-}
-.line{
-  border-top: 0.5px solid #00FF01;
-  margin-top: 50px;
-  opacity: 0.35;
-}
-.line-end{
-  border-top: 0.5px solid #fff;
-  margin-top: 50px;
-  opacity: 0.6;
-}
-.circle{
-  border-radius: 50%;
-  border: 0.6px solid #0afd0a;
-  width: 150px;
-  height: 150px;
-  padding: 6px;
-  margin-left: 80px;
-  margin-top: 5px;
-  background: transparent;
-  position: relative;
-  transition: all 0.5s ease;
-}
-.dotted-circle{
-  border-radius: 50%;
-  border: 2px dashed #00FF01;
-  width: 120px;
-  height: 120px;
-  padding: 6px;
-  background: transparent;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.faded-circle{
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: radial-gradient( rgba(173, 173, 173, 0.812), #040404);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: all 2s ease;
-}
-.circle:hover{
-  transform: rotate(360deg);
-  border: 8px solid #00fb00a9;
-  width: 155px;
-  height: 155px;
-}
-.circle:hover .faded-circle{
-  width: 80px;
-  height: 80px;
-}
-.grid-img:hover img{
-  transform:  scale(1.2);
-}
-.community-left{
-  position: relative;
-  left: -100%;
-  animation: slideRight 1s forwards;
-}
-.community-right{
-  position: relative;
-  right: -100%;
-  animation: slideLeft 1s forwards;
-}
-@keyframes slideLeft {
-  to {
-    right: 0;
-  }
-}
-.box-color{
-  background: radial-gradient( rgba(0, 255, 0, 0.276), #040404);
-  box-shadow: 0 0 0 1px rgb(0, 255, 1);
-}
-.icon-circle{
-  border-radius: 50%;
-  border: 3px solid #0afd0a;
-  width: 100px;
-  height: 100px;
-  padding: 6px;
-  margin-left: 80px;
-  margin-top: 5px;
-  background: transparent;
-  position: relative;
-}
-.social-button{
-  background-color: transparent;
-  border-radius: 20px;
-  border: 1px solid #00FF01;
-  color: #ffff;
-}
-.social-button:hover{
-  background: radial-gradient( rgba(0, 255, 0, 0.529), #040404);
-}
-@media screen and (max-width:500px) {
-  .grid-img{
-    margin-left: -80px;
-  }
-  .grid-h1{
-    font-size: 40px !important;
-  }
-  .image{
-    width:400px
-  }
-  .icon-circle{
-    display: none;
-  }
-  .community-left, .community-right{
-    width:100%
-  }
-  .navbarContainer {
-    display: flex;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width:1000px){
-  .grid-part{
-    margin-left: -80px;
-  }
+.navbar{
+  background: #000;
+  box-shadow: none;
+  align-items: center;
+  position: fixed;
 }
 
 .wallet-adapter-button {
@@ -294,16 +104,11 @@ a {
   font-size: 22px;
 }
 
-.logo-image {
-  /* width: 58px; */
-  /* height: 60px; */
-}
-
 .top-wallet-section {
   display: flex;
+  margin-left: 40px;
 }
 .top-wallet-section button {
-  margin-left: 10px !important;
   color: white !important;
   background: radial-gradient(122.09% 122.09% at 50% 50%, rgba(0, 255, 1, 0) 0%, #00FF01 100%) !important;
   border-radius: 100px !important;
@@ -318,48 +123,4 @@ a {
   color: #000;
   font-size: 20px;
   background-color: #00FF01;
-}
-
-.company-welcome-text {
-  font-family: 'Book Antiqua';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 42px;
-  line-height: 51px;
-  text-align: center;
-  color: #FDFDFD;
-}
-
-.company-main-content {
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-}
-
-.company-enterprise-button {
-
-  box-sizing: border-box;
-
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 10px 24px;
-  border: 1px solid #00FF01;
-  border-radius: 100px;
-  color: #FDFDFD;
-
-}
-
-.company-user-button {
-  box-sizing: border-box;
-
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 10px 24px;
-
-  border: 1px solid #00FF01;
-  border-radius: 100px;
-  color: #FDFDFD;
-
 }

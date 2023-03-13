@@ -3,20 +3,14 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 
-export default function WhitePaper(){
+export default function LightPaper(){
     return(
         <Box sx={{mt:10}}>
             <Typography
-              variant="h4"
               noWrap
-              sx={{
-                fontSize:'60px',
-                flexGrow: 1,
-                fontFamily: 'Book antique',
-                color: '#fff',
-                textAlign:"justify"
-              }}
-            >White Paper</Typography>
+              variant="h2"
+              className="core-values head-text"
+            >Light Paper</Typography>
             <br/>
             <Container sx={{width:'80%'}}>
             <Typography

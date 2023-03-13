@@ -44,6 +44,11 @@ export default function ToggleButtonNotEmpty() {
                       </Link>
                     </ListItemButton>
                     <ListItemButton className="toggle-item">
+                      <Link href='#working'>
+                      How We Work
+                      </Link>
+                    </ListItemButton>
+                    <ListItemButton className="toggle-item">
                         <Link href="#useCase">
                         Use Case
                         </Link>

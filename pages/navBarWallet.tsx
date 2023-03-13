@@ -1,4 +1,4 @@
-import { AppBar, Stack, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Stack, TextField, Toolbar, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
 import AccountInfo from "@/src/components/AccountInfo";
@@ -20,11 +20,12 @@ const Home: NextPage = () => {
     const [memoText, setMemoText] = useState('');
     return (
         <>
-            <AppBar position="fixed">
+              <AppBar className="navbar"> 
                 <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                       <img className='logo-image' alt='logo' src='/images/Logo.png' />
-                    </Typography>
+                  <Box sx={{ display:'flex', margin:'auto'}}>
+                    <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
+                    <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                  </Box>
                     {publicKey ? (
                         <div className='top-wallet-section'>
                           <AccountInfo publicKey={publicKey} />

@@ -8,13 +8,12 @@ import Link from 'next/link';
 export default function Reward(){
     return(
         <Grid container spacing={2} sx={{ mt: 10}}>
-            <Grid item xs={12} md={6} sx={{ml:-10, mr:5}}>
+            <Grid item xs={12} sm={12} md={6} sx={{ml:-10, mr:5}}>
                 <div className='image-container'>
                   <img alt="rewardBox" src='/images/Reward box.png' className='image'/>
                 </div>
             </Grid>
-            <Grid item xs={12} md={6} sx={{mt:25}}>
-                
+            <Grid item xs={12} md={6} className="reward-heading">     
             <Typography
               variant="body2"
               sx={{

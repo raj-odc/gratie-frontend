@@ -6,18 +6,11 @@ export default function TimeLine(){
     return(
         <>
             <Typography
-        variant="h4"
         noWrap
-        sx={{
-          fontSize:'60px',
-          flexGrow: 1,
-          fontFamily: 'Book antique',
-          color: '#fff',
-          textAlign:"justify",
-          mb:6,
-          mt:18
-        }}
+        variant="h2"
+        className="core-values head-text"
       >Time Line</Typography>
+      <br/>
         <Container sx={{width:'90%'}}>
         <Grid container spacing={1} sx={{margin:'auto'}}>
         <Grid item xs={12} md={6}>
@@ -27,7 +20,7 @@ export default function TimeLine(){
         <Typography
               variant="h6"
               sx={{
-                fontSize:'30px',
+                fontSize:'26px',
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"
@@ -45,7 +38,7 @@ export default function TimeLine(){
         <Typography
               variant="h6"
               sx={{
-                fontSize:'30px',
+                fontSize:'26px',
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"
@@ -60,7 +53,7 @@ export default function TimeLine(){
           <img alt='not gotten' src='/images/NewNFT.png' />
         </Grid>
         </Grid>
-        <Grid container spacing={1} sx={{margin:'auto'}}>
+        <Grid container spacing={1} sx={{margin:'auto', mt:5}}>
         <Grid item xs={12} md={6}>
           <img alt='not gotten' src="/images/userIcon.png" />
         </Grid>
@@ -68,7 +61,7 @@ export default function TimeLine(){
         <Typography
               variant="h6"
               sx={{
-                fontSize:'30px',
+                fontSize:'26px',
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"
@@ -85,7 +78,7 @@ export default function TimeLine(){
         <Typography
               variant="h6"
               sx={{
-                fontSize:'30px',
+                fontSize:'26px',
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"

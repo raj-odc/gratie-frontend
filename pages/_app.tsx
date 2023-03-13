@@ -1,6 +1,7 @@
 import '@/styles/globals.css'
 import '@/styles/wallet.css'
 import '@/styles/form.css'
+import '@/styles/landingPage.css'
 
 import { ThemeProvider } from '@mui/material/styles';
 

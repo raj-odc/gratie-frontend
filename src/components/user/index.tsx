@@ -101,9 +101,8 @@ export default function Users(props:any) {
     return;
   };
 
-console.log("props", props)
   return (
-    <>
+    <div>
       <React.Fragment>
         <Container className='form-outer' component="main" maxWidth="md">
 
@@ -157,6 +156,6 @@ console.log("props", props)
           </Box>
           </Container>
       </React.Fragment>
-    </>
+    </div>
   );
 }

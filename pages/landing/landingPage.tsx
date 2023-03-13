@@ -2,42 +2,46 @@ import Container from '@mui/material/Container';
 import Reward from './reward';
 import Chip from './chip';
 import CoreValue from './coreValue';
+import Working from './howWeWorks';
 import UseCase from './useCase';
 import Pricing from './pricing';
 import TimeLine from './timeLine';
 import Community from './community';
 import Team from './team';
-import WhitePaper from './whitePaper';
+import LightPaper from './lightPaper';
 
 export default function LandingPage(){
     return(
-        <Container sx={{width:'90%', fontFamily: 'Book antique'}}>
+        <Container sx={{width:'90%', fontFamily: 'Book antique', pb:18}}>
           <Reward />
           <Chip />
-          <div id="core">
+          <Container id="core">
             <CoreValue />
-          </div>
-          <div id="useCase">
+          </Container>
+          <Container id="working">
+            <Working />
+          </Container>
+          <Container id="useCase">
             <UseCase />
-          </div>
-          <div id="price">
+          </Container>
+          <Container id="price">
             <Pricing />
-          </div>
-          <div id="timeLine">
+          </Container>
+          <Container id="timeLine" sx={{mt: 20,mb:20}}>
             <TimeLine />
-          </div>
-          <div id="community">
+          </Container>
+          <Container id="community">
             <Community />
-          </div>
-          <div id="team">
+          </Container>
+          <Container id="team" sx={{mt: 20,mb:20}}>
             <Team />
-          </div>
-          <div id="white">
-            <WhitePaper />
-          </div>
-          <div style={{marginBottom:'50px', marginTop:'25px'}}>
+          </Container>
+          <Container id="white">
+            <LightPaper />
+          </Container>
+          <Container sx={{mb:'50px', mt:'25px'}}>
             <div className='line-end'/>
-          </div>
+          </Container>
         </Container>
     );
 }

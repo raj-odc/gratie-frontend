@@ -18,6 +18,7 @@ import { Backdrop, CircularProgress } from '@mui/material';
 import CompanyForm from '@/src/components/company/companyForm';
 
 import CompanyTab from '@/src/components/company/companyTab'
+import { getAllTiers } from '@/src/gratie_solana_contract/gratie_solana_tier';
 
 // todo:
 // Add tier ID button
@@ -34,6 +35,9 @@ export default function Admin() {
   const [companyLicense, setCompanyLicense] = React.useState(undefined);
   const [companyReward, setCompanyReward] = React.useState(undefined);
   const [usersList, setUsersList] = React.useState([]);
+
+  const [tierList, setTierList] = React.useState({});
+
 
   const [isLicenseVerified, setIsLicenseVerified] = React.useState(false);
 
@@ -68,6 +72,8 @@ export default function Admin() {
         const publicKey:any = wallet?.adapter.publicKey;
         setLoggedId(true);
         const program = await connectToGratieSolanaContract();
+        const tiers = await getAllTiers(program)
+        setTierList(tiers)
         const validLicense:any = await getCompanyLicense(program, publicKey)
         
         console.log("publicKey", program)
@@ -135,7 +141,7 @@ export default function Admin() {
         isDataFetched && <Container className='' component="main" maxWidth="md">
            { companyLicense ? 
             <CompanyTab handleChange = {fetchContractData} license = {companyLicense} reward = {companyReward} users = {usersList}/> 
-            : <CompanyForm handleChange = {updateVerifiedStatus}/>
+            : <CompanyForm tiers={tierList} handleChange = {updateVerifiedStatus}/>
            }
         </Container>
         }

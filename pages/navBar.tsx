@@ -45,11 +45,12 @@ function ResponsiveAppBar() {
 
   return (
     <div style={{flexGrow: 1}}>
-      <AppBar position="fixed"  style={{ background: '#000', boxShadow: 'none', alignItems: 'center'}}>
+      <AppBar className="navbar">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Box sx={{ display:'flex' ,margin:'auto', mt:2 }}>
               <Box  sx={{ display:'flex', margin:'auto', pr:3}}>
+              <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
               <img width={105} height={95} alt='logo' src='/images/Logo.png' />
               </Box>
               <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
