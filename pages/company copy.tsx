@@ -4,16 +4,11 @@ import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import NavBarWallet from './navBarWallet'
 
-import * as React from 'react';
-
-import Container from '@mui/material/Container';
-import { Box, Grid } from '@mui/material';
-
-import Users from '@/src/components/user/index';
+import Company from '@/src/components/company/index';
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function User() {
+export default function Home() {
   return (
     <>
       <Head>
@@ -23,15 +18,7 @@ export default function User() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBarWallet/>
-      <React.Fragment>
-        <Container className='' component="main" maxWidth="md">
-          <Box component="form" noValidate sx={{ mt: 12 }}>
-              <Grid container spacing={2}>
-              </Grid>
-              <Users/>
-          </Box>
-        </Container>
-      </React.Fragment>
+      <Company/>
     </>
   )
 }

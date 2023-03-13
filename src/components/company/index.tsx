@@ -1,204 +1,150 @@
 import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+
 import Container from '@mui/material/Container';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
-import { useState } from 'react'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 
+import { useEffect, useState } from 'react'
 
-
-import RegForm from '@/src/components/company/form';
+import List from './list'
+import { profile } from 'console';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 import CompanyList from '@/src/components/company/list';
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { getCompanyLicensePDA, getCompanyRewardsBucket } from '@/src/gratie_solana_contract/gratie_solana_pda';
-import { createCompanyRewardsBucket, CreateCompanyRewardsBucketForm, getCompanyRewardsBucketForCompany } from '@/src/gratie_solana_contract/gratie_solana_company';
+import { createCompanyRewardsBucket, CreateCompanyRewardsBucketForm, getCompanyRewardsBucketForCompany, listCompanyLicenses } from '@/src/gratie_solana_contract/gratie_solana_company';
 import { getCompanyUser } from '@/src/gratie_solana_contract/gratie_solana_user';
+import { Backdrop, CircularProgress } from '@mui/material';
 
+import CompanyForm from '@/src/components/company/companyForm';
 
-import GratieSolanaTest from "../../gratie_solana_contract/gratieSolanaContractTest";
-import { faker } from '@faker-js/faker';
+import CompanyTab from '@/src/components/company/companyTab'
 
-// import '@/styles/form.css';
+// todo:
+// Add tier ID button
 
-interface Values {
-  email: string;
-  password: string;
-}
+export default function Admin() {
 
-declare const window: Window &
-  typeof globalThis & {
-    solana: any
-  }
-
-export default function CompanyForm() {
   const { wallet } = useWallet();
-  const { connection } = useConnection();
 
   const [open, setOpen] = React.useState(false);
 
-  const [validCompany, setValidCompany] = React.useState(false);
+  const [loggedIn, setLoggedId] = React.useState(false);
+  
+  const [isDataFetched, setisDataFetched] = React.useState(false);
+  const [companyLicense, setCompanyLicense] = React.useState(undefined);
+  const [companyReward, setCompanyReward] = React.useState(undefined);
+  const [usersList, setUsersList] = React.useState([]);
 
-  const [isWalletConnected, setIsWalletConnected] = React.useState(false);
+  const [isLicenseVerified, setIsLicenseVerified] = React.useState(false);
 
-  const [users, setUsers] = React.useState([]);
+  
 
-  const [walletAddress, setWalletAdresss] = useState("");
-  const [Loding, setLoading] = useState(false)
-  const [solana, setSolana] = useState({})
+  const [tabIndex, setTabIndex] = useState(0);
 
-
-  // todo:
-  // Check for wallet present, else wallet connect
-  // Get all license, -> if this user has already company license 
-  //  -> Check for the reward token if its present then promt to list  else create reard token
-  //  -> Else -> Add company screen ()
-  // Pass the list of licenses to list component ,also show add user
-
-
-  const initWallet = async () => {
-    handleToggle();
-
-    console.log("useWalletuseWallet", wallet);
-    console.log("user--", connection);
-    const solanaPubKey = localStorage.getItem('solanaPubKey')
-
-    const program = await connectToGratieSolanaContract();
-
-    console.log("program", program);
-    setIsWalletConnected(true)
-    // this gets all the licenses
-    const allLicenses = await program.account.companyLicense.all();
-    console.log(allLicenses);
-    const userLicenses: any = allLicenses.filter(p => p.account.owner.toString() == solanaPubKey);
-    console.log("userLicenses", userLicenses.length);
-    setIsWalletConnected(true)
-    setValidCompany(userLicenses.length > 0)
-
-    if (userLicenses.length > 0) {
-      const companyLicensePDA = getCompanyLicensePDA(program, userLicenses[0].account.name);
-
-      let companyRewardsBucket;
-      try {
-        companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
-      }
-      catch {
-        console.log("Company rewards not yet created")
-      }
-      // if (companyRewardsBucket) {
-      // const provider = anchor.AnchorProvider.env();
-      // anchor.setProvider(provider);
-      // const wallet = anchor.AnchorProvider.env().wallet as Wallet;
-      // console.log('program',program);
-      console.log(wallet)
-      // console.log("solana", window.solana.wallet);
-
-      const companyRewardsBucketForm: CreateCompanyRewardsBucketForm = {
-        tokenName: 'test',
-        tokenSymbol: 'test',
-        tokenMetadataJsonUrl: 'https://test.com/testconfig.json',
-
-      };
-
-      await createCompanyRewardsBucket(program, wallet?.adapter.publicKey!, 'test', companyRewardsBucketForm);
-      console.log("companyRewardsBucket", companyRewardsBucket)
-      // }
-
-      console.log("companyRewardsBucket", companyRewardsBucket);
-
-    }
-
-
-    handleClose();
-  }
+  const handleTabChange = (event:any, newTabIndex:number) => {
+    setTabIndex(newTabIndex);
+  };
 
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleToggle = () => {
     setOpen(!open);
   };
 
-
-
-  const createRewardToken = async () => {
-    if (wallet) {
-      const program = await connectToGratieSolanaContract();
-      const allLicenses = await program.account.companyLicense.all();
-      const companyName = allLicenses[0].account.name
-      const rewards: any = getCompanyRewardsBucketForCompany(program, companyName)
-      if (rewards) {
-        confirm("already rewards present for the company");
-        return;
-      }
-      const companyRewardsBucketForm: CreateCompanyRewardsBucketForm = {
-        tokenName: faker.internet.userName(),
-        tokenSymbol: faker.internet.userName(),
-        tokenMetadataJsonUrl: faker.internet.url(),
-      };
-      const companyRewards = await createCompanyRewardsBucket(program, (wallet as any).adapter.publicKey, companyName, companyRewardsBucketForm);
-      console.log("companyRewards created", companyRewards);
-    }
-    else {
-      confirm("First connect to the wallet");
-    }
+  const updateVerifiedStatus = (status:boolean) => {
+    setIsLicenseVerified(status)
   }
 
-  const getAllUser = async () => {
-    let users;
-    if (wallet) {
-      const program = await connectToGratieSolanaContract();
-      users = await getCompanyUser(program, wallet?.adapter.publicKey!);
+  function sleep(ms:number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+ }
+
+  const fetchContractData = async() => {
+    handleToggle();
+    await sleep(3000);
+    if(wallet && wallet?.adapter.publicKey){
+        const publicKey:any = wallet?.adapter.publicKey;
+        setLoggedId(true);
+        const program = await connectToGratieSolanaContract();
+        const validLicense:any = await getCompanyLicense(program, publicKey)
+        
+        console.log("publicKey", program)
+        if (validLicense) {
+            setIsLicenseVerified(validLicense.account.verified)
+            setCompanyLicense(validLicense);
+            if(validLicense.account.verified) {
+                const companyRewardsBucket:any = await getCompanyReward(program, validLicense.account.name)
+                if(companyRewardsBucket) {
+                    setCompanyReward(companyRewardsBucket);
+                    console.log("publicKey", program)
+
+                    const usersList = await getCompanyUser(program, publicKey);
+                    console.log("usersList", usersList);
+                    setUsersList(usersList);
+                }
+            }
+        }
+        setisDataFetched(true);
+    } else {
+        alert("wallet should be present")
     }
-    console.log("getAllUser", users)
+    handleClose();
+    return;
+  };
+
+  const getCompanyLicense = async(program:any, publicKey:any) => {
+    const allLicenses = await program.account.companyLicense.all();
+    console.log(allLicenses);
+    const userLicenses: any = allLicenses.filter((lic: any) => lic.account.owner.toString() == publicKey.toString());
+    console.log("userLicenses", userLicenses.length);
+    return userLicenses && userLicenses[userLicenses.length-1]
   }
+
+  const getCompanyReward = async(program:any, companyName:any) => {
+    const companyLicensePDA = getCompanyLicensePDA(program, companyName);
+    let companyRewardsBucket;
+    try {
+        companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
+    }
+    catch {
+        console.log("Company rewards not yet created")
+    }
+    return companyRewardsBucket;
+  }
+
+  useEffect(() => {
+    fetchContractData();
+  }, []);
+
+// state: license, licenseVerified, rewardtoken, companyUsers, 
+
+  // Todo:
+  // 1) Company license present ah ? -> create company Reward bucket form
+  // 2) else -> open form for registration
+  // 3) create user form -> create user bucket reward
+  // 4) list of users for the company.
+
+
 
   return (
     <div className=''>
-      {/* Here we test the contract */}
-
       <React.Fragment>
-        {!isWalletConnected ?
-          <Container className='form-outer' component="main" maxWidth="md">
-            <Typography component="h1" variant="h5">
-              Registration
-            </Typography>
-            <Button
-              onClick={initWallet}
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 6, mb: 4 }}
-            >
-              Connect With Wallet
-            </Button>
-          </Container>
-          : validCompany ? <CompanyList /> : <RegForm />
+        { 
+        isDataFetched && <Container className='' component="main" maxWidth="md">
+           { companyLicense ? 
+            <CompanyTab handleChange = {fetchContractData} license = {companyLicense} reward = {companyReward} users = {usersList}/> 
+            : <CompanyForm handleChange = {updateVerifiedStatus}/>
+           }
+        </Container>
         }
-
-        <GratieSolanaTest />
-
-        <Button
-          onClick={createRewardToken}
-          type="button"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 6, mb: 4 }}
-        >
-          Create the Company Reward Token
-        </Button>
-
-        <Button
-          onClick={getAllUser}
-          type="button"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 6, mb: 4 }}
-        >
-          List the User
-        </Button>
+        {/* {
+         isDataFetched && !companyLicense && isLicenseVerified && <Container className='form-outer' component="main" maxWidth="md">
+                Need to Approve the License, waiting for Approval
+            </Container>
+        } */}
+        
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={open}
@@ -207,8 +153,6 @@ export default function CompanyForm() {
           <CircularProgress color="inherit" />
         </Backdrop>
       </React.Fragment>
-
-
     </div>
   );
 }

@@ -9,8 +9,8 @@
 }
 
 .non-selected-tab {
-    width: 265px;
-    height: 108px;
+    width: 150px;
+    height:70px;
 
     background: #050A04;
     box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25);
@@ -19,8 +19,8 @@
 }
 
 .selected-tab {
-    width: 265px;
-    height: 108px;
+    width: 150px;
+    height: 70px;
 
     background: #045703;
     box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25);

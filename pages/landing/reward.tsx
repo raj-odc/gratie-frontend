@@ -25,7 +25,7 @@ export default function Reward(){
                 A next generation SaaS infrastructure platform for your enterprise reward management.
               </Typography>
               <br/>
-                <Link href="/company" passHref>
+                <Link href="/home" passHref>
                   <Button variant='contained' className="button-arrow"> Explore <Arrow sx={{color:'#00FF01'}} /></Button>
                 </Link>
                 </Grid>

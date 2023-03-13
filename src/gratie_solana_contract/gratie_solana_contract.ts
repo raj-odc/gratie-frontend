@@ -7,7 +7,7 @@ console.log(process.env.NODE_ENV);
 
 const NETWORK = process.env.NODE_ENV === 'development' ? "http://localhost:8899" : "https://api.devnet.solana.com";
 
-const PROGRAM_ID = process.env.NODE_ENV === 'development' ? new PublicKey(idl.metadata.address) : new PublicKey("FmG2zTeSd4rStaj6FD9W8WipbXGjDyF3e3btXTqBFbky");
+const PROGRAM_ID = process.env.NODE_ENV === 'development' ? new PublicKey(idl.metadata.address) : new PublicKey("876aszEfTpFmid7jbhoZuTZW3wKewB6YXCkVnAxwcsEY");
 
 export const connectToGratieSolanaContract = async (): Promise<anchor.Program<GratieSolana>> => {
   const connection = new Connection(NETWORK, "processed");

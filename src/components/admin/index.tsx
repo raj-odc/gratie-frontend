@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import Container from '@mui/material/Container';
 
-import { useState } from 'react'
+import { useState } from 'react';
 
-import List from './list'
+import List from './list';
 
 // todo:
 // Add tier ID button

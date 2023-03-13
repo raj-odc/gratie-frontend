@@ -9,13 +9,14 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Akord } from '@akord/akord-js'
+import { redirect } from 'next/navigation';
 import { useState } from 'react'
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { createCompanyLicense, CreateCompanyLicenseForm } from '@/src/gratie_solana_contract/gratie_solana_company';
 import { useWallet } from '@solana/wallet-adapter-react';
 
-
+import UploadFile from '@/src/components/uploadFileS3';
+import {uploadMetaDataToS3} from '@/src/utils/uploadMetaDataToS3';
 
 // import '@/styles/form.css';
 
@@ -29,13 +30,15 @@ declare const window: Window &
     solana: any
   }
 
-export default function CompanyForm() {
+export default function CompanyForm(props:any) {
 
   const wallet = useWallet();
 
   const [open, setOpen] = React.useState(false);
 
-  const [validCompany, setValidCompany] = React.useState(undefined);
+  const [logoUrl, setLogoUrl] = React.useState('');
+
+  const [formSubmitted, setFormSubmitted] = React.useState(false);
 
   const [formObject, setFormObject] = useState({
     name: "",
@@ -44,50 +47,18 @@ export default function CompanyForm() {
     tierID: "",
     jsonMetadataUrl: '',
   });
+
+  React.useEffect(() => {
+    if(formSubmitted){
+      window.location.replace('/');
+    }
+  })
   const handleClose = () => {
     setOpen(false);
   };
   const handleToggle = () => {
     setOpen(!open);
   };
-
-  const [akord, setAkord] = useState<Akord | null>()
-
-  const upload = async (files: FileList | null) => {
-    handleToggle()
-    const { jwtToken, wallet } = await Akord.auth.signIn(
-      'selvaraj.ror@gmail.com',
-      'hBVp8i3KxtPM6zb'
-    );
-    const akord = await Akord.init(wallet, jwtToken)
-    if (!files || !files.length) {
-      throw new Error('Failed uploading the file')
-    }
-    const file = files[0]
-    const vaults = await akord?.vault.list()
-    if (!vaults || !vaults.length) {
-      throw new Error('User does not have any vaults')
-    }
-    const vault = vaults[0]
-    // confirm("Uploading file to vault: " + vault.name)
-    const { stackId } = await akord.stack.create(vault.id, file, file.name)
-    console.log("stackId", stackId);
-
-    const value = (res: any) => ({
-      ...res,
-      ['logoUri']: stackId,
-    });
-    setFormObject(value);
-
-    // const { data: getfile } = await akord.stack.getVersion(stackId);
-    // const fileUrl = URL.createObjectURL(new Blob([getfile]));
-
-    // console.log("akord.stack", fileUrl);
-
-    // confirm("Created stack: " + stackId)
-    setAkord(null)
-    handleClose()
-  }
 
   const onValChange = (event: any) => {
     const value = (res: any) => ({
@@ -97,35 +68,74 @@ export default function CompanyForm() {
     setFormObject(value);
   };
 
+  const updateImageUrl = (url:string) =>{
+    console.log("setLogoUrl", setLogoUrl);
+    if(url && url!=''){
+      setLogoUrl(url)
+    }
+  }
+
+   const getMetaJsonUrl = async (name:string, email:string) => {
+      const jsonData =  {
+        "name": name,
+        "symbol": "GRATIE",
+        "description": email,
+        "seller_fee_basis_points": 5,
+        "external_url": "",
+        "edition": "",
+        "background_color": "000000",
+        "image": logoUrl
+      }
+      const jsonUrl = await uploadMetaDataToS3(jsonData);
+      return jsonUrl;
+   }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (formObject.jsonMetadataUrl === '') {
+    if (logoUrl === '') {
+      confirm("Please upload the logo before proceed");
       console.log("Please upload the logo before proceed");
+      return false;
+    }
+    const data = new FormData(event.currentTarget);
+    const formVal: any = new Object(formObject);
+    
+    if (formVal['name']=='' || formVal['email']=='' || formVal['tierID']=='' || formVal['evaluation']==''){
+      confirm("Please enter all the form values");
       return false;
     }
     handleToggle()
 
-    console.log("event.currentTarget", event.currentTarget);
-    const data = new FormData(event.currentTarget);
-    console.log(formObject);
-    const formVal: any = new Object(formObject);
     formVal['tierID'] = parseInt(formVal.tierID)
     formVal['evaluation'] = parseInt(formVal.evaluation)
 
-    console.log(formVal);
+  
 
-    const program = await connectToGratieSolanaContract();
+    const jsonMetadataUrl = await getMetaJsonUrl(formVal.name, formVal.email);
+    formVal['jsonMetadataUrl'] = jsonMetadataUrl;
+    try {
+      const program = await connectToGratieSolanaContract();
 
-    // this gets all the licenses
-    const licenses = await program.account.companyLicense.all();
-    console.log(licenses);
+    // // this gets all the licenses
+    //   const licenses = await program.account.companyLicense.all();
+    //   console.log(licenses);
 
 
-    const company = await createCompanyLicense(program, wallet.publicKey!, formVal);
-    console.log(company)
+      const company = await createCompanyLicense(program, wallet.publicKey, formVal);
+      console.log("company", company)
+    
+      confirm("Thanks for Submitting your details, Gratie Admin will be verified soon");
+      
+      setFormSubmitted(true)
+    }
+    catch(err) {
+      console.log("err",err);
+      alert("Company should be unique, please add valid name and email");
+    }
+    
+    // props.handleChange();
 
     handleClose()
-
   };
   return (
     <div className=''>
@@ -191,16 +201,7 @@ export default function CompanyForm() {
                 />
               </Grid>
               <Grid item xs={4}>
-                <Button
-                  variant="contained"
-                  component="label"
-                >
-                  Upload File
-                  <input onChange={(e) => upload(e.target.files)}
-                    type="file"
-                    hidden
-                  />
-                </Button>
+                <UploadFile updateImage={updateImageUrl} />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel

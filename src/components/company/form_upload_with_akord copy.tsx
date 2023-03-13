@@ -11,17 +11,11 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Akord } from '@akord/akord-js'
 import { useState } from 'react'
-import { sha256 } from "@project-serum/anchor/dist/cjs/utils";
-
-
-import { createUser } from '@/src/gratie_solana_contract/gratie_solana_user';
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
-import { faker } from '@faker-js/faker';
+import { createCompanyLicense, CreateCompanyLicenseForm } from '@/src/gratie_solana_contract/gratie_solana_company';
 import { useWallet } from '@solana/wallet-adapter-react';
 
-
-
-
+``
 
 // import '@/styles/form.css';
 
@@ -35,7 +29,9 @@ declare const window: Window &
     solana: any
   }
 
-export default function List() {
+export default function CompanyForm() {
+
+  const wallet = useWallet();
 
   const [open, setOpen] = React.useState(false);
 
@@ -46,7 +42,7 @@ export default function List() {
     email: "",
     evaluation: "",
     tierID: "",
-    logoUri: '',
+    jsonMetadataUrl: '',
   });
   const handleClose = () => {
     setOpen(false);
@@ -57,33 +53,41 @@ export default function List() {
 
   const [akord, setAkord] = useState<Akord | null>()
 
-  React.useEffect(() => {
-    // handleToggle();
-    console.log("coming in the test")
-    // if (userLicenses.length > 0) {
-    //     const companyLicensePDA = await getCompanyLicensePDA(program, userLicenses[0].account.name);
+  const upload = async (files: FileList | null) => {
+    handleToggle()
+    const { jwtToken, wallet } = await Akord.auth.signIn(
+      'selvaraj.ror@gmail.com',
+      'hBVp8i3KxtPM6zb'
+    );
+    const akord = await Akord.init(wallet, jwtToken)
+    if (!files || !files.length) {
+      throw new Error('Failed uploading the file')
+    }
+    const file = files[0]
+    const vaults = await akord?.vault.list()
+    if (!vaults || !vaults.length) {
+      throw new Error('User does not have any vaults')
+    }
+    const vault = vaults[0]
+    // confirm("Uploading file to vault: " + vault.name)
+    const { stackId } = await akord.stack.create(vault.id, file, file.name)
+    console.log("stackId", stackId);
 
-    //     let companyRewardsBucket;
-    //     try {
-    //         companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
-    //     }
-    //     catch {
-    //         console.log("Company rewards not yet created")
-    //     }
-    //     if (!companyRewardsBucket) {
-    //         // const provider = anchor.AnchorProvider.env();
-    //         // anchor.setProvider(provider);
-    //         // const wallet = anchor.AnchorProvider.env().wallet as Wallet;
+    const value = (res: any) => ({
+      ...res,
+      ['logoUri']: stackId,
+    });
+    setFormObject(value);
 
-    //         // await createUserRewardsBucket(program, wallet);
-    //         // console.log("companyRewardsBucket", companyRewardsBucket)
-    //     }
+    // const { data: getfile } = await akord.stack.getVersion(stackId);
+    // const fileUrl = URL.createObjectURL(new Blob([getfile]));
 
-    //     console.log("companyRewardsBucket", companyRewardsBucket);
+    // console.log("akord.stack", fileUrl);
 
-    // }
-  });
-
+    // confirm("Created stack: " + stackId)
+    setAkord(null)
+    handleClose()
+  }
 
   const onValChange = (event: any) => {
     const value = (res: any) => ({
@@ -93,24 +97,36 @@ export default function List() {
     setFormObject(value);
   };
 
-  const { wallet } = useWallet();
-
-  const createCompanyUser = async () => {
-    if (wallet) {
-      const userEmail = faker.internet.email();
-      const program = await connectToGratieSolanaContract();
-      const allLicenses = await program.account.companyLicense.all();
-      const companyName = allLicenses[allLicenses.length-1].account.name
-      const user = await createUser(program, wallet.adapter.publicKey!, companyName, {
-        userId: sha256.hash(userEmail).substring(0, 16),
-        encryptedPassword: faker.internet.password(),
-        encryptedPasswordAlgorithm: 0,
-        encryptedPasswordSalt: faker.internet.password(),
-      });
-      console.log("createCompanyUser", user)
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (formObject.jsonMetadataUrl === '') {
+      console.log("Please upload the logo before proceed");
+      return false;
     }
-  }
+    handleToggle()
 
+    console.log("event.currentTarget", event.currentTarget);
+    const data = new FormData(event.currentTarget);
+    console.log(formObject);
+    const formVal: any = new Object(formObject);
+    formVal['tierID'] = parseInt(formVal.tierID)
+    formVal['evaluation'] = parseInt(formVal.evaluation)
+
+    console.log(formVal);
+
+    const program = await connectToGratieSolanaContract();
+
+    // this gets all the licenses
+    const licenses = await program.account.companyLicense.all();
+    console.log(licenses);
+
+
+    const company = await createCompanyLicense(program, wallet.publicKey!, formVal);
+    console.log(company)
+
+    handleClose()
+
+  };
   return (
     <div className=''>
 
@@ -121,7 +137,7 @@ export default function List() {
             Registration
           </Typography>
 
-          <Box component="form" noValidate sx={{ mt: 6 }}>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 6 }}>
 
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
@@ -160,6 +176,32 @@ export default function List() {
                   variant="standard"
                 />
               </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  type="number"
+                  required
+                  id="tierID"
+                  label="tierID"
+                  helperText="Fractal, Optical, Paradise, Cosmos"
+                  fullWidth
+                  autoComplete="cc-csc"
+                  variant="standard"
+                  onChange={onValChange}
+                  value={formObject.tierID}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  component="label"
+                >
+                  Upload File
+                  <input onChange={(e) => upload(e.target.files)}
+                    type="file"
+                    hidden
+                  />
+                </Button>
+              </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox color="secondary" name="terms" value="yes" />}
@@ -167,15 +209,13 @@ export default function List() {
                 />
               </Grid>
             </Grid>
-
             <Button
-              onClick={createCompanyUser}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 6, mb: 4 }}
             >
-              Create the Company user
+              Register Here
             </Button>
           </Box>
         </Container>
@@ -187,6 +227,7 @@ export default function List() {
           <CircularProgress color="inherit" />
         </Backdrop>
       </React.Fragment>
+
 
     </div>
   );
