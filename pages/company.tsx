@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import NavBarWallet from './navBarWallet'
 
 import Company from '@/src/components/company/index';
 
-const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   return (

@@ -193,8 +193,8 @@ export default function RewardContract(props:any) {
               <Typography component="h1" variant="h5">
                Rewards
               </Typography>
-              <div> {rewardData.name}</div>
-              <image src={rewardData.image}></image>
+              <div> {(rewardData as any).name}</div>
+              <img src={(rewardData as any).image}></img>
             </Container> :
            <Container className='form-outer' component="main" maxWidth="md">
 
@@ -223,9 +223,9 @@ export default function RewardContract(props:any) {
                     id="symbol"
                     label="symbol"
                     fullWidth
-                    autoComplete="email"
+                    autoComplete="symbol"
                     onChange={onValChange}
-                    value={formObject.email}
+                    value={formObject.symbol}
                     variant="standard"
                   />
                 </Grid>

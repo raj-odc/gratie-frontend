@@ -92,6 +92,10 @@ export default function CompanyForm(props:any) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!wallet){
+      console.log("Please connect to wallet");
+      return false;
+    }
     if (logoUrl === '') {
       confirm("Please upload the logo before proceed");
       console.log("Please upload the logo before proceed");
@@ -120,13 +124,14 @@ export default function CompanyForm(props:any) {
     //   const licenses = await program.account.companyLicense.all();
     //   console.log(licenses);
 
-
-      const company = await createCompanyLicense(program, wallet.publicKey, formVal);
+      const publicKey = (wallet as any).publicKey;
+      const company = await createCompanyLicense(program, publicKey, formVal);
       console.log("company", company)
     
       confirm("Thanks for Submitting your details, Gratie Admin will be verified soon");
       
       setFormSubmitted(true)
+      
     }
     catch(err) {
       console.log("err",err);

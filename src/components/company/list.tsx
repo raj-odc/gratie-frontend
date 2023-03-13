@@ -36,6 +36,7 @@ declare const window: Window &
   }
 
 export default function List() {
+  const { wallet } = useWallet();
 
   const [open, setOpen] = React.useState(false);
 
@@ -93,7 +94,6 @@ export default function List() {
     setFormObject(value);
   };
 
-  const { wallet } = useWallet();
 
   const createCompanyUser = async () => {
     if (wallet) {
@@ -101,7 +101,8 @@ export default function List() {
       const program = await connectToGratieSolanaContract();
       const allLicenses = await program.account.companyLicense.all();
       const companyName = allLicenses[allLicenses.length-1].account.name
-      const user = await createUser(program, wallet.adapter.publicKey!, companyName, {
+      const publicKey = (wallet as any).publicKey;
+      const user = await createUser(program, publicKey, companyName, {
         userId: sha256.hash(userEmail).substring(0, 16),
         encryptedPassword: faker.internet.password(),
         encryptedPasswordAlgorithm: 0,

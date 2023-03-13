@@ -19,7 +19,7 @@ export default function ListUserTable(props:any) {
     const [platformFeePerMille, setPlatformFeePerMille] = React.useState('');
     
 
-    const addTier = async(companyName:string) => {
+    const addTier = async() => {
         const program = await connectToGratieSolanaContract();
         const walletPubKey:any = wallet.publicKey;
         const isAdmin = await checkAdmin(program, walletPubKey);
@@ -27,7 +27,7 @@ export default function ListUserTable(props:any) {
             confirm("You can't do Verify until you are admin");
             return;
         }
-        const tier = await createTier(program, walletPubKey, tierID, name, freeUserAmount, platformFeePerMille)
+        const tier = await createTier(program, walletPubKey, parseInt(tierID), name, parseInt(freeUserAmount), parseInt(platformFeePerMille))
         console.log("tier",tier);
     }
   return (
