@@ -126,31 +126,3 @@ export const transferTokensToUser = async (program: anchor.Program<GratieSolana>
   return transferRewards;
 
 }
-
-export const createTier = async (program: Program<GratieSolana> | any, walletPubKey: anchor.web3.PublicKey, tierID: number, name: string, freeUserAmount: number, platformFeePerMille: number) => {
-  
-  console.log('tierID', tierID, freeUserAmount);
-  console.log(platformFeePerMille, name);
-  const price = new BN(3 * LAMPORTS_PER_SOL);
-  const priceForEachAdditionalUser = new BN(LAMPORTS_PER_SOL);
-  // 15 is 1.5% here
-  // const platformFeePerMille = 15;
-
-  const tierPDA = getTierPDA(program, tierID);
-
-  console.log("tierPDA", tierPDA.toBase58());
-
-  const newTier = await program.methods.createTier(
-    tierID,
-    name,
-    freeUserAmount,
-    price,
-    priceForEachAdditionalUser,
-    platformFeePerMille,
-  ).accounts({
-    creator: walletPubKey,
-    tier: tierPDA,
-  }).rpc();
-  return newTier;
-
-}

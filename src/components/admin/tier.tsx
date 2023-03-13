@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { checkAdmin, connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
-import { createTier } from "@/src/gratie_solana_contract/gratie_solana_company";
+import { createTier, getAllTiers } from "@/src/gratie_solana_contract/gratie_solana_tier";
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Box, Button, Container, Grid, ListItem, TextField, Typography } from '@mui/material';
 
