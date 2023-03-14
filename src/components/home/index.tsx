@@ -13,6 +13,7 @@ export default function Home() {
         <Container component="main" maxWidth="md">
         <Box className={styles.homeMainBox} component="form" noValidate sx={{ mt: 12 }}>
                 <Grid container spacing={2}>
+                    
                 <p className='company-welcome-text'>
                     Welcome to next generation crypto reward management system !
                 </p>

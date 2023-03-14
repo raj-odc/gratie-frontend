@@ -115,10 +115,6 @@ export default function CreateToken(props:any) {
    }
 
    const createRewardToken = async (name:string, symbol:string, url:string) => {
-    if(!props.license){
-        alert('Please create company license before inviting user')
-        return false;
-      }
     if (wallet) {
       console.log("wallet",wallet);
       const program = await connectToGratieSolanaContract();
@@ -159,6 +155,11 @@ export default function CreateToken(props:any) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("wallet",wallet);
+
+    if(!props.license){
+        alert('Please create company license before inviting user')
+        return false;
+      }
 
     if (logoUrl === '') {
       confirm("Please upload the logo before proceed");
@@ -266,7 +267,24 @@ export default function CreateToken(props:any) {
             <Button type="submit" variant='contained' className='create-token-btn'> Create Token</Button>
           </Box>
         </CardContent>
+        {rewardData && props.license && 
+            <div style={{display: 'flex', justifyContent: 'center'}}><Typography
+            noWrap
+            variant="h6"
+            sx={{color: '#fff'}}
+            >
+            Total Tokens generated : 
+          </Typography>
+          <Typography
+          noWrap
+          variant="h6"
+          sx={{color: '#fff'}}
+          className='profile-label'>
+          {props.license.account.evaluation.toNumber()}
+        </Typography></div>
+            }
         </Box>
+        
         </Container>
         </React.Fragment>
       )

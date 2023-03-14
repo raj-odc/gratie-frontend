@@ -18,175 +18,86 @@ import { createUser } from '@/src/gratie_solana_contract/gratie_solana_user';
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { faker } from '@faker-js/faker';
 import { useWallet } from '@solana/wallet-adapter-react';
-
-
-
+import { CardContent } from '@mui/material';
+import { transferTokensToUser } from '@/src/gratie_solana_contract/gratie_solana_company';
+import { BN } from '@project-serum/anchor';
+import ModalBox from '../Modal';
+import Loading from '../Loading';
 
 
 // import '@/styles/form.css';
 
-interface Values {
-  email: string;
-  password: string;
-}
 
 declare const window: Window &
   typeof globalThis & {
     solana: any
   }
 
-export default function List() {
+export default function List(props:any) {
   const { wallet } = useWallet();
+  const userIdCCC = sha256.hash('test@tets.com').substring(0, 16);
 
-  const [open, setOpen] = React.useState(false);
+  console.log("userId", userIdCCC);
 
-  const [validCompany, setValidCompany] = React.useState(undefined);
-
-  const [formObject, setFormObject] = useState({
-    name: "",
-    email: "",
-    evaluation: "",
-    tierID: "",
-    logoUri: '',
-  });
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleToggle = () => {
-    setOpen(!open);
-  };
-
-  const [akord, setAkord] = useState<Akord | null>()
-
-  React.useEffect(() => {
+  const [openMsg, setOpenMsg] = React.useState(false);
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const transferToken = async (userId:string) => {
     // handleToggle();
-    console.log("coming in the test")
-    // if (userLicenses.length > 0) {
-    //     const companyLicensePDA = await getCompanyLicensePDA(program, userLicenses[0].account.name);
-
-    //     let companyRewardsBucket;
-    //     try {
-    //         companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
-    //     }
-    //     catch {
-    //         console.log("Company rewards not yet created")
-    //     }
-    //     if (!companyRewardsBucket) {
-    //         // const provider = anchor.AnchorProvider.env();
-    //         // anchor.setProvider(provider);
-    //         // const wallet = anchor.AnchorProvider.env().wallet as Wallet;
-
-    //         // await createUserRewardsBucket(program, wallet);
-    //         // console.log("companyRewardsBucket", companyRewardsBucket)
-    //     }
-
-    //     console.log("companyRewardsBucket", companyRewardsBucket);
-
-    // }
-  });
-
-
-  const onValChange = (event: any) => {
-    const value = (res: any) => ({
-      ...res,
-      [event.target.id]: event.target.value,
-    });
-    setFormObject(value);
-  };
-
-
-  const createCompanyUser = async () => {
-    if (wallet) {
-      const userEmail = faker.internet.email();
+    const userIdCCC = sha256.hash('test@tets.com').substring(0, 16);
+console.log("userId", userIdCCC);
+    if (wallet && wallet.adapter.publicKey) {
+      const publicKey: any = wallet.adapter.publicKey;
+      const companyName:string = props.license.account.name
       const program = await connectToGratieSolanaContract();
-      const allLicenses = await program.account.companyLicense.all();
-      const companyName = allLicenses[allLicenses.length-1].account.name
-      const publicKey = (wallet as any).publicKey;
-      const user = await createUser(program, publicKey, companyName, {
-        userId: sha256.hash(userEmail).substring(0, 16),
-        encryptedPassword: faker.internet.password(),
-        encryptedPasswordAlgorithm: 0,
-        encryptedPasswordSalt: faker.internet.password(),
-      });
-      console.log("createCompanyUser", user)
+      try {
+        const transferToken = await transferTokensToUser(program, publicKey, new BN(1), companyName, userId);
+        console.log("transferToken", transferToken);
+      }
+      catch (err) {
+        alert(err);
+      }
+    } else {
+      alert("wallet should be present")
     }
-  }
+    // handleClose();
+    return;
+  };
 
   return (
     <div className=''>
+      <Button onClick={() => setOpenMsg(true)} variant='contained' className='create-token-btn'>Modal Open</Button>
 
       <React.Fragment>
-        <Container className='form-outer' component="main" maxWidth="md">
+        <Container component="main" maxWidth="md">
 
           <Typography component="h1" variant="h5">
-            Registration
+            Users List
           </Typography>
 
-          <Box component="form" noValidate sx={{ mt: 6 }}>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  required
-                  id="name"
-                  label="Name Of the Company"
-                  fullWidth
-                  autoComplete="name"
-                  onChange={onValChange}
-                  value={formObject.name}
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  required
-                  id="email"
-                  label="email"
-                  fullWidth
-                  autoComplete="email"
-                  onChange={onValChange}
-                  value={formObject.email}
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  required
-                  id="evaluation"
-                  label="evaluation"
-                  fullWidth
-                  autoComplete="evaluation"
-                  onChange={onValChange}
-                  value={formObject.evaluation}
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox color="secondary" name="terms" value="yes" />}
-                  label="Agree terms and conditions"
-                />
-              </Grid>
-            </Grid>
-
-            <Button
-              onClick={createCompanyUser}
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 6, mb: 4 }}
-            >
-              Create the Company user
-            </Button>
+          <Box className="form-box">
+            <CardContent>
+            <Box component="form" noValidate sx={{ mt: 3 }}>
+              {
+                props.users && props.users.map((user:any) => {
+                  return (<Grid item xs={12} md={12} sx={{display: 'flex', mb: 2}}>
+                    <Typography
+                      noWrap
+                      variant="h6"
+                      className='form-label'>
+                      {user.account.userId}
+                    </Typography>
+                      <Button onClick={() => transferToken(user.account.userId)} variant='contained' className='create-token-btn'>Send Tokens</Button>
+                    </Grid>
+                  )
+                })
+              }    
+          </Box>
+        </CardContent>
           </Box>
         </Container>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
-          onClick={handleClose}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        
+        <Loading open={openLoading} handleClose={() => setOpenLoading(false)} />
+        <ModalBox open={openMsg} handleClose={() => setOpenMsg(false)} />
       </React.Fragment>
 
     </div>

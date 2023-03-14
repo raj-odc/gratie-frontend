@@ -12,21 +12,22 @@ const style = {
   width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
+  color: 'red',
   boxShadow: 24,
   p: 4,
 };
 
-export default function ModalBox() {
+export default function ModalBox(props:any) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <Button  onClick={handleOpen}>Open modal</Button>
+      {/* <Button  onClick={handleOpen}>Open modal</Button> */}
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={props.open}
+        onClose={props.handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

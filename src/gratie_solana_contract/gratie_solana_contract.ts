@@ -14,7 +14,7 @@ const MUCKS_DEV_PROGRAM_ID = new PublicKey("FmG2zTeSd4rStaj6FD9W8WipbXGjDyF3e3bt
 // add your id here and then we have to change when we pull and use local
 const SELVA_DEV_PROGRAM_ID = new PublicKey("876aszEfTpFmid7jbhoZuTZW3wKewB6YXCkVnAxwcsEY");
 
-const PROGRAM_ID = PRODUCTION ? new PublicKey("FmG2zTeSd4rStaj6FD9W8WipbXGjDyF3e3btXTqBFbky") : SELVA_DEV_PROGRAM_ID;
+const PROGRAM_ID = PRODUCTION ? new PublicKey("FmG2zTeSd4rStaj6FD9W8WipbXGjDyF3e3btXTqBFbky") : SELVA_DEV_PROGRAM_ID // new PublicKey(idl.metadata.address);
 
 export const connectToGratieSolanaContract = async (): Promise<anchor.Program<GratieSolana>> => {
   const connection = new Connection(NETWORK, "processed");

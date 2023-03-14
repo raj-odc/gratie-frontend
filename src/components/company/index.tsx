@@ -45,7 +45,7 @@ export default function CompanyIndex() {
 
   const fetchContractData = async() => {
     handleToggle();
-    const waiting = await sleep(10)
+    const waiting = await sleep(2000)
     setWaitingPeriodOver(true)
     if(wallet && wallet?.adapter.publicKey){
         const publicKey:any = wallet?.adapter.publicKey;

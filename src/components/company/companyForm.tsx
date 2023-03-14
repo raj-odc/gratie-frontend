@@ -53,7 +53,7 @@ export default function CompanyForm(props: any) {
 
   React.useEffect(() => {
     if (formSubmitted) {
-      window.location.replace('/');
+      window.location.replace('/company');
     }
   })
   const handleClose = () => {
@@ -145,7 +145,7 @@ export default function CompanyForm(props: any) {
     }
     catch (err) {
       console.log("err", err);
-      alert("Company should be unique, please add valid name and email");
+      alert(err);
     }
 
     // props.handleChange();

@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper';
 import { checkAdmin, connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { verifyCompanyLicense } from '@/src/gratie_solana_contract/gratie_solana_company';
 import { useWallet } from '@solana/wallet-adapter-react';
+import Link from 'next/link';
+import { Button } from '@mui/material';
 
 export default function ListUserTable(props:any) {
     const wallet = useWallet();
@@ -51,7 +53,7 @@ export default function ListUserTable(props:any) {
               {
                 row.account.verified ? 
                 <TableCell align="right">Verified</TableCell> :
-                <TableCell align="right" onClick={() => handleVerify(row.account.name)}>Verify</TableCell>
+                <TableCell align="right" onClick={() => handleVerify(row.account.name)}><Button sx={{border: '2px solid #00FF01'}}>Verify</Button></TableCell>
               }
             </TableRow>
           ))}
