@@ -16,7 +16,9 @@ import { createCompanyLicense, CreateCompanyLicenseForm } from '@/src/gratie_sol
 import { useWallet } from '@solana/wallet-adapter-react';
 
 import UploadFile from '@/src/components/uploadFileS3';
-import {uploadMetaDataToS3} from '@/src/utils/uploadMetaDataToS3';
+import { uploadMetaDataToS3 } from '@/src/utils/uploadMetaDataToS3';
+import { addCompanyLicenseToMetaplex } from '@/src/gratie_solana_contract/gratie_solana_metaplex';
+import { PRODUCTION } from '@/src/config';
 
 // import '@/styles/form.css';
 
@@ -30,7 +32,7 @@ declare const window: Window &
     solana: any
   }
 
-export default function CompanyForm(props:any) {
+export default function CompanyForm(props: any) {
 
   const wallet = useWallet();
 
@@ -49,7 +51,7 @@ export default function CompanyForm(props:any) {
   });
 
   React.useEffect(() => {
-    if(formSubmitted){
+    if (formSubmitted) {
       window.location.replace('/');
     }
   })
@@ -68,31 +70,31 @@ export default function CompanyForm(props:any) {
     setFormObject(value);
   };
 
-  const updateImageUrl = (url:string) =>{
+  const updateImageUrl = (url: string) => {
     console.log("setLogoUrl", setLogoUrl);
-    if(url && url!=''){
+    if (url && url != '') {
       setLogoUrl(url)
     }
   }
 
-   const getMetaJsonUrl = async (name:string, email:string) => {
-      const jsonData =  {
-        "name": name,
-        "symbol": "GRATIE",
-        "description": email,
-        "seller_fee_basis_points": 5,
-        "external_url": "",
-        "edition": "",
-        "background_color": "000000",
-        "image": logoUrl
-      }
-      const jsonUrl = await uploadMetaDataToS3(jsonData);
-      return jsonUrl;
-   }
+  const getMetaJsonUrl = async (name: string, email: string) => {
+    const jsonData = {
+      "name": name,
+      "symbol": "GRATIE",
+      "description": email,
+      "seller_fee_basis_points": 5,
+      "external_url": "",
+      "edition": "",
+      "background_color": "000000",
+      "image": logoUrl
+    }
+    const jsonUrl = await uploadMetaDataToS3(jsonData);
+    return jsonUrl;
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!wallet){
+    if (!wallet) {
       console.log("Please connect to wallet");
       return false;
     }
@@ -103,8 +105,8 @@ export default function CompanyForm(props:any) {
     }
     const data = new FormData(event.currentTarget);
     const formVal: any = new Object(formObject);
-    
-    if (formVal['name']=='' || formVal['email']=='' || formVal['tierID']=='' || formVal['evaluation']==''){
+
+    if (formVal['name'] == '' || formVal['email'] == '' || formVal['tierID'] == '' || formVal['evaluation'] == '') {
       confirm("Please enter all the form values");
       return false;
     }
@@ -113,31 +115,38 @@ export default function CompanyForm(props:any) {
     formVal['tierID'] = parseInt(formVal.tierID)
     formVal['evaluation'] = parseInt(formVal.evaluation)
 
-  
+
 
     const jsonMetadataUrl = await getMetaJsonUrl(formVal.name, formVal.email);
     formVal['jsonMetadataUrl'] = jsonMetadataUrl;
     try {
       const program = await connectToGratieSolanaContract();
 
-    // // this gets all the licenses
-    //   const licenses = await program.account.companyLicense.all();
-    //   console.log(licenses);
+      // // this gets all the licenses
+      //   const licenses = await program.account.companyLicense.all();
+      //   console.log(licenses);
 
       const publicKey = (wallet as any).publicKey;
       const company = await createCompanyLicense(program, publicKey, formVal);
       console.log("company", company)
-    
+
+      // adding company license to metaplex (only works on devnet not localnet)
+
+      if (PRODUCTION) {
+        console.log('adding company license to metaplex');
+        await addCompanyLicenseToMetaplex(program, publicKey, company.name);
+      }
+
       confirm("Thanks for Submitting your details, Gratie Admin will be verified soon");
-      
+
       setFormSubmitted(true)
-      
+
     }
-    catch(err) {
-      console.log("err",err);
+    catch (err) {
+      console.log("err", err);
       alert("Company should be unique, please add valid name and email");
     }
-    
+
     // props.handleChange();
 
     handleClose()
