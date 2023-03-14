@@ -33,11 +33,11 @@ package-lock.json
 # vercel
 .vercel
 
+# yarn lock causing issues
+yarn.lock
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# yarn lock is commented out cause there are always merge conflicts
-yarn.lock
 
 kubernetes/gratie-secret.yaml

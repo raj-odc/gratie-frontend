@@ -26,11 +26,11 @@ import { BN } from '@project-serum/anchor';
 
 // import '@/styles/form.css';
 
-  // todo:
-  // Add tier ID button
+// todo:
+// Add tier ID button
 
 
-export default function Users(props:any) {
+export default function Users(props: any) {
   const wallet = useWallet();
 
   const [open, setOpen] = React.useState(false);
@@ -39,7 +39,7 @@ export default function Users(props:any) {
 
   const [userEmail, setUserEmail] = React.useState('');
   const [companyName, setCompanyName] = React.useState('');
-  
+
 
   const handleClose = () => {
     setOpen(false);
@@ -49,53 +49,55 @@ export default function Users(props:any) {
     setOpen(!open);
   };
 
-  function sleep(ms:number) {
+  function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  const transferToken = async() => {
+  const transferToken = async () => {
     handleToggle();
     const userId = sha256.hash(userEmail).substring(0, 16);
 
-    if(wallet && wallet.publicKey){
-        const publicKey:any = wallet.publicKey;
-        const program = await connectToGratieSolanaContract();
-        try{
-          const transferToken = await transferTokensToUser(program, publicKey, new BN(1), companyName, userId);
-          console.log("transferToken", transferToken);
-        }
-        catch(err) {
-          alert(err);
-        }
+    if (wallet && wallet.publicKey) {
+      const publicKey: any = wallet.publicKey;
+      const program = await connectToGratieSolanaContract();
+      try {
+        const transferToken = await transferTokensToUser(program, publicKey, new BN(1), companyName, userId);
+        console.log("transferToken", transferToken);
+      }
+      catch (err) {
+        alert(err);
+      }
     } else {
-        alert("wallet should be present")
+      alert("wallet should be present")
     }
     handleClose();
     return;
   };
 
 
-  const claimToken = async() => {
+
+
+  const claimToken = async () => {
     handleToggle();
     console.log("props", wallet)
 
-    console.log("comoany",companyName);
+    console.log("comoany", companyName);
     console.log('user', userEmail);
     const userId = sha256.hash(userEmail).substring(0, 16);
 
-    if(wallet && wallet.publicKey){
-        const publicKey:any = wallet.publicKey;
-        const program = await connectToGratieSolanaContract();
-        // const usersList = await getUser(program, publicKey, userId);
-        try{
-          const rewardBucket = await createUserRewardsBucket(program, publicKey, companyName, userId)
-          console.log("rewardBucket", rewardBucket);
-        }
-        catch(err) {
-          alert(err);
-        }
+    if (wallet && wallet.publicKey) {
+      const publicKey: any = wallet.publicKey;
+      const program = await connectToGratieSolanaContract();
+      // const usersList = await getUser(program, publicKey, userId);
+      try {
+        const rewardBucket = await createUserRewardsBucket(program, publicKey, companyName, userId)
+        console.log("rewardBucket", rewardBucket);
+      }
+      catch (err) {
+        alert(err);
+      }
     } else {
-        alert("wallet should be present")
+      alert("wallet should be present")
     }
     handleClose();
     return;
@@ -154,7 +156,7 @@ export default function Users(props:any) {
               Claim NFT
             </Button>
           </Box>
-          </Container>
+        </Container>
       </React.Fragment>
     </div>
   );

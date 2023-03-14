@@ -2,12 +2,13 @@ import * as anchor from "@project-serum/anchor";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { GratieSolana } from "./types/gratie_solana";
 import idl from "./idl/gratie_solana.json";
+import { PRODUCTION } from "../config";
 
 console.log(process.env.NODE_ENV);
 
-const NETWORK = process.env.NODE_ENV === 'development' ? "http://localhost:8899" : "https://api.devnet.solana.com";
+const NETWORK = PRODUCTION ? "https://api.devnet.solana.com" : "http://localhost:8899";
 
-const PROGRAM_ID = process.env.NODE_ENV === 'development' ? new PublicKey(idl.metadata.address) : new PublicKey("876aszEfTpFmid7jbhoZuTZW3wKewB6YXCkVnAxwcsEY");
+const PROGRAM_ID = PRODUCTION ? new PublicKey("FmG2zTeSd4rStaj6FD9W8WipbXGjDyF3e3btXTqBFbky") : new PublicKey(idl.metadata.address);
 
 export const connectToGratieSolanaContract = async (): Promise<anchor.Program<GratieSolana>> => {
   const connection = new Connection(NETWORK, "processed");

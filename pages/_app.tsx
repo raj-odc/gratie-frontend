@@ -25,11 +25,12 @@ import { WalletAdapterNetwork, WalletError } from '@solana/wallet-adapter-base';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { createTheme } from '@mui/material';
 import { ReactNode, useCallback, useMemo } from 'react';
+import { PRODUCTION } from '@/src/config';
 
 const CLUSTER = WalletAdapterNetwork.Devnet;
 const CONNECTION_CONFIG: ConnectionConfig = { commitment: 'processed' };
 // const ENDPOINT = /*#__PURE__*/ clusterApiUrl(CLUSTER);
-const ENDPOINT = process.env.NODE_ENV === 'development' ? 'http://localhost:8899' : 'https://api.devnet.solana.com';
+const ENDPOINT = PRODUCTION ? 'https://api.devnet.solana.com' : 'http://localhost:8899';
 
 // const theme = /*#__PURE__*/ createTheme();
 
