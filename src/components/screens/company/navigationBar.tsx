@@ -10,35 +10,21 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 
-import ToggleButtonNotEmpty from './toggleMenu';
 import Link from 'next/link';
 
+const pages = [{page: 'Subscription', link: '/subscription'}, {page: 'Create Token', link: '/token'}, 
+               {page: 'Create Users', link: '/create'}, {page: 'Profile', link: '/profile'}];
 
-const pages = [{page: 'Use Case', link: '#useCase'}, {page: 'Pricing', link: '#price'}, {page: 'Community', link: '#community'}];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
-function ResponsiveAppBar() {
+export default function NavigationBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
-  const [visibleWallet, setVisibleWallet] = React.useState(false);
-
-  React.useEffect(() => setVisibleWallet(true));
 
   return (
     <div style={{flexGrow: 1}}>
@@ -99,9 +85,6 @@ function ResponsiveAppBar() {
                   </Link>
                 ))}
               </Box>
-              <Box sx={{ display:'flex' ,margin:'auto', paddingX: 2, pr:10  }}>
-                <ToggleButtonNotEmpty />
-              </Box>
             </Box>
             
           </Toolbar>
@@ -110,4 +93,3 @@ function ResponsiveAppBar() {
     </div>
   );
 }
-export default ResponsiveAppBar;

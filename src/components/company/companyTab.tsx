@@ -5,15 +5,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
-import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
-import { getAllVerifiedLicenses, getAllPendingLicenses } from "@/src/gratie_solana_contract/gratie_solana_company";
-import { useEffect } from 'react';
-
-import CompanyReward from './rewardContract'
+import Token from './token'
 import Profile from './profile'
 import Users from './users'
-import Tier from './tier'
-
+import Subscription from './subscription'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -26,6 +21,7 @@ function TabPanel(props: TabPanelProps) {
 
   return (
     <div
+      style={{marginLeft: '0px'}}
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
@@ -33,7 +29,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 0, ml: 0}}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -50,53 +46,26 @@ function a11yProps(index: number) {
 
 export default function CompanyTab(props:any) {
 
-
-  const [value, setValue] = React.useState(0);
-  const [pendingLicenses, setPendingLicenses] = React.useState(null);
-  const [approvedLicenses, setApprovedLicenses] = React.useState(null);
-
+  const [value, setValue] = React.useState(props.showProfile ? 3 : 0 );
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  const getAllPendingCompanies = async () => {
-    const program = await connectToGratieSolanaContract();
-    const pendingLics:any = await getAllPendingLicenses(program);
-    setPendingLicenses(pendingLics);
-    await approveCompanyLicense();
-    return pendingLics;
-  }
-
-  const approveCompanyLicense = async () => {
-    const program = await connectToGratieSolanaContract();
-    const verifiedLics:any = await getAllVerifiedLicenses(program);
-    setApprovedLicenses(verifiedLics);
-    return verifiedLics;
-  }
-  
-//   const createTier = async () => {
-//     console.log("createTier", createTier)
-//   }
-
-  useEffect(() => {
-    getAllPendingCompanies();
-  }, []);
 
   return (
     <Container className='admin-list' component="main" maxWidth="md">
         <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab className={value==0 ? 'selected-tab' : 'non-selected-tab'} label="Subscription" {...a11yProps(0)} />
-            <Tab className={value==1 ? 'selected-tab' : 'non-selected-tab'} label="Issue Reward" {...a11yProps(1)} />
-            <Tab className={value==2 ? 'selected-tab' : 'non-selected-tab'} label="My Rewards" {...a11yProps(2)} />
-            <Tab className={value==3 ? 'selected-tab' : 'non-selected-tab'} label="Profile" {...a11yProps(3)} />
+              <Tab className={value==0 ? 'selected-tab' : 'non-selected-tab'} label="Subscription" {...a11yProps(0)} />
+              <Tab className={value==1 ? 'selected-tab' : 'non-selected-tab'} label="Issue Reward" {...a11yProps(1)} />
+              <Tab className={value==2 ? 'selected-tab' : 'non-selected-tab'} label="My Rewards" {...a11yProps(2)} />
+              <Tab className={value==3 ? 'selected-tab' : 'non-selected-tab'} label="Profile" {...a11yProps(3)} />
             </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
            {
-             <Tier {...props}/>
+             <Subscription/>
            }
         </TabPanel>
         <TabPanel value={value} index={1}>
@@ -106,12 +75,12 @@ export default function CompanyTab(props:any) {
         </TabPanel>
         <TabPanel value={value} index={2}>
             {
-             <CompanyReward {...props}/>
+             <Token {...props}/>
             }
         </TabPanel>
         <TabPanel value={value} index={3}>
             {
-              props.license && <Profile license = {props.license}/>
+              props.license && <Profile companyLicense = {props.license}/>
             }
         </TabPanel>
         </Box>

@@ -10,7 +10,7 @@ import { sha256 } from "@project-serum/anchor/dist/cjs/utils";
 
 
 import Container from '@mui/material/Container';
-import { AppBar, Box, Button, CardContent, Grid, ListItem, TextField, Toolbar, Typography } from '@mui/material';
+import { Box, Button, Grid, ListItem, TextField, Typography } from '@mui/material';
 
 import { useState } from 'react'
 
@@ -103,85 +103,61 @@ export default function Users(props: any) {
     return;
   };
 
-    return (
-      <>
-      <Container sx={{ mt: 2 }} className="create-user-container">
-            <Box className="form-box user-box">
-            <CardContent>
-            <Box component="form" noValidate sx={{ mt: 6 }}>
-            <Grid container spacing={1} sx={{ mt: 2, mb: 1 }}>
-                <Grid item xs={12} md={7}>
-                <Typography
-                  noWrap
-                  variant="h6"
-                  className='form-label'>
-                  Enter Email Id
-                </Typography>
-                </Grid>
-                <Grid item xs={12} md={5} className="user-grid">
+  return (
+    <div>
+      <React.Fragment>
+        <Container className='form-outer' component="main" maxWidth="md">
+
+          <Box component="form" noValidate sx={{ mt: 6 }}>
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
                 <TextField
-                  fullWidth
-                  id="userEmail"
-                  type='text'
-                  autoComplete='off'
                   required
-                  onChange={(e) => setUserEmail(e.target.value)}
-                  value={userEmail}
-                  className='form-textfield'
-                  focused sx={{ input: {color:'#fff', fontSize:'20px'}}}
-                />
-                </Grid>
-            </Grid>
-            <Grid container spacing={1} sx={{ mb: 2 }}>
-                <Grid item xs={12} md={7}>
-                <Typography
-                  noWrap
-                  variant="h6"
-                  className='form-label'>
-                  Company Name
-                </Typography>
-                </Grid>
-                <Grid item xs={12} md={5} className="user-grid">
-                <TextField
-                  fullWidth
-                  type='text'
                   id="CompanyName"
-                  autoComplete='off'
-                  required
+                  label="Name Of the Company"
+                  fullWidth
+                  autoComplete="CompanyName"
                   onChange={(e) => setCompanyName(e.target.value)}
                   value={companyName}
-                  className='form-textfield'
-                  focused sx={{ input: {color:'#fff', fontSize:'20px'}}}
+                  variant="standard"
                 />
-                </Grid>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  required
+                  id="userEmail"
+                  label="userEmail"
+                  fullWidth
+                  autoComplete="userEmail"
+                  onChange={(e) => setUserEmail(e.target.value)}
+                  value={userEmail}
+                  variant="standard"
+                />
+              </Grid>
             </Grid>
-          </Box>
-        </CardContent>
-        </Box>
-        <br/>
-        <Box className="form-box box-style" onClick={transferToken}>
-            <CardContent>
-            <Typography
-                  noWrap
-                  variant="h6"
-                  className='mint-nft-text'>
-                  Mint NFT
-                </Typography>
-        </CardContent>
-        </Box>   
-        <br/>
+            <Button
+              onClick={claimToken}
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 6, mb: 4 }}
+            >
+              Claim Reward
+            </Button>
 
-        <Box onClick={claimToken} className="form-box box-style">
-            <CardContent>
-            <Typography
-                  noWrap
-                  variant="h6"
-                  className='mint-nft-text'>
-                  Claim Rewards
-                </Typography>
-        </CardContent>
-        </Box>
+            <Button
+              onClick={transferToken}
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 6, mb: 4 }}
+            >
+              Claim NFT
+            </Button>
+          </Box>
         </Container>
-    </>
-      )
+      </React.Fragment>
+    </div>
+  );
 }

@@ -1,24 +1,23 @@
+
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import { redirect } from 'next/navigation';
 import { useState } from 'react'
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
-import { createCompanyLicense, CreateCompanyLicenseForm, createCompanyRewardsBucket, CreateCompanyRewardsBucketForm, getCompanyRewardsBucketForCompany } from '@/src/gratie_solana_contract/gratie_solana_company';
+import { createCompanyRewardsBucket, CreateCompanyRewardsBucketForm, getCompanyRewardsBucketForCompany } from '@/src/gratie_solana_contract/gratie_solana_company';
 import { useWallet } from '@solana/wallet-adapter-react';
 
 import UploadFile from '@/src/components/uploadFileS3';
-import { parseDataFromJsonUrl, uploadMetaDataToS3 } from '@/src/utils/uploadMetaDataToS3';
-import { addCompanyRewardTokensToMetaplex } from '@/src/gratie_solana_contract/gratie_solana_metaplex';
+import {parseDataFromJsonUrl, uploadMetaDataToS3} from '@/src/utils/uploadMetaDataToS3';
+import CardContent from '@mui/material/CardContent';
 import { PRODUCTION } from '@/src/config';
+import { addCompanyRewardTokensToMetaplex } from '@/src/gratie_solana_contract/gratie_solana_metaplex';
 
 // import '@/styles/form.css';
 
@@ -32,7 +31,7 @@ declare const window: Window &
     solana: any
   }
 
-export default function RewardContract(props: any) {
+export default function CreateToken(props:any) {
 
 
   console.log("props", props);
@@ -62,9 +61,9 @@ export default function RewardContract(props: any) {
         console.log('data', data);
         setRewardData(data)
         handleClose()
-      });
-    }
-    if (formSubmitted) {
+      });  
+    } 
+    if(formSubmitted){
       window.location.replace('/');
     }
   })
@@ -83,9 +82,9 @@ export default function RewardContract(props: any) {
     setFormObject(value);
   };
 
-  const updateImageUrl = (url: string) => {
+  const updateImageUrl = (url:string) =>{
     console.log("setLogoUrl", setLogoUrl);
-    if (url && url != '') {
+    if(url && url!=''){
       setLogoUrl(url)
     }
   }
@@ -100,24 +99,24 @@ export default function RewardContract(props: any) {
     }
   }
 
-  const getMetaJson = async (name: string, symbol: string, description: string) => {
-    const jsonData = {
-      "name": name,
-      "symbol": symbol,
-      "description": description,
-      "seller_fee_basis_points": 5,
-      "external_url": "",
-      "edition": "",
-      "background_color": "000000",
-      "image": logoUrl
-    }
-    const jsonUrl = await uploadMetaDataToS3(jsonData);
-    return [jsonUrl, jsonData];
-  }
+   const getMetaJson = async (name:string, symbol:string, description:string) => {
+      const jsonData =  {
+        "name": name,
+        "symbol": symbol,
+        "description": description,
+        "seller_fee_basis_points": 5,
+        "external_url": "",
+        "edition": "",
+        "background_color": "000000",
+        "image": logoUrl
+      }
+      const jsonUrl = await uploadMetaDataToS3(jsonData);
+      return [jsonUrl, jsonData];
+   }
 
-  const createRewardToken = async (name: string, symbol: string, url: string) => {
+   const createRewardToken = async (name:string, symbol:string, url:string) => {
     if (wallet) {
-      console.log("wallet", wallet);
+      console.log("wallet",wallet);
       const program = await connectToGratieSolanaContract();
       // const allLicenses = await program.account.companyLicense.all();
       console.log("program", program);
@@ -128,7 +127,7 @@ export default function RewardContract(props: any) {
           confirm("already rewards present for the company");
           return;
         }
-      } catch (err: any) {
+      } catch(err:any) {
         console.log("rewards", companyName, rewards);
       }
       const companyRewardsBucketForm: CreateCompanyRewardsBucketForm = {
@@ -155,7 +154,7 @@ export default function RewardContract(props: any) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("wallet", wallet);
+    console.log("wallet",wallet);
 
     if (logoUrl === '') {
       confirm("Please upload the logo before proceed");
@@ -164,8 +163,8 @@ export default function RewardContract(props: any) {
     }
     const data = new FormData(event.currentTarget);
     const formVal: any = new Object(formObject);
-
-    if (formVal['name'] == '' || formVal['email'] == '' || formVal['tierID'] == '' || formVal['evaluation'] == '') {
+    
+    if (formVal['name']=='' || formVal['email']=='' || formVal['tierID']=='' || formVal['evaluation']==''){
       confirm("Please enter all the form values");
       return false;
     }
@@ -175,98 +174,96 @@ export default function RewardContract(props: any) {
     formVal['jsonMetadataUrl'] = jsonMetadataUrl;
     try {
       const reward = await createRewardToken(formVal.name, formVal.symbol, jsonMetadataUrl)
-      console.log("reward", reward);
+      console.log("reward",reward);
       setRewardData(jsonMetadata);
       confirm("Created Reward for company, now you can invite users");
-
+      
       // setFormSubmitted(true)
     }
-    catch (err) {
-      console.log("err", err);
+    catch(err) {
+      console.log("err",err);
       alert("Company should be unique, please add valid name and email");
     }
-
+    
     // props.handleChange();
 
     handleClose()
   };
-  return (
-    <div className=''>
-
-      <React.Fragment>
-        {
-          rewardData && Object.keys(rewardData).length!==0 ? 
-           <Container>
-              <Typography component="h1" variant="h5">
-                Rewards
-              </Typography>
-              <div> {(rewardData as any).name}</div>
-              <img src={(rewardData as any).image}></img>
-            </Container> :
-            <Container className='form-outer' component="main" maxWidth="md">
-
-              <Typography component="h1" variant="h5">
-                Registration
-              </Typography>
-
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 6 }}>
-
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      required
-                      id="name"
-                      label="Name Of the Token"
-                      fullWidth
-                      autoComplete="name"
-                      onChange={onValChange}
-                      value={formObject.name}
-                      variant="standard"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      required
-                      id="symbol"
-                      label="symbol"
-                      fullWidth
-                      autoComplete="symbol"
-                      onChange={onValChange}
-                      value={formObject.symbol}
-                      variant="standard"
-                    />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <UploadFile updateImage={updateImageUrl} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={<Checkbox color="secondary" name="terms" value="yes" />}
-                      label="Agree terms and conditions"
-                    />
-                  </Grid>
+    return (
+        <React.Fragment>
+        <Container sx={{ mt: 4}}>
+            <Box className="form-box">
+            <CardContent>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 6 }}>
+            <Grid container spacing={1} sx={{ mt: 5, mb: 5 }}>
+                <Grid item xs={12} md={6}>
+                <Typography
+                  noWrap
+                  variant="h6"
+                  className='form-label'>
+                  Provide a token name
+                </Typography>
                 </Grid>
-                <Button
-                  type="submit"
+                <Grid item xs={12} md={6}>
+                <TextField
                   fullWidth
-                  variant="contained"
-                  sx={{ mt: 6, mb: 4 }}
-                >
-                  Register Here
-                </Button>
-              </Box>
-            </Container>
-        }
-
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
-          onClick={handleClose}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      </React.Fragment>
-
-    </div>
-  );
+                  id="name"
+                  type='text'
+                  autoComplete='off'
+                  required
+                  onChange={onValChange}
+                  value={formObject.name}
+                  className='form-textfield'
+                  focused sx={{ input: {color:'#fff', fontSize:'20px'}}}
+                />
+                </Grid>
+            </Grid>
+    
+            <Grid container spacing={1} sx={{mb: 5 }}>
+                <Grid item xs={12} md={6}>
+                <Typography
+                  noWrap
+                  variant="h6"
+                  className='form-label'>
+                  Token Symbol
+                </Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  type='text'
+                  id="symbol"
+                  autoComplete='off'
+                  required
+                  onChange={onValChange}
+                  value={formObject.symbol}
+                  className='form-textfield'
+                  focused sx={{ input: {color:'#fff', fontSize:'20px'}}}
+                />
+                </Grid>
+            </Grid>
+    
+            <Grid container spacing={1} sx={{ mb: 5 }}>
+                <Grid item xs={12} md={6}>
+                <Typography
+                  noWrap
+                  variant="h6"
+                  className='form-label'>
+                    Token Logo
+                </Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6}>
+                    <UploadFile updateImage={updateImageUrl} />
+                </Grid>
+                </Grid>
+            </Grid>
+    
+            <Button type="submit" variant='contained' className='create-token-btn'> Create Token</Button>
+          </Box>
+        </CardContent>
+        </Box>
+        </Container>
+        </React.Fragment>
+      )
 }

@@ -2,6 +2,9 @@ import '@/styles/globals.css'
 import '@/styles/wallet.css'
 import '@/styles/form.css'
 import '@/styles/landingPage.css'
+import '@/styles/company.css'
+import '@/styles/formPage.css'
+
 
 import { ThemeProvider } from '@mui/material/styles';
 
@@ -66,7 +69,7 @@ function App({ children }: { children: ReactNode }) {
     </main>)
 }
 
-function ExampleMobileDApp({ Component, pageProps }: AppProps) {
+function GratieDApp({ Component, pageProps }: AppProps) {
   return (
     <SnackbarProvider autoHideDuration={10000}>
       <App>
@@ -76,5 +79,5 @@ function ExampleMobileDApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default ExampleMobileDApp;
+export default GratieDApp;
 

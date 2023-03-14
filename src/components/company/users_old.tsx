@@ -1,10 +1,9 @@
-
 import * as React from 'react';
 import { sha256 } from "@project-serum/anchor/dist/cjs/utils";
 
 
 import Container from '@mui/material/Container';
-import { Box, Button, CardContent, Grid, ListItem, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, ListItem, TextField, Typography } from '@mui/material';
 
 import { useState } from 'react'
 
@@ -19,9 +18,14 @@ import { createUser } from '@/src/gratie_solana_contract/gratie_solana_user';
 import { faker } from '@faker-js/faker';
 import { useWallet } from '@solana/wallet-adapter-react';
 
+// import '@/styles/form.css';
 
-export default function CreateUsers(props:any) {
-    const wallet = useWallet();
+  // todo:
+  // Add tier ID button
+
+
+export default function Users(props:any) {
+  const wallet = useWallet();
 
   const [open, setOpen] = React.useState(false);
 
@@ -54,40 +58,54 @@ export default function CreateUsers(props:any) {
     
   }
 
-    return (
-        <Container sx={{ mt: 3}} className="create-user-container">
-            <Box className="form-box">
-            <CardContent>
-          <form className='form'>
-            <Grid container spacing={1} sx={{ mt: 5, mb: 5 }}>
-                <Grid item xs={12} md={7}>
-                <Typography
-                  noWrap
-                  variant="h6"
-                  className='form-label'>
-                  Service Provider Email Id
-                </Typography>
-                </Grid>
-                <Grid item xs={12} md={5} className="user-grid">
-                <TextField
-                  fullWidth
-                  type='text'
-                  id="email"
-                  autoComplete='off'
-                  required
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                  className='form-textfield'
-                  focused sx={{ input: {color:'#fff', fontSize:'20px'}}}
-                />
-                </Grid>
+console.log("props", props)
+  return (
+    <div className=''>
+      <Button
+        onClick={() => {setOpenAddUser(true)}}
+        type="button"
+        fullWidth
+        variant="contained"
+        sx={{ mt: 6, mb: 4 }}
+      >
+        Invite user
+      </Button>
+       {
+        props.users.length > 0 &&
+        <Grid item xs={12} sx={{ margin:'auto', pl:10, pr:5}}>
+            <Typography component="h1" variant="h5">
+              List users        
+            </Typography>
+             First User: { props.users[props.users.length-1].account.userId }
+            </Grid>}
+        <Container className='form-outer' component="main" maxWidth="md">
+        {(openAddUser || props.users.length == 0) && <Box component="form" noValidate sx={{ mt: 6 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                required
+                id="email"
+                label="email"
+                fullWidth
+                autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                variant="standard"
+              />
             </Grid>
-            <Button onClick={handleClick} variant='contained' className='create-token-btn' sx={{mt:2, mb:5}}>
-                Invite User
-            </Button>
-          </form>
-        </CardContent>
-        </Box>
-        </Container>
-      )
+            
+          </Grid>
+          <Button
+            onClick={handleClick}
+            type="button"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 6, mb: 4 }}
+          >
+            Invite user
+          </Button>
+        </Box>}
+      </Container>
+    </div>
+  );
 }

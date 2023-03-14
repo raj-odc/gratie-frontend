@@ -1,19 +1,14 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import NavBarWallet from './navBarWallet'
 
-import * as React from 'react';
+import UserForm from '@/src/components/user/index';
+import React from 'react';
+import { Box, Container, Grid } from '@mui/material';
 
-import Container from '@mui/material/Container';
-import { Box, Grid } from '@mui/material';
 
-import Users from '@/src/components/user/index';
-
-const inter = Inter({ subsets: ['latin'] })
-
-export default function User() {
+export default function Home() {
   return (
     <>
       <Head>
@@ -28,7 +23,7 @@ export default function User() {
           <Box component="form" noValidate sx={{ mt: 12 }}>
               <Grid container spacing={2}>
               </Grid>
-              <Users/>
+              <UserForm/>
           </Box>
         </Container>
       </React.Fragment>

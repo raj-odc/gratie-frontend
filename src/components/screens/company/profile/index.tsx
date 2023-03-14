@@ -7,14 +7,12 @@ import Button from '@mui/material/Button'
 import { Container } from '@mui/material'
 import Upload from '@mui/icons-material/ArrowUpward';
 import Edit from '@mui/icons-material/Edit';
-import CompanyForm from './companyNewForm';
 
-export default function Profile(props:any) {
+export default function Profile() {
     const email = 'xyz@gmail.com';
     const token = 175990;
     const subscription = 'Optical';
     return (
-      <>
         <Container sx={{ mt: 3}} className="create-user-container">
             <Box className="form-box">
             <CardContent>
@@ -86,7 +84,5 @@ export default function Profile(props:any) {
         </CardContent>
         </Box>
         </Container>
-        <CompanyForm />
-      </>
       )
 }

@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Head from 'next/head'
 import { useState } from 'react'
 import axios from "axios";
+import Upload from '@mui/icons-material/Upload';
 
 
 interface Values {
@@ -11,7 +12,7 @@ interface Values {
   password: string;
 }
 
-const Upload = (props:any) => {
+const UploadFile = (props:any) => {
 
   const file2Buffer = (file: any) => {
     return new Promise(function (resolve, reject) {
@@ -44,7 +45,7 @@ const Upload = (props:any) => {
             variant="contained"
             component="label"
             >
-            Upload File
+            <Upload sx={{color:'#56e456'}} />
             <input onChange={(e) => uploadImage(e.target.files)}
                 type="file"
                 hidden
@@ -55,7 +56,7 @@ const Upload = (props:any) => {
   
 }
 
-export default Upload
+export default UploadFile
 
 
 // import * as React from 'react';

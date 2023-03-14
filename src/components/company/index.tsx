@@ -4,32 +4,24 @@ import Container from '@mui/material/Container';
 
 import { useEffect, useState } from 'react'
 
-import List from './list'
-import { profile } from 'console';
 import { useWallet } from '@solana/wallet-adapter-react';
 
-import CompanyList from '@/src/components/company/list';
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { getCompanyLicensePDA, getCompanyRewardsBucket } from '@/src/gratie_solana_contract/gratie_solana_pda';
-import { createCompanyRewardsBucket, CreateCompanyRewardsBucketForm, getCompanyRewardsBucketForCompany, listCompanyLicenses } from '@/src/gratie_solana_contract/gratie_solana_company';
 import { getCompanyUser } from '@/src/gratie_solana_contract/gratie_solana_user';
-import { Backdrop, CircularProgress } from '@mui/material';
-
-import CompanyForm from '@/src/components/company/companyForm';
+import { Backdrop, Button, CircularProgress } from '@mui/material';
 
 import CompanyTab from '@/src/components/company/companyTab'
 import { getAllTiers } from '@/src/gratie_solana_contract/gratie_solana_tier';
 
-// todo:
-// Add tier ID button
 
-export default function Admin() {
+export default function CompanyIndex() {
 
   const { wallet } = useWallet();
 
   const [open, setOpen] = React.useState(false);
 
-  const [loggedIn, setLoggedId] = React.useState(false);
+  const [waitingPeriodOver, setWaitingPeriodOver] = React.useState(false);
   
   const [isDataFetched, setisDataFetched] = React.useState(false);
   const [companyLicense, setCompanyLicense] = React.useState(undefined);
@@ -39,16 +31,6 @@ export default function Admin() {
   const [tierList, setTierList] = React.useState({});
 
 
-  const [isLicenseVerified, setIsLicenseVerified] = React.useState(false);
-
-  
-
-  const [tabIndex, setTabIndex] = useState(0);
-
-  const handleTabChange = (event:any, newTabIndex:number) => {
-    setTabIndex(newTabIndex);
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -57,28 +39,21 @@ export default function Admin() {
     setOpen(!open);
   };
 
-  const updateVerifiedStatus = (status:boolean) => {
-    setIsLicenseVerified(status)
-  }
-
   function sleep(ms:number) {
     return new Promise(resolve => setTimeout(resolve, ms));
  }
 
   const fetchContractData = async() => {
     handleToggle();
-    await sleep(3000);
+    const waiting = await sleep(10)
+    setWaitingPeriodOver(true)
     if(wallet && wallet?.adapter.publicKey){
         const publicKey:any = wallet?.adapter.publicKey;
-        setLoggedId(true);
         const program = await connectToGratieSolanaContract();
         const tiers = await getAllTiers(program)
         setTierList(tiers)
         const validLicense:any = await getCompanyLicense(program, publicKey)
-        
-        console.log("publicKey", program)
         if (validLicense) {
-            setIsLicenseVerified(validLicense.account.verified)
             setCompanyLicense(validLicense);
             if(validLicense.account.verified) {
                 const companyRewardsBucket:any = await getCompanyReward(program, validLicense.account.name)
@@ -94,7 +69,9 @@ export default function Admin() {
         }
         setisDataFetched(true);
     } else {
-        alert("wallet should be present")
+      confirm("Please connect with your wallet");
+      console.log("wallet loading, please wait")
+        // alert("wallet should be present")
     }
     handleClose();
     return;
@@ -121,36 +98,53 @@ export default function Admin() {
   }
 
   useEffect(() => {
-    fetchContractData();
+    fetchContractData().then(() => {
+      console.log("fetching Data")
+    });
   }, []);
 
-// state: license, licenseVerified, rewardtoken, companyUsers, 
-
-  // Todo:
-  // 1) Company license present ah ? -> create company Reward bucket form
-  // 2) else -> open form for registration
-  // 3) create user form -> create user bucket reward
-  // 4) list of users for the company.
-
-
+  const getBlockChainData = async() => {
+    if(wallet && wallet?.adapter.publicKey){
+      const data = await fetchContractData();
+      console.log("data", data)
+    }
+    else {
+      confirm("Please connect with your wallet");
+      return false;
+    }
+    
+  }
 
   return (
     <div className=''>
       <React.Fragment>
+      {
+         !isDataFetched && waitingPeriodOver && <Container className='form-outer' component="main" maxWidth="md">
+              <Button
+                onClick={getBlockChainData}
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 6, mb: 4 }}
+              >
+                Please click here to get Blockchain data
+              </Button>
+            </Container>
+        }
         { 
         isDataFetched && <Container className='' component="main" maxWidth="md">
-           { companyLicense ? 
-            <CompanyTab handleChange = {fetchContractData} license = {companyLicense} reward = {companyReward} users = {usersList}/> 
-            : <CompanyForm tiers={tierList} handleChange = {updateVerifiedStatus}/>
+           { 
+            <CompanyTab 
+              showProfile={companyLicense ? true : false} 
+              handleChange = {fetchContractData} 
+              license = {companyLicense} 
+              reward = {companyReward} 
+              users = {usersList}
+              tiers = {tierList}
+            /> 
            }
         </Container>
         }
-        {/* {
-         isDataFetched && !companyLicense && isLicenseVerified && <Container className='form-outer' component="main" maxWidth="md">
-                Need to Approve the License, waiting for Approval
-            </Container>
-        } */}
-        
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={open}

@@ -1,3 +1,7 @@
+.navbar-link button:hover{
+    color:#00FF01 !important;
+}
+
 .head-text {
     font-size: 50px !important;
     font-weight: 400 !important;
@@ -326,8 +330,7 @@
 }
 
 .price-box{
-    width:255px;
-    height:400px; 
+    width:150px;
     border:2px outset #d9d9d9;
     border-radius: 10%;
     box-shadow: 5px 5px #c1c1c1;
