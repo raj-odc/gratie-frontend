@@ -9,6 +9,8 @@ import { GratieSolana } from "./types/gratie_solana";
 import AES from "crypto-js/aes";
 import { encryptPassword } from "../utils/encryption";
 import { enc } from "crypto-js";
+import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
+import { connectToGratieSolanaContract, connectToGratieSolanaContractWithKeypair } from "./gratie_solana_contract";
 
 export interface CreateUserForm {
   // sha256 hash of user email see gratie_solana_test.ts
@@ -160,7 +162,10 @@ export const claimUser = async (program: anchor.Program<GratieSolana>, userPassw
 
   const oldUser = await userGetPrivateKey(program, userPassword, userEmail, companyName);
 
-  const tokenAccount = await userCreateTokenAccount(program, oldUser, tokenMintPubkey, newUserKeypair.publicKey);
+
+  const userProgram = await connectToGratieSolanaContractWithKeypair(oldUser);
+
+  const tokenAccount = await userCreateTokenAccount(userProgram, oldUser, tokenMintPubkey, newUserKeypair.publicKey);
 
   console.log("newUserKeypair.publicKey: ", newUserKeypair.publicKey.toBase58());
   console.log('newTokenAccount:', tokenAccount.toBase58());
@@ -171,7 +176,7 @@ export const claimUser = async (program: anchor.Program<GratieSolana>, userPassw
 
   console.log('SENDING CLAIM USER TX');
 
-  await program.methods.claimUser(encryptedPrivateKey).accounts({
+  await userProgram.methods.claimUser(encryptedPrivateKey).accounts({
     claimer: user.owner,
     user: userPDA,
     userRewardsBucket: userRewardsBucketPDA,

@@ -3,6 +3,8 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { GratieSolana } from "./types/gratie_solana";
 import idl from "./idl/gratie_solana.json";
 import { PRODUCTION } from "../config";
+import NodeWallet from '@project-serum/anchor/dist/cjs/nodewallet'
+
 
 console.log(process.env.NODE_ENV);
 
@@ -22,6 +24,19 @@ export const connectToGratieSolanaContract = async (): Promise<anchor.Program<Gr
 
   return program;
 }
+
+// this is for the users who don't have their own wallet
+export const connectToGratieSolanaContractWithKeypair = async (keypair: anchor.web3.Keypair): Promise<anchor.Program<GratieSolana>> => {
+  const connection = new Connection(NETWORK, "processed");
+
+  const wallet = new NodeWallet(keypair);
+
+  const provider = new anchor.AnchorProvider(connection, wallet, { preflightCommitment: 'processed' });
+
+  const program: anchor.Program<GratieSolana> | any = new anchor.Program(idl as any, PROGRAM_ID, provider);
+
+  return program;
+};
 
 export const checkAdmin = async (program: anchor.Program<GratieSolana>, admin: anchor.web3.PublicKey): Promise<boolean> => {
   try {

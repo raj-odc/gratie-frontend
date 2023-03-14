@@ -2,11 +2,13 @@ import * as React from 'react';
 import { sha256 } from "@project-serum/anchor/dist/cjs/utils";
 import Container from '@mui/material/Container';
 import { Box, Button, CardContent, Grid, ListItem, TextField, Toolbar, Typography } from '@mui/material';
-import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
+import { connectToGratieSolanaContract, connectToGratieSolanaContractWithKeypair } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { transferTokensToUser } from "@/src/gratie_solana_contract/gratie_solana_company";
-import { claimUser, createUserRewardsBucket, getUser } from '@/src/gratie_solana_contract/gratie_solana_user';
+import { claimUser, claimUserToHisOwnWallet, createUserRewardsBucket, getUser, getUserRewardsBucket } from '@/src/gratie_solana_contract/gratie_solana_user';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { BN } from '@project-serum/anchor';
+import { Keypair } from '@solana/web3.js';
+import { getCompanyLicensePDA, getCompanyRewardsBucket, getUserPDA } from '@/src/gratie_solana_contract/gratie_solana_pda';
 
 // on this page we don't need a wallet connected for the user to connect
 // the wallet is saved on chain but it's encrypted
@@ -38,13 +40,17 @@ export default function Users(props: any) {
 
   const [userHashOwnWallet, setUserHashOwnWallet] = React.useState(false);
 
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [userData, setUserData] = React.useState({} as any);
+  const [userRewards, setUserRewards] = React.useState({} as any);
+
 
   React.useEffect(() => {
 
     const checkIfWalletHasUser = async () => {
       const program = await connectToGratieSolanaContract();
       const users = await program.account.user.all();
-      const user = users.find(u => u.account.owner == wallet.publicKey);
+      const user = users.find(u => u.account.owner == wallet.publicKey && u.account.claimedToHisOwnWallet);
 
       setUserHashOwnWallet(user ? true : false);
 
@@ -87,31 +93,73 @@ export default function Users(props: any) {
     return;
   };
 
+  const claimToOwnWallet = async () => {
+    try {
 
+      console.log(`userEmail: ${userEmail} companyName: ${companyName}`);
+      const program = await connectToGratieSolanaContract();
+      const userID = sha256.hash(userEmail).substring(0, 16);
+      const user = await getUser(program, companyName, userID);
+      console.log(user);
+
+      console.log(wallet.publicKey);
+      await claimUserToHisOwnWallet(program, wallet.publicKey!, userPassword, companyName, userEmail);
+      console.log('user successfully claimed to his own wallet');
+
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    }
+
+  };
 
 
   const loginUser = async () => {
     handleToggle();
-    console.log("props", wallet)
 
-    console.log("comoany", companyName);
-    console.log('user', userEmail);
 
-    const program = await connectToGratieSolanaContract();
+    const tempKeypair = Keypair.generate();
+    const program = await connectToGratieSolanaContractWithKeypair(tempKeypair);
+    const userID = sha256.hash(userEmail).substring(0, 16);
+
+    console.log(`userID: ${userID} companyName: ${companyName}`);
+
+    try {
+      const user = await getUser(program, companyName, userID);
+      setUserData(user);
+      const bucket = await getUserRewardsBucket(program, companyName, userID);
+      console.log(bucket);
+
+      setUserRewards(bucket);
+      if (user.claimed) {
+        setIsLoggedIn(true);
+        handleClose();
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+      alert('user does not exist')
+    }
+
 
     try {
       await claimUser(program, userPassword, userEmail, companyName);
     } catch (e) {
       console.log(e);
+      alert('user does not exist')
     }
+
+    setIsLoggedIn(true);
+
+    console.log('user logged in');
 
     handleClose();
     return;
   };
 
-  return (
-    <>
-      <Container sx={{ mt: 2 }} className="create-user-container">
+  const userLoggedOutView = () => {
+    return (
+      <>
         <Box className="form-box user-box">
           <CardContent>
             <Box component="form" noValidate sx={{ mt: 6 }}>
@@ -187,35 +235,55 @@ export default function Users(props: any) {
             </Box>
           </CardContent>
         </Box>
-        <br />
-        {userHashOwnWallet ? <>
-          <h1>User already has his own wallet</h1>
-        </> : <>
-          < Box onClick={loginUser} className="form-box box-style">
-            <CardContent>
-              <Typography
-                noWrap
-                variant="h6"
-                className='mint-nft-text'>
-                Login
-              </Typography>
-            </CardContent>
-          </Box>
-          <Box className="form-box box-style" onClick={transferToken}>
-            <CardContent>
-              <Typography
-                noWrap
-                variant="h6"
-                className='mint-nft-text'>
-                Mint NFT
-              </Typography>
-            </CardContent>
-          </Box>
-          <br />
-        </>
-        }
+        <Box onClick={loginUser} className="form-box box-style">
+          <CardContent>
+            <Typography
+              noWrap
+              variant="h6"
+              className='mint-nft-text'>
+              Login
+            </Typography>
+          </CardContent>
+        </Box>
+      </>)
+  };
 
-      </Container >
-    </>
+  const userLoggedInView = () => {
+    return (<div>
+      <div>User Balance {userRewards.balance.toNumber()}</div>
+      <div>{claimToOwnWalletView()}</div>
+    </div>)
+  };
+
+  const claimToOwnWalletView = () => {
+    if (userHashOwnWallet) {
+      return <h1>User already has his own wallet</h1>
+    }
+    return (<Box onClick={claimToOwnWallet} className="form-box box-style">
+      <CardContent>
+        <Typography
+          noWrap
+          variant="h6"
+          className='mint-nft-text'>
+          ClaimToOwnWallet (optional)
+        </Typography>
+      </CardContent>
+    </Box>);
+  };
+
+  const view = () => {
+    if (isLoggedIn) {
+      return userLoggedInView();
+    }
+
+    return userLoggedOutView();
+  }
+
+
+
+  return (
+    <Container sx={{ mt: 2 }} className="create-user-container">
+      {view()}
+    </Container >
   )
 }

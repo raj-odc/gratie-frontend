@@ -13,6 +13,7 @@ import { listCompanyLicenses } from '@/src/gratie_solana_contract/gratie_solana_
 import { base64 } from '@project-serum/anchor/dist/cjs/utils/bytes';
 import { Keypair } from '@solana/web3.js';
 import { AES } from 'crypto-js';
+import { delay } from '@/src/utils/util';
 
 
 export default function CreateUsers(props: any) {
@@ -51,6 +52,7 @@ export default function CreateUsers(props: any) {
       console.log(user)
 
       try {
+        await delay(1000);
         const rewardBucket = await createUserRewardsBucket(program, wallet.publicKey, companyName, userId)
         console.log("rewardBucket", rewardBucket);
       }
@@ -141,10 +143,10 @@ export default function CreateUsers(props: any) {
                 />
               </Grid>
               <Grid item xs={12}>
-                <h4>
+                <Typography variant="h6">
                   Password is only here for testing, usually the company would just add the salt, encryption algorithm and encrypted password here.
                   right now the encrypted password is also generated for convenience and testing purposes.
-                </h4>
+                </Typography>
               </Grid>
               <Grid item xs={12} md={4}>
                 <Typography
