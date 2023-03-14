@@ -52,6 +52,10 @@ export default function CompanyTab(props:any) {
     setValue(newValue);
   };
 
+  const handleClickTab = (tabNo: number) => {
+    setValue(tabNo);
+  }
+
   return (
     <Container className='admin-list' component="main" maxWidth="md">
         <Box sx={{ width: '100%' }}>
@@ -65,7 +69,7 @@ export default function CompanyTab(props:any) {
         </Box>
         <TabPanel value={value} index={0}>
            {
-             <Subscription/>
+             <Subscription handleClickTab={handleClickTab}/>
            }
         </TabPanel>
         <TabPanel value={value} index={1}>
@@ -80,7 +84,7 @@ export default function CompanyTab(props:any) {
         </TabPanel>
         <TabPanel value={value} index={3}>
             {
-              props.license && <Profile companyLicense = {props.license}/>
+              <Profile companyLicense = {props.license}/>
             }
         </TabPanel>
         </Box>

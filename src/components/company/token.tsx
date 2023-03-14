@@ -62,7 +62,7 @@ export default function CreateToken(props:any) {
         setRewardData(data)
         handleClose()
       });  
-    } 
+    }
     if(formSubmitted){
       window.location.replace('/');
     }
@@ -115,6 +115,10 @@ export default function CreateToken(props:any) {
    }
 
    const createRewardToken = async (name:string, symbol:string, url:string) => {
+    if(!props.license){
+        alert('Please create company license before inviting user')
+        return false;
+      }
     if (wallet) {
       console.log("wallet",wallet);
       const program = await connectToGratieSolanaContract();

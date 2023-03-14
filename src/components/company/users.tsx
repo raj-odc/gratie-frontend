@@ -23,11 +23,15 @@ export default function CreateUsers(props: any) {
 
   const [email, setEmail] = React.useState('');
 
+  const [showSuccessMsg, setShowSuccessMsg] = React.useState(false);
+
   const [openAddUser, setOpenAddUser] = React.useState(false);
 
   const [encryptedPassword, setEncryptedPassword] = React.useState('');
   const [salt, setSalt] = React.useState('salt');
   const [password, setPassword] = React.useState('');
+  console.log("props", props.license);
+
 
   const handleClick = async () => {
     console.log("wallet", wallet)
@@ -37,6 +41,12 @@ export default function CreateUsers(props: any) {
     }
     const userId = sha256.hash(email).substring(0, 16);
 
+    if(!props.license){
+      alert('Please create company license before inviting user')
+      return false;
+    }
+
+    console.log("props", props.license);
 
     const program = await connectToGratieSolanaContract();
 
@@ -49,12 +59,15 @@ export default function CreateUsers(props: any) {
         encryptedPasswordAlgorithm: 0,
         encryptedPasswordSalt: salt,
       });
+      
       console.log(user)
 
       try {
         await delay(1000);
         const rewardBucket = await createUserRewardsBucket(program, wallet.publicKey, companyName, userId)
         console.log("rewardBucket", rewardBucket);
+        setEmail('');
+        setShowSuccessMsg(true);
       }
       catch (err) {
         alert(err);
@@ -202,6 +215,10 @@ export default function CreateUsers(props: any) {
               Add User
             </Button>
           </form>
+          {showSuccessMsg && <Box>
+            User Id has been sucessfully created 
+            Service providers can mint their NFT to claim rewards using their Email Id  
+          </Box>}
         </CardContent>
       </Box>
     </Container>

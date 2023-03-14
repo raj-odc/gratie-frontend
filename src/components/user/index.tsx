@@ -165,12 +165,12 @@ export default function Users(props: any) {
             <Box component="form" noValidate sx={{ mt: 6 }}>
               <Grid container spacing={1} sx={{ mt: 2, mb: 1 }}>
                 <Grid item xs={12} md={7}>
-                  <Typography
-                    noWrap
-                    variant="h6"
-                    className='form-label'>
-                    Enter Email
-                  </Typography>
+                <Typography
+                  noWrap
+                  variant="h6"
+                  className='form-label'>
+                  Enter Email
+                </Typography>
                 </Grid>
                 <Grid item xs={12} md={5} className="user-grid">
                   <TextField

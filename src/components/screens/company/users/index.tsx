@@ -18,7 +18,7 @@ export default function CreateUsers() {
                   noWrap
                   variant="h6"
                   className='form-label'>
-                  Service Provider Email Id
+                  Service Provider Email
                 </Typography>
                 </Grid>
                 <Grid item xs={12} md={5} className="user-grid">

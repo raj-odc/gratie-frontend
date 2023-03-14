@@ -62,7 +62,7 @@ export default function Profile() {
                   noWrap
                   variant="h6"
                   className='form-label'>
-                  Service Provider Email Id
+                  Service Provider Email
                 </Typography>
                 </Grid>
                 <Grid item xs={12} md={3} className="user-grid">
