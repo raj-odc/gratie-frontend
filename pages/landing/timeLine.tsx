@@ -55,7 +55,7 @@ export default function TimeLine(){
         </Grid>
         <Grid container spacing={1} sx={{margin:'auto', mt:5}}>
         <Grid item xs={12} md={6}>
-          <img alt='not gotten' src="/images/userIcon.png" />
+          <img alt='not gotten' src="/images/UserIcon.png" />
         </Grid>
         <Grid item xs={12} md={6}>
         <Typography

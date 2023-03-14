@@ -19,6 +19,7 @@ export default function Reward(){
               sx={{
                 fontSize:'38px',
                 fontFamily: 'Book antique',
+                color: '#fff',
                 lineHeight: '45.55px',
               }}>
                 A next generation SaaS infrastructure platform for your enterprise reward management.

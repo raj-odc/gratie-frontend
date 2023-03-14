@@ -40,7 +40,7 @@ export default function UseCase(){
             </Grid>
             <Grid container spacing={2} sx={{ mt: 8}}>
               <Grid item xs={12} md={6} className='grid-img'>
-                <img style={{marginLeft:'150px' }} alt="reward" src="/images/userIcon.png" />
+                <img style={{marginLeft:'150px' }} alt="reward" src="/images/UserIcon.png" />
               </Grid>
               <Grid item xs={12} md={6} className="grid-part">
               <Typography

@@ -1,0 +1,11 @@
+
+.homeMainBox Button {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px 24px;
+  border: 1px solid #00FF01;
+  border-radius: 100px;
+  color: #FDFDFD;
+}
