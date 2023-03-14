@@ -12,6 +12,15 @@
     color: #fff;
 }
 
+
+.form-box button {
+    color: #fff;
+    background-color: #56e456;
+    border-radius: 25px;
+    background-color: #269a26;
+    font-size: 18px;
+    font-weight: 500;
+}
 .form-label{
     font-size: 22px;
 }

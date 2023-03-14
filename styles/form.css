@@ -9,21 +9,21 @@
 }
 
 .non-selected-tab {
-    width: 150px;
-    height:70px;
+    width: 150px !important;
+    height:70px !important;
 
-    background: #050A04;
-    box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25);
-    border-radius: 35px;
-    color: #fff;
+    background: #050A04 !important;
+    box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25) !important;
+    border-radius: 35px !important;
+    color: #fff !important;
 }
 
 .selected-tab {
-    width: 150px;
-    height: 70px;
+    width: 150px !important;
+    height: 70px !important;
 
-    background: #045703;
-    box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25);
-    border-radius: 35px;
+    background: #045703 !important;
+    box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25) !important;
+    border-radius: 35px !important;
     color: #fff !important;
 }

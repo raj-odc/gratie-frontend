@@ -8,13 +8,16 @@ import { Container } from '@mui/material'
 import Upload from '@mui/icons-material/ArrowUpward';
 import Edit from '@mui/icons-material/Edit';
 import CompanyForm from './companyNewForm';
+import React from 'react';
+import { TierInfo } from '@/src/constants';
 
 export default function Profile(props:any) {
-    const email = 'xyz@gmail.com';
-    const token = 175990;
-    const subscription = 'Optical';
+    
+  console.log("props license", props);
     return (
       <>
+      <React.Fragment>
+        { props.companyLicense ?
         <Container sx={{ mt: 3}} className="create-user-container">
             <Box className="form-box">
             <CardContent>
@@ -25,7 +28,7 @@ export default function Profile(props:any) {
                   noWrap
                   variant="h6"
                   className='form-label'>
-                  Email Id
+                  Company Name
                 </Typography>
                 </Grid>
                 <Grid item xs={12} md={5} className="user-grid">
@@ -33,7 +36,25 @@ export default function Profile(props:any) {
                   noWrap
                   variant="h6"
                   className='profile-label'>
-                  {email}
+                  {props.companyLicense.account.name}
+                </Typography>
+                </Grid>
+            </Grid>
+            <Grid container spacing={1} sx={{ mt: 5, mb: 5 }}>
+                <Grid item xs={12} md={7}>
+                <Typography
+                  noWrap
+                  variant="h6"
+                  className='form-label'>
+                  Company Email
+                </Typography>
+                </Grid>
+                <Grid item xs={12} md={5} className="user-grid">
+                <Typography
+                  noWrap
+                  variant="h6"
+                  className='profile-label'>
+                  {props.companyLicense.account.email}
                 </Typography>
                 </Grid>
             </Grid>
@@ -46,47 +67,23 @@ export default function Profile(props:any) {
                   Total Token Supply
                 </Typography>
                 </Grid>
-                <Grid item xs={12} md={3} className="user-grid">
+                <Grid item xs={12} md={5} className="user-grid">
                 <Typography
                   noWrap
                   variant="h6"
                   className='profile-label'>
-                  {token}
+                  {props.companyLicense.account.evaluation.toNumber()}
                 </Typography>
-                </Grid>
-                <Grid item xs={12} md={2}>
-                    <Button variant='contained' className='profile-btn'><Upload sx={{color:'#56e456',fontWeight:'700'}} /></Button>
                 </Grid>
             </Grid>
-            <Grid container spacing={1} sx={{ mt: 5, mb: 5 }}>
-                <Grid item xs={12} md={7}>
-                <Typography
-                  noWrap
-                  variant="h6"
-                  className='form-label'>
-                  Service Provider Email Id
-                </Typography>
-                </Grid>
-                <Grid item xs={12} md={3} className="user-grid">
-                <Typography
-                  noWrap
-                  variant="h6"
-                  className='profile-label'>
-                  {subscription}
-                </Typography>
-                </Grid>
-                <Grid item xs={12} md={2}>
-                    <Button variant='contained' className='profile-btn'><Upload sx={{color:'#56e456',fontWeight:'700'}} /></Button>
-                </Grid>
-            </Grid>
-            <Button variant='contained' className='create-token-btn' sx={{mt:2, mb:5}}>
-                Invite Users
-            </Button>
           </form>
         </CardContent>
         </Box>
-        </Container>
+        </Container> :
         <CompanyForm />
+        }
+        
+        </React.Fragment>
       </>
       )
 }

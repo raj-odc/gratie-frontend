@@ -1,5 +1,5 @@
 import CardContent from '@mui/material/CardContent'
-import { Box, Container } from '@mui/material'
+import { Box, Container, MenuItem, OutlinedInput, Select, SelectChangeEvent } from '@mui/material'
 import Upload from '@mui/icons-material/Upload';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -32,13 +32,15 @@ export default function FormPage(props:any) {
 
   const [logoUrl, setLogoUrl] = React.useState('');
 
+  const [tierID, setTierID] = React.useState('');
+
+
   const [formSubmitted, setFormSubmitted] = React.useState(false);
 
   const [formObject, setFormObject] = useState({
     name: "",
     email: "",
     evaluation: "",
-    tierID: "",
     jsonMetadataUrl: '',
   });
 
@@ -53,6 +55,7 @@ export default function FormPage(props:any) {
   const handleToggle = () => {
     setOpen(!open);
   };
+  
 
   const onValChange = (event: any) => {
     console.log("event", event.target.value)
@@ -100,13 +103,13 @@ export default function FormPage(props:any) {
     const data = new FormData(event.currentTarget);
     const formVal: any = new Object(formObject);
     
-    if (formVal['name']=='' || formVal['email']=='' || formVal['tierID']=='' || formVal['evaluation']==''){
+    if (formVal['name']=='' || formVal['email']=='' || tierID=='' || formVal['evaluation']==''){
       confirm("Please enter all the form values");
       return false;
     }
     handleToggle()
 
-    formVal['tierID'] = parseInt(formVal.tierID)
+    formVal['tierID'] = parseInt(tierID)
     formVal['evaluation'] = parseInt(formVal.evaluation)
 
   
@@ -136,14 +139,18 @@ export default function FormPage(props:any) {
       console.log("err",err);
       alert("Company should be unique, please add valid name and email");
     }
-    
-    // props.handleChange();
 
     handleClose()
+  };
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setTierID(event.target.value);
   };
     return (
         <React.Fragment>
         <Container>
+            <Box className="form-box">
+
             <CardContent>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 6 }}>
             <Grid container spacing={1} sx={{ mt: 5, mb: 5 }}>
@@ -238,25 +245,32 @@ export default function FormPage(props:any) {
                 </Typography>
                 </Grid>
                 <Grid item xs={12} md={5}>
-                <TextField
-                  fullWidth
-                  type='text'
-                  id="tierID"
-                  autoComplete='off'
-                  required
-                  onChange={onValChange}
-                  value={formObject.tierID}
-                  className='form-textfield'
-                  focused sx={{ input: {color:'#fff', fontSize:'20px'}}}
-                />
+                    <Select sx={{ m: 1, minWidth: 150, color: '#fff' }}
+                        labelId="tierID"
+                        displayEmpty
+                        input={<OutlinedInput />}
+                        id="tierID"
+                        onChange={handleChange}                      value={tierID}
+                        label="Subscription"
+                    >
+                        <MenuItem disabled value="">
+                            <em>Select</em>
+                        </MenuItem>
+                        <MenuItem selected value='1'>Fractal</MenuItem>
+                        <MenuItem value='2'>Optical</MenuItem>
+                        <MenuItem value='3'>Paradise</MenuItem>
+                        <MenuItem value='4'>Cosmos</MenuItem>
+                    </Select>
+               
                 </Grid>
                 <Grid item xs={12} md={2}>
                     
                 </Grid>
             </Grid>
             <Button type='submit' variant='contained' className='form-wallet-button'> Create License</Button>
-          </Box>
-        </CardContent>
+            </Box>
+            </CardContent>
+        </Box>
         </Container>
         </React.Fragment>
       )

@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Arrow from '@mui/icons-material/ArrowRight';
 import { Container } from '@mui/material';
 
-export default function Subscription(){
+export default function Subscription(props:any){
     return(
         <Container sx={{ mt:1}}>
       <br/>
@@ -33,7 +33,10 @@ export default function Subscription(){
                 <img width={30} height={21} alt="price1" src="/images/Solona icon.png" />
                 </Typography>
                 <br />
-                <Button variant='contained' className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
+                <Button 
+                  variant='contained'
+                  onClick={() => props.handleClickTab(3)}
+                  className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
                 </Box>
             </Grid>
 
@@ -58,7 +61,10 @@ export default function Subscription(){
                 <img width={30} height={21} alt="price1" src="/images/Solona icon.png" />
                 </Typography>
                 <br />
-                <Button variant='contained' className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
+                <Button 
+                  variant='contained'
+                  onClick={() => props.handleClickTab(3)}
+                  className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
                 </Box>
             </Grid>
 
@@ -83,7 +89,10 @@ export default function Subscription(){
                 <img width={30} height={21} alt="price1" src="/images/Solona icon.png" />
                 </Typography>
                 <br />
-                <Button variant='contained' className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
+                <Button
+                   variant='contained'
+                   onClick={() => props.handleClickTab(3)}
+                   className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
             </Box>
             </Grid>
 
@@ -109,7 +118,7 @@ export default function Subscription(){
                 <img width={30} height={21} alt="price1" src="/images/Solona icon.png" />
                 </Typography>
                 <br />
-                <Button variant='contained' className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
+                <Button onClick={() => props.handleClickTab(3)} variant='contained' className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
                 </Box>
               </Grid>
         </Grid>
