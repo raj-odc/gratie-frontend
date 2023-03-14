@@ -66,3 +66,26 @@ export const companyCreateInitialTokenAccountForUser = async (program: Program<G
   return tokenAccount;
 
 };
+
+export const userCreateTokenAccount = async (program: Program<GratieSolana>, oldUserWallet: anchor.web3.Keypair, mintKey: anchor.web3.PublicKey, newUserPubKey: anchor.web3.PublicKey) => {
+  const tokenAccount = await getAssociatedTokenAddress(
+    mintKey,
+    newUserPubKey,
+  );
+
+  const tx = new anchor.web3.Transaction().add(
+    createAssociatedTokenAccountInstruction(
+      oldUserWallet.publicKey,
+      tokenAccount,
+      newUserPubKey,
+      mintKey
+    )
+  );
+
+  await program.provider.sendAndConfirm!(tx, [oldUserWallet]);
+
+
+  return tokenAccount;
+
+};
+
