@@ -8,7 +8,8 @@ import { claimUser, claimUserToHisOwnWallet, createUserRewardsBucket, getUser, g
 import { useWallet } from '@solana/wallet-adapter-react';
 import { BN } from '@project-serum/anchor';
 import { Keypair } from '@solana/web3.js';
-import { getCompanyLicensePDA, getCompanyRewardsBucket, getUserPDA } from '@/src/gratie_solana_contract/gratie_solana_pda';
+import Loading from '../Loading';
+import ModalBox from '../Modal';
 
 // on this page we don't need a wallet connected for the user to connect
 // the wallet is saved on chain but it's encrypted
@@ -29,11 +30,6 @@ import { getCompanyLicensePDA, getCompanyRewardsBucket, getUserPDA } from '@/src
 
 export default function Users(props: any) {
   const wallet = useWallet();
-
-  const [open, setOpen] = React.useState(false);
-
-  const [isTokenClaimed, setIsTokenClaimed] = React.useState(false);
-
   const [userEmail, setUserEmail] = React.useState('');
   const [userPassword, setUserPassword] = React.useState('');
   const [companyName, setCompanyName] = React.useState('');
@@ -44,6 +40,19 @@ export default function Users(props: any) {
   const [userData, setUserData] = React.useState({} as any);
   const [userRewards, setUserRewards] = React.useState({} as any);
 
+  const [openMsg, setOpenMsg] = React.useState(false);
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const [modalTitle, setModalTitle] = React.useState('');
+  const [modalDesc, setModalDesc] = React.useState('');
+
+  const handleModalClose = () => {
+    setOpenMsg(false);
+    setModalTitle('')
+    setModalDesc('');
+  }
+  const handleLoaderToggle = (status:boolean) => {
+    setOpenLoading(status)
+  }
 
   React.useEffect(() => {
 
@@ -60,20 +69,8 @@ export default function Users(props: any) {
   });
 
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleToggle = () => {
-    setOpen(!open);
-  };
-
-  function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   const transferToken = async () => {
-    handleToggle();
+    handleLoaderToggle(true)
     const userId = sha256.hash(userEmail).substring(0, 16);
 
     if (wallet && wallet.publicKey) {
@@ -89,11 +86,12 @@ export default function Users(props: any) {
     } else {
       alert("wallet should be present")
     }
-    handleClose();
+    handleLoaderToggle(false)
     return;
   };
 
   const claimToOwnWallet = async () => {
+    handleLoaderToggle(true)
     try {
 
       console.log(`userEmail: ${userEmail} companyName: ${companyName}`);
@@ -104,18 +102,19 @@ export default function Users(props: any) {
 
       console.log(wallet.publicKey);
       await claimUserToHisOwnWallet(program, wallet.publicKey!, userPassword, companyName, userEmail);
-      console.log('user successfully claimed to his own wallet');
+      setModalTitle('User successfully claimed to his own wallet')
+      setOpenMsg(true);
 
     } catch (e) {
       console.log(e);
       alert(e);
     }
-
+    handleLoaderToggle(false)
   };
 
 
   const loginUser = async () => {
-    handleToggle();
+    handleLoaderToggle(true)
 
 
     const tempKeypair = Keypair.generate();
@@ -133,12 +132,14 @@ export default function Users(props: any) {
       setUserRewards(bucket);
       if (user.claimed) {
         setIsLoggedIn(true);
-        handleClose();
+        handleLoaderToggle(false)
         return;
       }
     } catch (e) {
       console.log(e);
       alert('user does not exist')
+      handleLoaderToggle(false);
+      return;
     }
 
 
@@ -147,19 +148,22 @@ export default function Users(props: any) {
     } catch (e) {
       console.log(e);
       alert('user does not exist')
+      handleLoaderToggle(false);
+      return;
     }
 
     setIsLoggedIn(true);
 
     console.log('user logged in');
 
-    handleClose();
+    handleLoaderToggle(false);
     return;
   };
 
   const userLoggedOutView = () => {
     return (
       <>
+      <React.Fragment>
         <Box className="form-box user-box">
           <CardContent>
             <Box component="form" noValidate sx={{ mt: 6 }}>
@@ -245,14 +249,15 @@ export default function Users(props: any) {
             </Typography>
           </CardContent>
         </Box>
+        </React.Fragment>
       </>)
   };
 
   const userLoggedInView = () => {
-    return (<div>
-      <div>User Balance {userRewards.balance.toNumber()}</div>
-      <div>{claimToOwnWalletView()}</div>
-    </div>)
+    return (<Box>
+      <Box>User Balance {userRewards.balance.toNumber()}</Box>
+      <Box>{claimToOwnWalletView()}</Box>
+    </Box>)
   };
 
   const claimToOwnWalletView = () => {
@@ -282,8 +287,22 @@ export default function Users(props: any) {
 
 
   return (
-    <Container sx={{ mt: 2 }} className="create-user-container">
-      {view()}
-    </Container >
+    <div className=''>
+    <>
+      <React.Fragment>
+        <Container className='' component="main" maxWidth="md">
+          <Box component="form" noValidate sx={{ mt: 12 }}>
+              <Grid container spacing={2}>
+              </Grid>
+              <Container sx={{ mt: 2 }} className="create-user-container">
+                {view()}
+                <Loading open={openLoading} handleClose={handleLoaderToggle} />
+                <ModalBox open={openMsg} handleClose={handleModalClose} heading={modalTitle} description={modalDesc}/>
+              </Container >
+          </Box>
+        </Container>
+      </React.Fragment>
+    </>
+    </div>
   )
 }

@@ -40,6 +40,10 @@
     float: right;
 }
 
+#modal-modal-title{
+    color: #00FF01;
+}
+
 .create-user-container{
     margin-left: 0px;
 }

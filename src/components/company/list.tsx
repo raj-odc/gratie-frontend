@@ -18,7 +18,7 @@ import { createUser } from '@/src/gratie_solana_contract/gratie_solana_user';
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { faker } from '@faker-js/faker';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { CardContent } from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia } from '@mui/material';
 import { transferTokensToUser } from '@/src/gratie_solana_contract/gratie_solana_company';
 import { BN } from '@project-serum/anchor';
 import ModalBox from '../Modal';
@@ -35,16 +35,25 @@ declare const window: Window &
 
 export default function List(props:any) {
   const { wallet } = useWallet();
-  const userIdCCC = sha256.hash('test@tets.com').substring(0, 16);
-
-  console.log("userId", userIdCCC);
-
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
-  const transferToken = async (userId:string) => {
-    // handleToggle();
-    const userIdCCC = sha256.hash('test@tets.com').substring(0, 16);
-console.log("userId", userIdCCC);
+  const [modalTitle, setModalTitle] = React.useState('');
+  const [modalDesc, setModalDesc] = React.useState('');
+
+  const handleModalClose = () => {
+    setOpenMsg(false);
+    setModalTitle('')
+    setModalDesc('');
+  }
+  const handleLoaderToggle = (status:boolean) => {
+    setOpenLoading(status)
+  }
+
+  const transferToken = async (event:any, userId:string) => {
+    event.preventDefault();
+    handleLoaderToggle(true)
+    // const userIdCCC = sha256.hash('test@tets.com').substring(0, 16);
+    console.log("userId", userId);
     if (wallet && wallet.adapter.publicKey) {
       const publicKey: any = wallet.adapter.publicKey;
       const companyName:string = props.license.account.name
@@ -52,31 +61,27 @@ console.log("userId", userIdCCC);
       try {
         const transferToken = await transferTokensToUser(program, publicKey, new BN(1), companyName, userId);
         console.log("transferToken", transferToken);
+        setModalTitle('Transfer Token Success')
+        setOpenMsg(true);
       }
-      catch (err) {
+      catch (err:any) {
         alert(err);
       }
     } else {
-      alert("wallet should be present")
+      alert('Wallet should be present');
     }
-    // handleClose();
+    handleLoaderToggle(false);
     return;
   };
 
   return (
     <div className=''>
-      <Button onClick={() => setOpenMsg(true)} variant='contained' className='create-token-btn'>Modal Open</Button>
 
       <React.Fragment>
-        <Container component="main" maxWidth="md">
-
-          <Typography component="h1" variant="h5">
-            Users List
-          </Typography>
-
+        <Container component="main" maxWidth="md" sx={{ mt: 4}}>
           <Box className="form-box">
             <CardContent>
-            <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Box component="form" noValidate sx={{ mt: 5 }}>
               {
                 props.users && props.users.map((user:any) => {
                   return (<Grid item xs={12} md={12} sx={{display: 'flex', mb: 2}}>
@@ -86,18 +91,27 @@ console.log("userId", userIdCCC);
                       className='form-label'>
                       {user.account.userId}
                     </Typography>
-                      <Button onClick={() => transferToken(user.account.userId)} variant='contained' className='create-token-btn'>Send Tokens</Button>
+                      <Button onClick={(e) => transferToken(e, user.account.userId)} variant='contained' className='create-token-btn'>Send Tokens</Button>
                     </Grid>
                   )
                 })
               }    
           </Box>
+          <Box>
+            {
+              props.users.length == 0 && <Typography
+              noWrap
+              variant="h6"
+              className='form-label'>
+              Users Not Found</Typography>
+            }
+          </Box>
         </CardContent>
           </Box>
         </Container>
         
-        <Loading open={openLoading} handleClose={() => setOpenLoading(false)} />
-        <ModalBox open={openMsg} handleClose={() => setOpenMsg(false)} />
+        <Loading open={openLoading} handleClose={handleLoaderToggle} />
+        <ModalBox open={openMsg} handleClose={handleModalClose} heading={modalTitle} description={modalDesc}/>
       </React.Fragment>
 
     </div>

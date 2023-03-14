@@ -18,6 +18,8 @@ import {parseDataFromJsonUrl, uploadMetaDataToS3} from '@/src/utils/uploadMetaDa
 import CardContent from '@mui/material/CardContent';
 import { PRODUCTION } from '@/src/config';
 import { addCompanyRewardTokensToMetaplex } from '@/src/gratie_solana_contract/gratie_solana_metaplex';
+import Loading from '../Loading';
+import ModalBox from '../Modal';
 
 // import '@/styles/form.css';
 
@@ -33,11 +35,7 @@ declare const window: Window &
 
 export default function CreateToken(props:any) {
 
-
-  console.log("props", props);
   const wallet = useWallet();
-
-  const [open, setOpen] = React.useState(false);
 
   const [logoUrl, setLogoUrl] = React.useState('');
 
@@ -53,26 +51,34 @@ export default function CreateToken(props:any) {
 
   const [rewards, setRewards] = React.useState({});
 
+  const [openMsg, setOpenMsg] = React.useState(false);
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const [modalTitle, setModalTitle] = React.useState('');
+  const [modalDesc, setModalDesc] = React.useState('');
+
+  const handleModalClose = () => {
+    setOpenMsg(false);
+    setModalTitle('')
+    setModalDesc('');
+  }
+  const handleLoaderToggle = (status:boolean) => {
+    setOpenLoading(status)
+  }
+
 
   React.useEffect(() => {
     if (props.reward && props.reward.tokenName && Object.keys(props.reward).length == 0) {
-      handleToggle();
-      parseDataFromJsonUrl(props.reward.tokenMetadataJsonUri).then((data) => {
+        handleLoaderToggle(true)
+        parseDataFromJsonUrl(props.reward.tokenMetadataJsonUri).then((data) => {
         console.log('data', data);
         setRewardData(data)
-        handleClose()
-      });  
+        handleLoaderToggle(false)
+    });  
     }
     if(formSubmitted){
       window.location.replace('/');
     }
   })
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleToggle = () => {
-    setOpen(!open);
-  };
 
   const onValChange = (event: any) => {
     const value = (res: any) => ({
@@ -90,7 +96,6 @@ export default function CreateToken(props:any) {
   }
 
   const showContractInfo = async () => {
-    handleToggle()
     if (props.contract && props.contract.token) {
       const jsonData = await parseDataFromJsonUrl(props.contract.token.tokenMetadataJsonUri);
       return (<div>{jsonData.name}<img src={jsonData.image}></img></div>)
@@ -115,6 +120,7 @@ export default function CreateToken(props:any) {
    }
 
    const createRewardToken = async (name:string, symbol:string, url:string) => {
+    handleLoaderToggle(true)
     if (wallet) {
       console.log("wallet",wallet);
       const program = await connectToGratieSolanaContract();
@@ -130,25 +136,30 @@ export default function CreateToken(props:any) {
       } catch(err:any) {
         console.log("rewards", companyName, rewards);
       }
-      const companyRewardsBucketForm: CreateCompanyRewardsBucketForm = {
-        tokenName: name,
-        tokenSymbol: symbol,
-        tokenMetadataJsonUrl: url,
-      };
-      console.log("companyRewardsBucketForm", companyRewardsBucketForm);
-      const companyRewards = await createCompanyRewardsBucket(program, (wallet as any).publicKey, companyName, companyRewardsBucketForm);
-      setRewards(companyRewards);
-      console.log("companyRewards created", companyRewards);
+      try {
+        const companyRewardsBucketForm: CreateCompanyRewardsBucketForm = {
+            tokenName: name,
+            tokenSymbol: symbol,
+            tokenMetadataJsonUrl: url,
+        };
+        console.log("companyRewardsBucketForm", companyRewardsBucketForm);
+        const companyRewards = await createCompanyRewardsBucket(program, (wallet as any).publicKey, companyName, companyRewardsBucketForm);
+        setRewards(companyRewards);
+        console.log("companyRewards created", companyRewards);
 
-      // Adding company reward tokens to metaplex
-      if (PRODUCTION) {
-        await addCompanyRewardTokensToMetaplex(program, wallet.publicKey!, companyName);
+        // Adding company reward tokens to metaplex
+        if (PRODUCTION) {
+            await addCompanyRewardTokensToMetaplex(program, wallet.publicKey!, companyName);
+        }
       }
-
+      catch (err) {
+        alert(err);
+      }
     }
     else {
-      confirm("First connect to the wallet");
+      confirm("Please connect to the wallet");
     }
+    handleLoaderToggle(false)
   }
 
 
@@ -173,7 +184,7 @@ export default function CreateToken(props:any) {
       confirm("Please enter all the form values");
       return false;
     }
-    handleToggle()
+    handleLoaderToggle(true)
 
     const [jsonMetadataUrl, jsonMetadata] = await getMetaJson(formVal.name, formVal.symbol, formVal.description);
     formVal['jsonMetadataUrl'] = jsonMetadataUrl;
@@ -181,8 +192,8 @@ export default function CreateToken(props:any) {
       const reward = await createRewardToken(formVal.name, formVal.symbol, jsonMetadataUrl)
       console.log("reward",reward);
       setRewardData(jsonMetadata);
-      confirm("Created Reward for company, now you can invite users");
-      
+      setModalTitle('Created Reward for company, now you can invite users');
+       setOpenMsg(true);
       // setFormSubmitted(true)
     }
     catch(err) {
@@ -190,10 +201,9 @@ export default function CreateToken(props:any) {
       alert("Company should be unique, please add valid name and email");
     }
     
-    // props.handleChange();
-
-    handleClose()
+    handleLoaderToggle(false)
   };
+  
     return (
         <React.Fragment>
         <Container sx={{ mt: 4}}>
@@ -286,6 +296,8 @@ export default function CreateToken(props:any) {
         </Box>
         
         </Container>
+        <Loading open={openLoading} handleClose={handleLoaderToggle} />
+        <ModalBox open={openMsg} handleClose={handleModalClose} heading={modalTitle} description={modalDesc}/>
         </React.Fragment>
       )
 }

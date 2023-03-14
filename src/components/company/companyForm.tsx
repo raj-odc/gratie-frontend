@@ -20,6 +20,8 @@ import UploadFile from '@/src/components/uploadFileS3';
 import { uploadMetaDataToS3 } from '@/src/utils/uploadMetaDataToS3';
 import { addCompanyLicenseToMetaplex } from '@/src/gratie_solana_contract/gratie_solana_metaplex';
 import { PRODUCTION } from '@/src/config';
+import Loading from '../Loading';
+import ModalBox from '../Modal';
 
 // import '@/styles/form.css';
 
@@ -37,7 +39,20 @@ export default function CompanyForm(props: any) {
 
   const wallet = useWallet();
 
-  const [open, setOpen] = React.useState(false);
+  const [openMsg, setOpenMsg] = React.useState(false);
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const [modalTitle, setModalTitle] = React.useState('');
+  const [modalDesc, setModalDesc] = React.useState('');
+
+  const handleModalClose = () => {
+    setOpenMsg(false);
+    setModalTitle('')
+    setModalDesc('');
+  }
+  const handleLoaderToggle = (status:boolean) => {
+    setOpenLoading(status)
+  }
+
 
   const [logoUrl, setLogoUrl] = React.useState('');
 
@@ -56,12 +71,7 @@ export default function CompanyForm(props: any) {
       window.location.replace('/company');
     }
   })
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleToggle = () => {
-    setOpen(!open);
-  };
+
 
   const onValChange = (event: any) => {
     const value = (res: any) => ({
@@ -111,12 +121,10 @@ export default function CompanyForm(props: any) {
       confirm("Please enter all the form values");
       return false;
     }
-    handleToggle()
+    handleLoaderToggle(true);
 
     formVal['tierID'] = parseInt(formVal.tierID)
     formVal['evaluation'] = parseInt(formVal.evaluation)
-
-
 
     const jsonMetadataUrl = await getMetaJsonUrl(formVal.name, formVal.email);
     formVal['jsonMetadataUrl'] = jsonMetadataUrl;
@@ -138,19 +146,18 @@ export default function CompanyForm(props: any) {
         await addCompanyLicenseToMetaplex(program, publicKey, company.name);
       }
 
-      confirm("Thanks for Submitting your details, Gratie Admin will be verified soon");
-
+      setModalTitle('Thanks for Submitting your details, Gratie Admin will be verified soon')
+      setOpenMsg(true);
       setFormSubmitted(true)
 
     }
     catch (err) {
-      console.log("err", err);
       alert(err);
     }
 
     // props.handleChange();
 
-    handleClose()
+    handleLoaderToggle(false);
   };
   return (
     <div className=''>
@@ -235,13 +242,8 @@ export default function CompanyForm(props: any) {
             </Button>
           </Box>
         </Container>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
-          onClick={handleClose}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        <Loading open={openLoading} handleClose={handleLoaderToggle} />
+        <ModalBox open={openMsg} handleClose={handleModalClose} heading={modalTitle} description={modalDesc}/>
       </React.Fragment>
 
 

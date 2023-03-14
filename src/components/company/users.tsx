@@ -14,23 +14,31 @@ import { base64 } from '@project-serum/anchor/dist/cjs/utils/bytes';
 import { Keypair } from '@solana/web3.js';
 import { AES } from 'crypto-js';
 import { delay } from '@/src/utils/util';
+import Loading from '../Loading';
+import ModalBox from '../Modal';
 
 
 export default function CreateUsers(props: any) {
   const wallet = useWallet();
-
-  const [open, setOpen] = React.useState(false);
-
   const [email, setEmail] = React.useState('');
-
   const [showSuccessMsg, setShowSuccessMsg] = React.useState(false);
-
-  const [openAddUser, setOpenAddUser] = React.useState(false);
-
   const [encryptedPassword, setEncryptedPassword] = React.useState('');
   const [salt, setSalt] = React.useState('salt');
   const [password, setPassword] = React.useState('');
-  console.log("props", props.license);
+  
+  const [openMsg, setOpenMsg] = React.useState(false);
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const [modalTitle, setModalTitle] = React.useState('');
+  const [modalDesc, setModalDesc] = React.useState('');
+
+  const handleModalClose = () => {
+    setOpenMsg(false);
+    setModalTitle('')
+    setModalDesc('');
+  }
+  const handleLoaderToggle = (status:boolean) => {
+    setOpenLoading(status)
+  }
 
 
   const handleClick = async () => {
@@ -45,6 +53,8 @@ export default function CreateUsers(props: any) {
       alert('Please create company license before inviting user')
       return false;
     }
+    handleLoaderToggle(true)
+
 
     console.log("props", props.license);
 
@@ -66,6 +76,8 @@ export default function CreateUsers(props: any) {
         await delay(1000);
         const rewardBucket = await createUserRewardsBucket(program, wallet.publicKey, companyName, userId)
         console.log("rewardBucket", rewardBucket);
+        setModalTitle('Reward created Successfully')
+        setOpenMsg(true);
         setEmail('');
         setShowSuccessMsg(true);
       }
@@ -76,6 +88,8 @@ export default function CreateUsers(props: any) {
     } else {
       console.error("CAN'T RUN TESTS: No wallet connected");
     }
+    handleLoaderToggle(false)
+
 
   }
 
@@ -222,6 +236,8 @@ export default function CreateUsers(props: any) {
           </Box>}
         </CardContent>
       </Box>
+      <Loading open={openLoading} handleClose={handleLoaderToggle} />
+      <ModalBox open={openMsg} handleClose={handleModalClose} heading={modalTitle} description={modalDesc}/>
     </Container>
   )
 }

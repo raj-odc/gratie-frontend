@@ -13,14 +13,14 @@ import { Backdrop, Button, CircularProgress } from '@mui/material';
 
 import CompanyTab from '@/src/components/company/companyTab'
 import { getAllTiers } from '@/src/gratie_solana_contract/gratie_solana_tier';
+import { delay } from '@/src/utils/util';
+import Loading from '../Loading';
+import ModalBox from '../Modal';
 
 
 export default function CompanyIndex() {
 
   const { wallet } = useWallet();
-
-  const [open, setOpen] = React.useState(false);
-
   const [waitingPeriodOver, setWaitingPeriodOver] = React.useState(false);
   
   const [isDataFetched, setisDataFetched] = React.useState(false);
@@ -30,22 +30,15 @@ export default function CompanyIndex() {
 
   const [tierList, setTierList] = React.useState({});
 
+  const [openLoading, setOpenLoading] = React.useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleToggle = () => {
-    setOpen(!open);
-  };
-
-  function sleep(ms:number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
- }
+  const handleLoaderToggle = (status:boolean) => {
+    setOpenLoading(status)
+  }
 
   const fetchContractData = async() => {
-    handleToggle();
-    const waiting = await sleep(2000)
+    handleLoaderToggle(true);
+    const waiting = await delay(2000);
     setWaitingPeriodOver(true)
     if(wallet && wallet?.adapter.publicKey){
         const publicKey:any = wallet?.adapter.publicKey;
@@ -59,10 +52,8 @@ export default function CompanyIndex() {
                 const companyRewardsBucket:any = await getCompanyReward(program, validLicense.account.name)
                 if(companyRewardsBucket) {
                     setCompanyReward(companyRewardsBucket);
-                    console.log("publicKey", program)
-
+                    
                     const usersList = await getCompanyUser(program, publicKey);
-                    console.log("usersList", usersList);
                     setUsersList(usersList);
                 }
             }
@@ -73,16 +64,22 @@ export default function CompanyIndex() {
       console.log("wallet loading, please wait")
         // alert("wallet should be present")
     }
-    handleClose();
+    handleLoaderToggle(false);
     return;
   };
 
   const getCompanyLicense = async(program:any, publicKey:any) => {
-    const allLicenses = await program.account.companyLicense.all();
-    console.log(allLicenses);
-    const userLicenses: any = allLicenses.filter((lic: any) => lic.account.owner.toString() == publicKey.toString());
-    console.log("userLicenses", userLicenses.length);
-    return userLicenses && userLicenses[userLicenses.length-1]
+    try {
+      const allLicenses = await program.account.companyLicense.all();
+      console.log(allLicenses);
+      const userLicenses: any = allLicenses.filter((lic: any) => lic.account.owner.toString() == publicKey.toString());
+      console.log("userLicenses", userLicenses.length);
+      return userLicenses && userLicenses[userLicenses.length-1]
+    }
+    catch(err) {
+        alert(err);
+        return null;
+    }
   }
 
   const getCompanyReward = async(program:any, companyName:any) => {
@@ -145,13 +142,7 @@ export default function CompanyIndex() {
            }
         </Container>
         }
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
-          onClick={handleClose}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        <Loading open={openLoading} handleClose={handleLoaderToggle} />
       </React.Fragment>
     </div>
   );

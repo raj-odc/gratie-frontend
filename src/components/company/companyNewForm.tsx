@@ -17,6 +17,8 @@ import {uploadMetaDataToS3} from '@/src/utils/uploadMetaDataToS3';
 import React from 'react';
 import { addCompanyLicenseToMetaplex } from '@/src/gratie_solana_contract/gratie_solana_metaplex';
 import { PRODUCTION } from '@/src/config';
+import Loading from '../Loading';
+import ModalBox from '../Modal';
 
 
 declare const window: Window &
@@ -28,8 +30,7 @@ declare const window: Window &
 export default function FormPage(props:any) {
   const wallet = useWallet();
 
-  const [open, setOpen] = React.useState(false);
-
+  
   const [logoUrl, setLogoUrl] = React.useState('');
 
   const [tierID, setTierID] = React.useState('');
@@ -44,18 +45,25 @@ export default function FormPage(props:any) {
     jsonMetadataUrl: '',
   });
 
+  const [openMsg, setOpenMsg] = React.useState(false);
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const [modalTitle, setModalTitle] = React.useState('');
+  const [modalDesc, setModalDesc] = React.useState('');
+
+  const handleModalClose = () => {
+    setOpenMsg(false);
+    setModalTitle('')
+    setModalDesc('');
+  }
+  const handleLoaderToggle = (status:boolean) => {
+    setOpenLoading(status)
+  }
+
   React.useEffect(() => {
     if(formSubmitted){
-      window.location.replace('/');
+      window.location.replace('/company');
     }
   })
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleToggle = () => {
-    setOpen(!open);
-  };
-  
 
   const onValChange = (event: any) => {
     console.log("event", event.target.value)
@@ -107,7 +115,7 @@ export default function FormPage(props:any) {
       confirm("Please enter all the form values");
       return false;
     }
-    handleToggle()
+    handleLoaderToggle(true);
 
     formVal['tierID'] = parseInt(tierID)
     formVal['evaluation'] = parseInt(formVal.evaluation)
@@ -130,17 +138,18 @@ export default function FormPage(props:any) {
         await addCompanyLicenseToMetaplex(program, publicKey, company.name);
       }
       
-      confirm("Thanks for Submitting your details, Gratie Admin will be verified soon");
-      
+      setModalTitle('Thanks for Submitting your details, Gratie Admin will be verified soon')
+      setOpenMsg(true);
+
       setFormSubmitted(true)
       
     }
     catch(err) {
       console.log("err",err);
-      alert("Company should be unique, please add valid name and email");
+      alert(err);
     }
 
-    handleClose()
+    handleLoaderToggle(false);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -272,6 +281,8 @@ export default function FormPage(props:any) {
             </CardContent>
         </Box>
         </Container>
+        <Loading open={openLoading} handleClose={handleLoaderToggle} />
+        <ModalBox open={openMsg} handleClose={handleModalClose} heading={modalTitle} description={modalDesc}/>
         </React.Fragment>
       )
 }
