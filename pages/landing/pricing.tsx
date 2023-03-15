@@ -33,7 +33,7 @@ export default function Pricing(){
                    fontFamily: 'Book antique',
                    color: '#d9d9d9',
                    textAlign:"center"
-                }} >3 SQL
+                }} >3 SOL
                 <img width={30} height={21} alt="price1" src="/images/Solona icon.png" />
                 </Typography>
                 <br />
@@ -58,7 +58,7 @@ export default function Pricing(){
                    fontFamily: 'Book antique',
                    color: '#d9d9d9',
                    textAlign:"center"
-                }} >3 SQL
+                }} >8 SOL
                 <img width={30} height={21} alt="price1" src="/images/Solona icon.png" />
                 </Typography>
                 <br />
@@ -83,7 +83,7 @@ export default function Pricing(){
                    fontFamily: 'Book antique',
                    color: '#d9d9d9',
                    textAlign:"center"
-                }} >3 SQL
+                }} >20 SOL
                 <img width={30} height={21} alt="price1" src="/images/Solona icon.png" />
                 </Typography>
                 <br />
@@ -109,7 +109,7 @@ export default function Pricing(){
                    fontFamily: 'Book antique',
                    color: '#d9d9d9',
                    textAlign:"center"
-                }} >3 SQL
+                }} >50 SOL
                 <img width={30} height={21} alt="price1" src="/images/Solona icon.png" />
                 </Typography>
                 <br />

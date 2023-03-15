@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography';
 import DiscordIcon from '@mui/icons-material/Facebook'
 import Button from '@mui/material/Button';
+import Link from 'next/link';
 
 export default function Discord(){
     return(
@@ -21,9 +22,11 @@ export default function Discord(){
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"
-              }}>Dorem hgt fast mario lesiro gekko.</Typography>
+              }}>To join our community</Typography>
               <br/>
-              <Button className="social-button"> Join Us</Button>
+              <Link target='_blank' href='https://discord.gg/wDwygmxH'>
+                <Button className="social-button"> Join Us</Button>
+              </Link>
             </Grid>
           </Grid>
         </Box>

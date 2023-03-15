@@ -47,8 +47,10 @@ function ResponsiveAppBar() {
           <Toolbar disableGutters>
             <Box sx={{ display:'flex' ,margin:'auto', mt:2 }}>
               <Box  sx={{ display:'flex', margin:'auto', pr:3}}>
-              <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
-              <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                <Link href='/'>
+                  <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
+                  <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                </Link>
               </Box>
               <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                 <IconButton

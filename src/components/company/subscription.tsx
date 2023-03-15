@@ -118,7 +118,7 @@ export default function Subscription(props:any){
                 <img width={30} height={21} alt="price1" src="/images/Solona icon.png" />
                 </Typography>
                 <br />
-                <Button onClick={() => props.handleClickTab(3)} variant='contained' className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
+                <Button onClick={() => props.handleClickTab(4)} variant='contained' className="social-button"> Buy Now <Arrow sx={{color:'#fff'}} /> </Button>
                 </Box>
               </Grid>
         </Grid>

@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography';
 import TwitterIcon from '@mui/icons-material/Twitter' 
 import { Button } from '@mui/material';
+import Link from 'next/link';
 
 export default function Twitter(){
     return(
@@ -16,9 +17,11 @@ export default function Twitter(){
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"
-              }}>Dorem hgt fast mario lesiro gekko.</Typography>
+              }}>To get more updates</Typography>
               <br/>
+              <Link target='_blank' href='https://twitter.com/Gratie_'>
               <Button className="social-button"> Join Us</Button>
+              </Link>
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
               <div className='icon-circle'>

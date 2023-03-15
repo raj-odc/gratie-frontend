@@ -49,8 +49,8 @@ export default function TimeLine(){
                 <li>Implementation of seperate service provider dashboard</li>
                 </ul></Typography>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <img alt='not gotten' src='/images/NewNFT.png' />
+        <Grid item xs={12} md={5} ml={2}>
+          <img alt='not gotten' style={{paddingLeft: '50px'}} src='/images/NewNFT.png' />
         </Grid>
         </Grid>
         <Grid container spacing={1} sx={{margin:'auto', mt:5}}>
@@ -90,7 +90,7 @@ export default function TimeLine(){
                 </ul></Typography>
         </Grid>
         <Grid item xs={12} md={6}>
-          <img alt='PiggySaver' src='/images/PiggySaver.png' />
+          <img alt='PiggySaver' style={{paddingLeft: '50px'}} src='/images/PiggySaver.png' />
         </Grid>
         </Grid>
         </Container>

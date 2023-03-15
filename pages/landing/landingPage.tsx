@@ -33,9 +33,6 @@ export default function LandingPage(){
           <Container id="community">
             <Community />
           </Container>
-          <Container id="team" sx={{mt: 20,mb:20}}>
-            <Team />
-          </Container>
           <Container id="white">
             <LightPaper />
           </Container>

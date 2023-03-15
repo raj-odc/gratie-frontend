@@ -21,8 +21,8 @@ export default function LightPaper(){
                 color: 'inherit',
                 textAlign:"justify",
                 mt:5
-              }}>Dorem hgt fast mario lesiro gekko hgt fast mario lesiro gekko.
-              <Link href='#' style={{color:'#00FF01'}}> Read more</Link>
+              }}>To understand more about Gratie
+              <Link target='_blank' href='https://drive.google.com/file/d/14VmP4UPiGYrgXhvqOs4uKx03xWwNr_t2/view?usp=sharing' style={{color:'#00FF01'}}> Read more</Link>
               </Typography>
             </Container>
         </Box>

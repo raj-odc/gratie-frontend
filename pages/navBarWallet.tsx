@@ -1,4 +1,4 @@
-import { AppBar, Box, Stack, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Link, Stack, TextField, Toolbar, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
 import AccountInfo from "@/src/components/AccountInfo";
@@ -23,8 +23,10 @@ const Home: NextPage = () => {
               <AppBar className="navbar"> 
                 <Toolbar>
                   <Box sx={{ display:'flex', margin:'auto'}}>
-                    <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
-                    <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                    <Link href='/'>
+                      <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
+                      <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                    </Link>
                   </Box>
                     {publicKey ? (
                         <div className='top-wallet-section'>
