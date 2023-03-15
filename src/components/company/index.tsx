@@ -116,7 +116,7 @@ export default function CompanyIndex() {
     <div className=''>
       <React.Fragment>
       {
-         !isDataFetched && waitingPeriodOver && <Container className='form-outer' component="main" maxWidth="md">
+         !isDataFetched && waitingPeriodOver && <Container className='fetch-block-data' component="main">
               <Button
                 onClick={getBlockChainData}
                 type="submit"

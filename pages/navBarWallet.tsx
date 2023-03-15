@@ -23,7 +23,7 @@ const Home: NextPage = () => {
               <AppBar className="navbar"> 
                 <Toolbar>
                   <Box sx={{ display:'flex', margin:'auto'}}>
-                    <Link href='/'>
+                    <Link style={{ display:'flex'}} href='/'>
                       <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
                       <img width={105} height={95} alt='logo' src='/images/Logo.png' />
                     </Link>

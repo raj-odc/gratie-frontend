@@ -50,8 +50,8 @@
 }
   
 .logo-icon{
-    margin-top: 10px; 
-    margin-right: -10px;
+    margin-top: 19px;
+    margin-right: -16px;
 }
   
   @keyframes slideRight {
@@ -158,10 +158,10 @@
     position: relative;
 }
 .social-button{
-    background-color: transparent;
-    border-radius: 20px;
-    border: 1px solid #00FF01;
-    color: #ffff;
+    background-color: transparent !important;
+    border-radius: 20px !important;
+    border: 1px solid #00FF01 !important;
+    color: #ffff !important;
 }
 .social-button:hover{
     background: radial-gradient( rgba(0, 255, 0, 0.529), #040404);
@@ -266,27 +266,6 @@
     height: 60px;
 } */
   
-.top-wallet-section {
-    display: flex;
-}
-.top-wallet-section button {
-    margin-left: 10px !important;
-    color: white !important;
-    background: radial-gradient(122.09% 122.09% at 50% 50%, rgba(0, 255, 1, 0) 0%, #00FF01 100%) !important;
-    border-radius: 100px !important;
-    border-color: #00FF01 !important;
-}
-  
-.top-wallet-section button:hover {
-    border-color: #FFF !important;
-}
-  
-.top-wallet-section div {
-    color: #000;
-    font-size: 20px;
-    background-color: #00FF01;
-}
-  
 .company-welcome-text {
     font-family: 'Book Antiqua';
     font-style: normal;
@@ -327,6 +306,18 @@
     border-radius: 100px;
     color: #FDFDFD;
   
+}
+
+.price-box-landing{
+    width:255px;
+    height:400px; 
+    border:2px outset #d9d9d9;
+    border-radius: 10%;
+    box-shadow: 5px 5px #c1c1c1;
+    align-items: center;
+    margin-bottom: 12px;
+    text-align: center;
+    position: relative;
 }
 
 .price-box{

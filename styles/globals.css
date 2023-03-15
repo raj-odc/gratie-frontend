@@ -118,9 +118,26 @@ a {
 }
 
 .top-wallet-section div {
-  color: #000;
+  color: #fff;
   font-size: 20px;
-  background-color: #00FF01;
+  background: radial-gradient(122.09% 122.09% at 50% 50%, rgba(0, 255, 1, 0) 0%, #00FF01 100%) !important;
+  border-radius: 100px !important;
+  border-color: #00FF01 !important;
+}
+
+.fetch-block-data {
+  width: 40%;
+  margin-left: 30%;
+  display: flex;
+}
+
+.fetch-block-data button {
+  margin-top: 100px;
+  color: white !important;
+  background: radial-gradient(122.09% 122.09% at 50% 50%, rgba(0, 255, 1, 0) 0%, #00FF01 100%) !important;
+  border-radius: 100px !important;
+  border-color: #00FF01 !important;
+  text-align: center;
 }
  
 .company-main-content {

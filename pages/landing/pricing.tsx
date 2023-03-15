@@ -15,7 +15,7 @@ export default function Pricing(){
       <br/>
         <Grid container spacing={1} sx={{margin:'auto'}}>
             <Grid item xs={12} md={6} lg={3}>
-                <Box className="price-box price-box1">
+                <Box className="price-box-landing price-box1">
                   <img width={150} height={150} alt="price1" src='/images/NFT4 .png' className='nft-price' /> 
                   <br/>
                   <Typography variant="h5"
@@ -42,7 +42,7 @@ export default function Pricing(){
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-                <Box className="price-box price-box2">
+                <Box className="price-box-landing price-box2">
                 <img width={150} height={150} alt="price1" src='/images/NFT3 .png' className='nft-price' /> 
                 <Typography variant="h5"
                  sx={{
@@ -67,7 +67,7 @@ export default function Pricing(){
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-            <Box className="price-box price-box3" >
+            <Box className="price-box-landing price-box3" >
             <img width={150} height={150} alt="price1" src='/images/NFT2.png' className='nft-price' /> 
             <Typography variant="h5"
                  sx={{
@@ -92,7 +92,7 @@ export default function Pricing(){
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-            <Box className="price-box price-box4">
+            <Box className="price-box-landing price-box4">
                   <img width={150} height={150} alt="price1" src='/images/NFT1.png' className='nft-price' /> 
                   <br/>
                   <Typography variant="h5"
