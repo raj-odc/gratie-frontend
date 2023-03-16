@@ -1,0 +1,73 @@
+.enterprise{
+    background-color: transparent;
+    border-radius: 20px;
+    border: 1px solid #00FF01;
+    color: #ffff;
+    font-size: 16px;
+}
+
+.enterprise:hover{
+    background: radial-gradient( rgba(0, 255, 0, 0.529), #040404);
+}
+
+.user-grid .MuiOutlinedInput-notchedOutline{
+    width: 100%;
+    height: 50px;
+}
+
+.create-token-btn{
+    border-radius: 25px;
+    background-color: #269a26;
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 220px;
+    height: 40px;
+}
+
+.create-token-btn:hover{
+    background-color: #269a26;
+}
+
+.profile-label{
+    color: #00FF01;
+}
+
+.profile-btn{
+    border-radius: 50%;
+    border: 2px outset #b7c6b2;
+    height: 55px;
+    width: 10px;
+    float: right;
+}
+
+#modal-modal-title{
+    color: #00FF01;
+}
+
+.create-user-container{
+    margin-left: 0px;
+}
+
+@media screen and (max-width:600px) {
+    .create-token-btn{
+        margin-left: -5px;
+    }
+}
+
+@media screen and (max-width:950px) {
+    .create-user-container{
+        /* margin-left: 65px; */
+    }
+}
+
+@media screen and (min-width:1000px) {
+    .enterprise{
+        margin-right: 100px;
+    }
+    .enterprise-btn{
+        float: right;
+    }
+    .create-user-container{
+        /* width:65%; */
+    }
+}

@@ -25,12 +25,19 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+package-lock.json
+
 # local env files
-.env*.local
+.env
 
 # vercel
 .vercel
 
+# yarn lock causing issues
+yarn.lock
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+kubernetes/gratie-secret.yaml

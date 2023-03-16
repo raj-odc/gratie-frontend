@@ -1,0 +1,29 @@
+.form-outer {
+    background-color: #fff;
+    color: #000;
+    margin-top: 110px;
+}
+
+.admin-list {
+    margin-top: 110px; 
+}
+
+.non-selected-tab {
+    width: 150px !important;
+    height:70px !important;
+
+    background: #050A04 !important;
+    box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25) !important;
+    border-radius: 35px !important;
+    color: #fff !important;
+}
+
+.selected-tab {
+    width: 150px !important;
+    height: 70px !important;
+
+    background: #045703 !important;
+    box-shadow: inset 8px 4px 8px rgba(255, 255, 255, 0.25) !important;
+    border-radius: 35px !important;
+    color: #fff !important;
+}

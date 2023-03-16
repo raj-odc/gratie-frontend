@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import NavBar from './navBar'
 
 import { HomeView } from "./../src/views";
+import ConnectWallet from "../src/views/WalletView/connectWallet";
+import LandingPage from './landing/landingPage'
 
-const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   return (
@@ -18,7 +18,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar/>
-
+      <LandingPage />
     </>
   )
 }
