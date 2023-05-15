@@ -1,26 +1,24 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react'
 
 import Container from '@mui/material/Container';
 
-import { useEffect, useState } from 'react'
-
-import { useWallet } from '@solana/wallet-adapter-react';
-
-import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
-import { getCompanyLicensePDA, getCompanyRewardsBucket } from '@/src/gratie_solana_contract/gratie_solana_pda';
-import { getCompanyUser } from '@/src/gratie_solana_contract/gratie_solana_user';
 import { Backdrop, Button, CircularProgress } from '@mui/material';
 
-import CompanyTab from '@/src/components/company/companyTab'
-import { getAllTiers } from '@/src/gratie_solana_contract/gratie_solana_tier';
 import { delay } from '@/src/utils/util';
 import Loading from '../Loading';
 import ModalBox from '../Modal';
 
+import Web3 from 'web3';
+
+import CompanyTab from '@/src/components/company/companyTab'
+
+declare const window: Window &
+  typeof globalThis & {
+    ethereum: any
+  }
 
 export default function CompanyIndex() {
 
-  const { wallet } = useWallet();
   const [waitingPeriodOver, setWaitingPeriodOver] = React.useState(false);
   
   const [isDataFetched, setisDataFetched] = React.useState(false);
@@ -28,9 +26,14 @@ export default function CompanyIndex() {
   const [companyReward, setCompanyReward] = React.useState(undefined);
   const [usersList, setUsersList] = React.useState([]);
 
+  const [isWalletConnected, setIsWalletConnected] = React.useState(false);
+
   const [tierList, setTierList] = React.useState({});
 
   const [openLoading, setOpenLoading] = React.useState(false);
+
+  const [account, setAccount] = useState({})
+  let [web3, setWeb3] = useState({})
 
   const handleLoaderToggle = (status:boolean) => {
     setOpenLoading(status)
@@ -40,24 +43,24 @@ export default function CompanyIndex() {
     handleLoaderToggle(true);
     const waiting = await delay(2000);
     setWaitingPeriodOver(true)
-    if(wallet && wallet?.adapter.publicKey){
-        const publicKey:any = wallet?.adapter.publicKey;
-        const program = await connectToGratieSolanaContract();
-        const tiers = await getAllTiers(program)
-        setTierList(tiers)
-        const validLicense:any = await getCompanyLicense(program, publicKey)
-        if (validLicense) {
-            setCompanyLicense(validLicense);
-            if(validLicense.account.verified) {
-                const companyRewardsBucket:any = await getCompanyReward(program, validLicense.account.name)
-                if(companyRewardsBucket) {
-                    setCompanyReward(companyRewardsBucket);
+    if(isWalletConnected){
+        const publicKey:any = window?.ethereum?.selectedaddress;
+        // const program = await connectToGratieSolanaContract();
+        // const tiers = await getAllTiers(program)
+        // setTierList(tiers)
+        // const validLicense:any = await getCompanyLicense(program, publicKey)
+        // if (validLicense) {
+        //     setCompanyLicense(validLicense);
+        //     if(validLicense.account.verified) {
+        //         const companyRewardsBucket:any = await getCompanyReward(program, validLicense.account.name)
+        //         if(companyRewardsBucket) {
+        //             setCompanyReward(companyRewardsBucket);
                     
-                    const usersList = await getCompanyUser(program, publicKey);
-                    setUsersList(usersList);
-                }
-            }
-        }
+        //             const usersList = await getCompanyUser(program, publicKey);
+        //             setUsersList(usersList);
+        //         }
+        //     }
+        // }
         setisDataFetched(true);
     } else {
       confirm("Please connect with your wallet");
@@ -82,34 +85,41 @@ export default function CompanyIndex() {
     }
   }
 
-  const getCompanyReward = async(program:any, companyName:any) => {
-    const companyLicensePDA = getCompanyLicensePDA(program, companyName);
-    let companyRewardsBucket;
-    try {
-        companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
-    }
-    catch {
-        console.log("Company rewards not yet created")
-    }
-    return companyRewardsBucket;
-  }
+  // const getCompanyReward = async(program:any, companyName:any) => {
+  //   const companyLicensePDA = getCompanyLicensePDA(program, companyName);
+  //   let companyRewardsBucket;
+  //   try {
+  //       companyRewardsBucket = await getCompanyRewardsBucket(program, companyLicensePDA);
+  //   }
+  //   catch {
+  //       console.log("Company rewards not yet created")
+  //   }
+  //   return companyRewardsBucket;
+  // }
 
   useEffect(() => {
-    fetchContractData().then(() => {
+    activate().then(() => {
       console.log("fetching Data")
     });
   }, []);
 
-  const getBlockChainData = async() => {
-    if(wallet && wallet?.adapter.publicKey){
-      const data = await fetchContractData();
-      console.log("data", data)
+  const checkAccount = async() => {
+    let web3 = new Web3(window.ethereum)
+    setWeb3(web3)
+    const accounts = await web3.eth.getAccounts()
+    setAccount(accounts[0])
+    setIsWalletConnected(true)
+  }
+
+  const activate = async() => {
+    if (window.ethereum) {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        checkAccount()
+      } catch (err) {
+        console.log('user did not add account...', err)
+      }
     }
-    else {
-      confirm("Please connect with your wallet");
-      return false;
-    }
-    
   }
 
   return (
@@ -118,7 +128,6 @@ export default function CompanyIndex() {
       {
          !isDataFetched && waitingPeriodOver && <Container className='fetch-block-data' component="main">
               <Button
-                onClick={getBlockChainData}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -134,10 +143,10 @@ export default function CompanyIndex() {
             <CompanyTab 
               showProfile={companyLicense ? true : false} 
               handleChange = {fetchContractData} 
-              license = {companyLicense} 
-              reward = {companyReward} 
-              users = {usersList}
-              tiers = {tierList}
+              // license = {companyLicense} 
+              // reward = {companyReward} 
+              // users = {usersList}
+              // tiers = {tierList}
             /> 
            }
         </Container>
